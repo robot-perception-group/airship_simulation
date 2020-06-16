@@ -28,6 +28,7 @@ Build packages with **catkin_make**
 * [mav_msgs] (http://wiki.ros.org/mav_msgs)
 * [Gazebo] (http://gazebosim.org/) -- tested with Gazebo 9.0
 * [rotors_simulator] (https://github.com/ethz-asl/rotors_simulator)
+* [BebopS] (https://github.com/gsilano/BebopS)
 
 # Additional Requirements
 * [aircap] (https://github.com/robot-perception-group/AIRCAP)
