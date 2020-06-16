@@ -67,6 +67,12 @@ $ git clone https://github.com/ootang2018/blimp_description.git
 $ cd ~/catkin_ws
 ```
 
+and optionally
+```console
+$ git clone https://github.com/ootang2018/AirCap.git
+
+```
+
 3. Build your workspace with `python_catkin_tools` (therefore you need `python_catkin_tools`)
 
 ```console
@@ -97,11 +103,12 @@ Basic Usage
 After installing, you can test with teh following command in a terminal
 
 ```console
-$ roslaunch blimp_description blimp_with_env.launch` -- You should see blimp in gazebo environment
-$ roslaunch blimp_description teleokeyboard.launch` -- This will allow manual control of the blimp
+$ roslaunch blimp_description blimp_with_env.launch  
+$ roslaunch blimp_description teleokeyboard.launch 
 ```
+You should see blimp in gazebo environment and be able to fly it via teleokeyboard
 
-To fly with blimp, it is necessary to generate thrust with the rotors, this is achieved by sending commands as follows
+To fly with blimp, it is necessary to generate thrust with the rotors, this is achieved by sending commands as follows:
 
  ```console
 $ rostopic pub /blimp/command/motor_speed mav_msgs/Actuators '{angular_velocities: [100, 100, 0]}'
