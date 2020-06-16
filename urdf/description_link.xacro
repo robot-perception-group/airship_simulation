@@ -1,0 +1,367 @@
+<?xml version="1.0" ?>
+<robot name="blimp" xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<!--***************** link description	*****************-->
+	<link name="${namespace}/base_link"/>
+	<xacro:box_model
+		robot_namespace="${namespace}"
+		link_name="gondola_body"
+		mass="${mass_gondola_body}"
+		body_length="${length_gondola_body}"
+		body_width= "${width_gondola_body}"
+		body_height="${height_gondola_body}"
+		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_blimp_gondola}">
+		<xacro:insert_block name="origin_gondola_body" />
+		<xacro:insert_block name="inertia_gondola_body" />
+	</xacro:box_model>
+	<joint name="${namespace}/base_gondola_body_joint" type="fixed">
+		<xacro:insert_block name="origin_base_gondola_body_joint" />
+      		<parent link="${namespace}/base_link" />
+      		<child link="${namespace}/gondola_body_link" />
+    	</joint>
+	<xacro:box_model
+		robot_namespace="${namespace}"
+		link_name="gondola_left_support"
+		mass="${mass_gondola_support}"
+		body_length="${length_gondola_support}"
+		body_width= "${width_gondola_support}"
+		body_height="${height_gondola_support}"
+    		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_blimp_support}">
+		<xacro:insert_block name="origin_gondola_support" />
+		<xacro:insert_block name="inertia_gondola_support" />
+	</xacro:box_model>
+	<joint name="${namespace}/base_gondola_left_support_joint" type="fixed">
+		<xacro:insert_block name="origin_base_gondola_left_support_joint" />
+      		<parent link="${namespace}/base_link" />
+      		<child link="${namespace}/gondola_left_support_link" />
+    	</joint>
+	<xacro:box_model
+		robot_namespace="${namespace}"
+		link_name="gondola_right_support"
+		mass="${mass_gondola_support}"
+		body_length="${length_gondola_support}"
+		body_width= "${width_gondola_support}"
+		body_height="${height_gondola_support}"
+    		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_blimp_support}">
+		<xacro:insert_block name="origin_gondola_support" />
+		<xacro:insert_block name="inertia_gondola_support" />
+	</xacro:box_model>
+	<joint name="${namespace}/base_gondola_right_support_joint" type="fixed">
+		<xacro:insert_block name="origin_base_gondola_right_support_joint" />
+      		<parent link="${namespace}/base_link" />
+      		<child link="${namespace}/gondola_right_support_link" />
+    	</joint>
+	<xacro:cylinder_model
+		robot_namespace="${namespace}"
+		link_name="blimp_body"
+		mass="${mass_blimp_body}"
+		body_radius="${radius_blimp_body}"
+		body_length="${length_blimp_body}"
+    		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_blimp_body}">
+		<xacro:insert_block name="origin_blimp_body" />
+		<xacro:insert_block name="inertia_blimp_body" />
+	</xacro:cylinder_model>
+	<joint name="${namespace}/gondola_body_blimp_body_joint" type="revolute">
+		<xacro:insert_block name="origin_gondola_body_blimp_body_joint" />
+      		<parent link="${namespace}/gondola_body_link" />
+      		<child link="${namespace}/blimp_body_link" />
+		<limit effort="0" velocity="0" lower="0" upper="0" /> 
+    	</joint>	
+	<xacro:cylinder_model
+		robot_namespace="${namespace}"
+		link_name="stick"
+		mass="${mass_stick}"
+		body_radius="${radius_stick}"
+		body_length="${length_stick}"
+		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_blimp_stick}">
+		<xacro:insert_block name="origin_stick" />
+		<xacro:insert_block name="inertia_stick" />
+	</xacro:cylinder_model>
+	<joint name="${namespace}/base_stick_joint" type="revolute">
+		<xacro:insert_block name="origin_base_stick_joint" />
+      		<parent link="${namespace}/base_link" />
+      		<child link="${namespace}/stick_link" />
+		<axis xyz="0 0 -1" />
+		<limit effort="${effort_stick}" velocity="${velocity_stick}" lower="${-max_angle_stick}" upper="${max_angle_stick}" /> 
+    	</joint>
+	<xacro:cylinder_model
+		robot_namespace="${namespace}"
+		link_name="left_wing"
+		mass="${mass_wing}"
+		body_radius="${radius_wing}"
+		body_length="${length_wing}"
+    		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_blimp_wing}">
+		<xacro:insert_block name="origin_wing" />
+		<xacro:insert_block name="inertia_wing" />
+	</xacro:cylinder_model>
+	<joint name="${namespace}/stick_left_wing_joint" type="fixed">
+		<xacro:insert_block name="origin_stick_left_wing_joint" />
+      		<parent link="${namespace}/stick_link" />
+      		<child link="${namespace}/left_wing_link" />
+    	</joint>
+	<xacro:cylinder_model
+		robot_namespace="${namespace}"
+		link_name="right_wing"
+		mass="${mass_wing}"
+		body_radius="${radius_wing}"
+		body_length="${length_wing}"
+    		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_blimp_wing}">
+		<xacro:insert_block name="origin_wing" />
+		<xacro:insert_block name="inertia_wing" />
+	</xacro:cylinder_model>
+	<joint name="${namespace}/stick_right_wing_joint" type="fixed">
+		<xacro:insert_block name="origin_stick_right_wing_joint" />
+      		<parent link="${namespace}/stick_link" />
+      		<child link="${namespace}/right_wing_link" />
+    	</joint>
+	<xacro:cylinder_model
+		robot_namespace="${namespace}"
+		link_name="left_blade"
+		mass="${mass_blade}"
+		body_radius="${radius_blade}"
+		body_length="${length_blade}"
+    		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_propeller_ccw}">
+		<xacro:insert_block name="origin_blade" />
+		<xacro:insert_block name="inertia_blade" />
+	</xacro:cylinder_model>
+	<joint name="${namespace}/stick_left_blade_joint" type="continuous">
+		<xacro:insert_block name="origin_stick_left_blade_joint" />
+      		<parent link="${namespace}/stick_link" />
+      		<child link="${namespace}/left_blade_link" />
+		<axis xyz="0 0 1" />
+    	</joint>
+	<xacro:cylinder_model
+		robot_namespace="${namespace}"
+		link_name="right_blade"
+		mass="${mass_blade}"
+		body_radius="${radius_blade}"
+		body_length="${length_blade}"
+    		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_propeller_cw}">
+		<xacro:insert_block name="origin_blade" />
+		<xacro:insert_block name="inertia_blade" />
+	</xacro:cylinder_model>
+	<joint name="${namespace}/stick_right_blade_joint" type="continuous">
+		<xacro:insert_block name="origin_stick_right_blade_joint" />
+      		<parent link="${namespace}/stick_link" />
+      		<child link="${namespace}/right_blade_link" />
+		<axis xyz="0 0 1" />
+    	</joint>
+	<xacro:box_model
+		robot_namespace="${namespace}"
+		link_name="top_rud_part1"
+		mass="${mass_rud_part1}"
+		body_length="${length_rud_part1}"
+		body_width= "${width_rud_part1}"
+		body_height="${height_rud_part1}"
+    		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_blimp_rud_part1}">
+		<xacro:insert_block name="origin_rud_part1" />
+		<xacro:insert_block name="inertia_rud_part1" />
+	</xacro:box_model>
+	<joint name="${namespace}/blimp_body_top_rud_part1_joint" type="fixed">
+		<xacro:insert_block name="origin_blimp_body_top_rud_part1_joint" />
+      		<parent link="${namespace}/blimp_body_link" />
+      		<child link="${namespace}/top_rud_part1_link" />
+    	</joint>
+	<link name="${namespace}/top_rud_joint_link">
+		<visual>
+			<geometry>
+				<cylinder radius="0.01" length="0.3"/>
+			</geometry>
+		</visual>
+	</link>
+	<joint name="${namespace}/top_rud_part1_top_rud_joint_link_joint" type="revolute">
+		<xacro:insert_block name="origin_top_rud_part1_top_rud_joint_link_joint" />
+      		<parent link="${namespace}/top_rud_part1_link" />
+      		<child link="${namespace}/top_rud_joint_link" />
+		<axis xyz="0 0 -1" />
+		<limit effort="${effort_fin}" velocity="${velocity_fin}" lower="${-max_angle_fin}" upper="${max_angle_fin}" /> 
+    	</joint>
+	<xacro:box_model
+		robot_namespace="${namespace}"
+		link_name="top_rud_part2"
+		mass="${mass_rud_part2}"
+		body_length="${length_rud_part2}"
+		body_width= "${width_rud_part2}"
+		body_height="${height_rud_part2}"
+    		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_blimp_rud_part2}">
+		<xacro:insert_block name="origin_rud_part2" />
+		<xacro:insert_block name="inertia_rud_part2" />
+	</xacro:box_model>
+	<joint name="${namespace}/top_rud_joint_link_top_rud_part2_joint" type="fixed">
+		<xacro:insert_block name="origin_top_rud_joint_link_top_rud_part2_joint" />
+      		<parent link="${namespace}/top_rud_joint_link" />
+      		<child link="${namespace}/top_rud_part2_link" />
+    	</joint>
+	<xacro:box_model
+		robot_namespace="${namespace}"
+		link_name="bot_rud_part1"
+		mass="${mass_bot_rud_part1}"
+		body_length="${length_rud_part1}"
+		body_width= "${width_rud_part1}"
+		body_height="${height_rud_part1}"
+    		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_blimp_bot_rud_part1}">
+		<xacro:insert_block name="origin_rud_part1" />
+		<xacro:insert_block name="inertia_rud_part1" />
+	</xacro:box_model>
+	<joint name="${namespace}/blimp_body_bot_rud_part1_joint" type="fixed">
+		<xacro:insert_block name="origin_blimp_body_bot_rud_part1_joint" />
+      		<parent link="${namespace}/blimp_body_link" />
+      		<child link="${namespace}/bot_rud_part1_link" />
+    	</joint>
+	<link name="${namespace}/bot_rud_joint_link">
+		<visual>
+			<geometry>
+				<cylinder radius="0.01" length="0.3"/>
+			</geometry>
+		</visual>
+	</link>
+	<joint name="${namespace}/bot_rud_part1_bot_rud_joint_link_joint" type="revolute">
+		<xacro:insert_block name="origin_bot_rud_part1_bot_rud_joint_link_joint" />
+      		<parent link="${namespace}/bot_rud_part1_link" />
+      		<child link="${namespace}/bot_rud_joint_link" />
+		<axis xyz="0 0 1" />
+		<limit effort="${effort_fin}" velocity="${velocity_fin}" lower="${-max_angle_fin}" upper="${max_angle_fin}" /> <!--TODO: measure the max/min angle-->
+    	</joint>
+	<xacro:box_model
+		robot_namespace="${namespace}"
+		link_name="bot_rud_part2"
+		mass="${mass_rud_part2}"
+		body_length="${length_rud_part2}"
+		body_width= "${width_rud_part2}"
+		body_height="${height_rud_part2}"
+    		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_blimp_rud_part2}">
+		<xacro:insert_block name="origin_rud_part2" />
+		<xacro:insert_block name="inertia_rud_part2" />
+	</xacro:box_model>
+	<joint name="${namespace}/bot_rud_joint_link_bot_rud_part2_joint" type="fixed">
+		<xacro:insert_block name="origin_bot_rud_joint_link_bot_rud_part2_joint" />
+      		<parent link="${namespace}/bot_rud_joint_link" />
+      		<child link="${namespace}/bot_rud_part2_link" />
+    	</joint>
+	<xacro:cylinder_model
+		robot_namespace="${namespace}"
+		link_name="bot_rud_motor"
+		mass="${mass_bot_rud_motor}"
+		body_radius="${radius_bot_rud_motor}"
+		body_length= "${length_bot_rud_motor}"
+		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_bot_propeller_cw}">
+		<xacro:insert_block name="origin_bot_rud_motor" />
+		<xacro:insert_block name="inertia_bot_rud_motor" />
+	</xacro:cylinder_model>
+	<joint name="${namespace}/bot_rud_part1_bot_rud_motor_joint" type="continuous">
+		<xacro:insert_block name="origin_bot_rud_part1_bot_rud_motor_joint" />
+      		<parent link="${namespace}/bot_rud_part1_link" />
+      		<child link="${namespace}/bot_rud_motor_link" />
+		<axis xyz="0 0 -1" />
+    	</joint>
+	<xacro:box_model
+		robot_namespace="${namespace}"
+		link_name="left_elv_part1"
+		mass="${mass_rud_part1}"
+		body_length="${length_rud_part1}"
+		body_width= "${width_rud_part1}"
+		body_height="${height_rud_part1}"
+    		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_blimp_rud_part1}">
+		<xacro:insert_block name="origin_rud_part1" />
+		<xacro:insert_block name="inertia_rud_part1" />
+	</xacro:box_model>
+	<joint name="${namespace}/blimp_body_left_elv_part1_joint" type="fixed">
+		<xacro:insert_block name="origin_blimp_body_left_elv_part1_joint" />
+      		<parent link="${namespace}/blimp_body_link" />
+      		<child link="${namespace}/left_elv_part1_link" />
+    	</joint>
+	<link name="${namespace}/left_elv_joint_link">
+		<visual>
+			<geometry>
+				<cylinder radius="0.01" length="0.3"/>
+			</geometry>
+		</visual>
+	</link>
+	<joint name="${namespace}/left_elv_part1_left_elv_joint_link_joint" type="revolute">
+		<xacro:insert_block name="origin_left_elv_part1_left_elv_joint_link_joint" />
+      		<parent link="${namespace}/left_elv_part1_link" />
+      		<child link="${namespace}/left_elv_joint_link" />
+		<axis xyz="0 0 1" />
+		<limit effort="${effort_fin}" velocity="${velocity_fin}" lower="${-max_angle_fin}" upper="${max_angle_fin}" /> <!--TODO: measure the max/min angle-->
+    	</joint>
+	<xacro:box_model
+		robot_namespace="${namespace}"
+		link_name="left_elv_part2"
+		mass="${mass_rud_part2}"
+		body_length="${length_rud_part2}"
+		body_width= "${width_rud_part2}"
+		body_height="${height_rud_part2}"
+    		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_blimp_rud_part2}">
+		<xacro:insert_block name="origin_rud_part2" />
+		<xacro:insert_block name="inertia_rud_part2" />
+	</xacro:box_model>
+	<joint name="${namespace}/left_elv_joint_link_left_elv_part2_joint" type="fixed">
+		<xacro:insert_block name="origin_left_elv_joint_link_left_elv_part2_joint" />
+      		<parent link="${namespace}/left_elv_joint_link" />
+      		<child link="${namespace}/left_elv_part2_link" />
+    	</joint>
+	<xacro:box_model
+		robot_namespace="${namespace}"
+		link_name="right_elv_part1"
+		mass="${mass_rud_part1}"
+		body_length="${length_rud_part1}"
+		body_width= "${width_rud_part1}"
+		body_height="${height_rud_part1}"
+    		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_blimp_rud_part1}">
+		<xacro:insert_block name="origin_rud_part1" />
+		<xacro:insert_block name="inertia_rud_part1" />
+	</xacro:box_model>
+	<joint name="${namespace}/blimp_body_right_elv_part1_joint" type="fixed">
+		<xacro:insert_block name="origin_blimp_body_right_elv_part1_joint" />
+      		<parent link="${namespace}/blimp_body_link" />
+      		<child link="${namespace}/right_elv_part1_link" />
+    	</joint>
+	<link name="${namespace}/right_elv_joint_link">
+		<visual>
+			<geometry>
+				<cylinder radius="0.01" length="0.3"/>
+			</geometry>
+		</visual>
+	</link>
+	<joint name="${namespace}/right_elv_part1_right_elv_joint_link_joint" type="revolute">
+		<xacro:insert_block name="origin_right_elv_part1_right_elv_joint_link_joint" />
+      		<parent link="${namespace}/right_elv_part1_link" />
+      		<child link="${namespace}/right_elv_joint_link" />
+		<axis xyz="0 0 -1" />
+		<limit effort="${effort_fin}" velocity="${velocity_fin}" lower="${-max_angle_fin}" upper="${max_angle_fin}" /> <!--TODO: measure the max/min angle-->
+    	</joint>
+	<xacro:box_model
+		robot_namespace="${namespace}"
+		link_name="right_elv_part2"
+		mass="${mass_rud_part2}"
+		body_length="${length_rud_part2}"
+		body_width= "${width_rud_part2}"
+		body_height="${height_rud_part2}"
+    		use_mesh_file="${use_mesh_file}"
+    		mesh_file="${mesh_file_blimp_rud_part2}">
+		<xacro:insert_block name="origin_rud_part2" />
+		<xacro:insert_block name="inertia_rud_part2" />
+	</xacro:box_model>
+	<joint name="${namespace}/right_elv_joint_link_right_elv_part2_joint" type="fixed">
+		<xacro:insert_block name="origin_right_elv_joint_link_right_elv_part2_joint" />
+      		<parent link="${namespace}/right_elv_joint_link" />
+      		<child link="${namespace}/right_elv_part2_link" />
+    	</joint>
+</robot>

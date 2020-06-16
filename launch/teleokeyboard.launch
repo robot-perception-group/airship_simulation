@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+	<node name="teleokeyboard" pkg="blimp_description" type="teleokeyboard.py" output="screen"/>
+
+</launch>
+
+

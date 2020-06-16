@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/yliu2/gazebo_plugin_tutorial/build/devel/setup.sh

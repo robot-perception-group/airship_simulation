@@ -1,0 +1,93 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<!-- TODO Instantiate controller-->
+	<xacro:controller_plugin_macro namespace="${namespace}" imu_sub_topic="imu" />
+	<gazebo>
+		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+			<robotNamespace>/${namespace}</robotNamespace>
+		</plugin>
+	</gazebo>
+
+	<!-- Instantiate mavlink telemetry interface. -->
+	<xacro:if value="$(arg enable_mavlink_interface)">
+		<xacro:default_mavlink_interface namespace="${namespace}" imu_sub_topic="imu" rotor_count="3" />
+	</xacro:if>
+
+	<!--  Instantiate rotors -->
+	<xacro:rotor_macro
+		robot_namespace="${namespace}"
+		joint_name="${namespace}/stick_left_blade_joint"
+		link_name="${namespace}/left_blade_link"
+		direction="ccw"
+		motor_constant="${motor_constant}"
+		moment_constant="${moment_constant}"
+		time_constant_up="${time_constant_up}"
+		time_constant_down="${time_constant_down}"
+		max_rot_velocity="${max_rot_velocity}"
+		motor_number="0"
+		rotor_drag_coefficient="${rotor_drag_coefficient}"
+		rolling_moment_coefficient="${rolling_moment_coefficient}">
+	</xacro:rotor_macro>
+	<xacro:rotor_macro
+		robot_namespace="${namespace}"
+		joint_name="${namespace}/stick_right_blade_joint"
+		link_name="${namespace}/right_blade_link"
+		direction="cw"
+		motor_constant="${motor_constant}"
+		moment_constant="${moment_constant}"
+		time_constant_up="${time_constant_up}"
+		time_constant_down="${time_constant_down}"
+		max_rot_velocity="${max_rot_velocity}"
+		motor_number="1"
+		rotor_drag_coefficient="${rotor_drag_coefficient}"
+		rolling_moment_coefficient="${rolling_moment_coefficient}">
+	</xacro:rotor_macro>
+	<xacro:rotor_macro
+		robot_namespace="${namespace}"
+		joint_name="${namespace}/bot_rud_part1_bot_rud_motor_joint"
+		link_name="${namespace}/bot_rud_motor_link"
+		direction="cw"
+		motor_constant="${motor_constant}"
+		moment_constant="${moment_constant}"
+		time_constant_up="${time_constant_up}"
+		time_constant_down="${time_constant_down}"
+		max_rot_velocity="${max_rot_velocity}"
+		motor_number="2"
+		rotor_drag_coefficient="${rotor_drag_coefficient}"
+		rolling_moment_coefficient="${rolling_moment_coefficient}">
+	</xacro:rotor_macro>
+
+	<!--  Instantiate controls  -->
+	<xacro:transmission_macro
+		namespace="${namespace}"
+		joint_name="base_stick_joint"
+		trans_name="tran1"
+		actuator_name="motor1">
+	</xacro:transmission_macro>
+	<xacro:transmission_macro
+		namespace="${namespace}"
+		joint_name="bot_rud_part1_bot_rud_joint_link_joint"
+		trans_name="tran2"
+		actuator_name="motor2">
+	</xacro:transmission_macro>
+	<xacro:transmission_macro
+		namespace="${namespace}"
+		joint_name="top_rud_part1_top_rud_joint_link_joint"
+		trans_name="tran3"
+		actuator_name="motor3">
+	</xacro:transmission_macro>
+	<xacro:transmission_macro
+		namespace="${namespace}"
+		joint_name="left_elv_part1_left_elv_joint_link_joint"
+		trans_name="tran4"
+		actuator_name="motor4">
+	</xacro:transmission_macro>
+	<xacro:transmission_macro
+		namespace="${namespace}"
+		joint_name="right_elv_part1_right_elv_joint_link_joint"
+		trans_name="tran5"
+		actuator_name="motor5">
+	</xacro:transmission_macro>
+
+</robot>

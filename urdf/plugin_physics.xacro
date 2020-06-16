@@ -1,0 +1,110 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+	
+	<!-- Macro to add the wind plugin. -->
+	<xacro:macro name="wind_plugin_macro"
+		params="namespace linkname xyz_offset wind_direction wind_force_mean
+		wind_gust_direction wind_gust_duration wind_gust_start
+		wind_gust_force_mean wind_speed_mean use_custom_static_wind_field 
+		custom_wind_field_path">
+		<gazebo>
+			<plugin filename="librotors_gazebo_wind_plugin.so" name="wind_plugin">
+				<frameId>world</frameId>
+				<linkName>${linkname}</linkName>
+				<robotNamespace>${namespace}</robotNamespace>
+				<xyzOffset>${xyz_offset}</xyzOffset> <!-- [m] [m] [m] -->
+				<windDirection>${wind_direction}</windDirection>
+				<windForceMean>${wind_force_mean}</windForceMean> <!-- [N] -->
+				<windGustDirection>${wind_gust_direction}</windGustDirection>
+				<windGustDuration>${wind_gust_duration}</windGustDuration> <!-- [s] -->
+				<windGustStart>${wind_gust_start}</windGustStart> <!-- [s] -->
+				<windGustForceMean>${wind_gust_force_mean}</windGustForceMean> <!-- [N] -->
+				<windSpeedMean>${wind_speed_mean}</windSpeedMean> <!-- [m/s] -->
+				<useCustomStaticWindField>${use_custom_static_wind_field}</useCustomStaticWindField>
+				<customWindFieldPath>${custom_wind_field_path}</customWindFieldPath> <!-- from ~/.ros -->
+			</plugin>
+		</gazebo>
+	</xacro:macro>
+
+	<!-- Macro to add fixed wing aerodynamics -->
+	<xacro:macro name="fw_dynamics"
+		params="robot_namespace link_name aero_params_yaml vehicle_params_yaml isInputJoystick">
+		<gazebo>
+			<plugin name="${link_name}_fw_dynamics_plugin" filename="librotors_gazebo_fw_dynamics_plugin.so">
+				<robotNamespace>${robot_namespace}</robotNamespace>
+				<linkName>${link_name}</linkName>
+				<aeroParamsYAML>${aero_params_yaml}</aeroParamsYAML>
+				<vehicleParamsYAML>${vehicle_params_yaml}</vehicleParamsYAML>
+				<isInputJoystick>${isInputJoystick}</isInputJoystick>
+			</plugin>
+		</gazebo>
+	</xacro:macro>
+
+	<!-- Macro to add aerodynamics -->
+	<xacro:macro name="liftdrag"
+		params="link_name air_density area *upward *forward *cp">
+		<gazebo>
+			<plugin name="${link_name}_liftdrag" filename="libLiftDragPlugin.so">
+				<link_name>${link_name}</link_name>
+				<air_density>${air_density}</air_density>
+				<cla>1.2535816618911175</cla>
+				<cla_stall>-1.4326647564469914</cla_stall>
+				<cda>0</cda>
+				<cda_stall>1.4326647564469914</cda_stall>
+				<alpha_stall>1.396</alpha_stall>
+				<a0>0</a0>
+				<area>${area}</area>
+				<xacro:insert_block name="upward" />
+				<xacro:insert_block name="forward" />
+				<xacro:insert_block name="cp" />
+			</plugin>
+		</gazebo>
+	</xacro:macro>
+
+	<!-- Macro to add aerodynamics -->
+	<!-- finliftdrag_plugin takes windspeed into consideration whereas LiftDragPlugin only consider vehicle speed -->
+	<xacro:macro name="finliftdrag"
+		params="namespace link_name air_density area *upward *forward *cp">
+		<gazebo>
+			<plugin name="${link_name}_finliftdrag" filename="libfinliftdrag_plugin.so">
+				<robotNamespace>${namespace}</robotNamespace> 
+				<link_name>${link_name}</link_name>
+				<air_density>${air_density}</air_density>
+				<cla>1.2535816618911175</cla>
+				<cla_stall>-1.4326647564469914</cla_stall>
+				<cda>0</cda>
+				<cda_stall>1.4326647564469914</cda_stall>
+				<alpha_stall>1.396</alpha_stall>
+				<a0>0</a0>
+				<area>${area}</area>
+				<xacro:insert_block name="upward" />
+				<xacro:insert_block name="forward" />
+				<xacro:insert_block name="cp" />
+			</plugin>
+		</gazebo>
+	</xacro:macro>
+
+	<!-- Macro to add buoyancy -->
+	<xacro:macro name="buoyancy" 
+		     params="volume fluid_density">
+		<gazebo>
+			<plugin name="BuoyancyPlugin" filename="libBuoyancyPlugin.so">
+				<fluid_density>${fluid_density}</fluid_density>
+				<volume>${volume}</volume>
+			</plugin>
+		</gazebo>
+	</xacro:macro>
+
+	<!-- Macro to add buoyancy changes with volume and pressure -->
+	<xacro:macro name="dynamic_volume" 
+		     params="namespace linkname dynamicvolumetopic reference_altitude">
+		<gazebo>
+			<plugin name="dynamicvolume_plugin" filename="libdynamicvolume_plugin.so">
+				<robotNamespace>${namespace}</robotNamespace> 
+				<linkName>${linkname}</linkName> 
+				<dynamicvolumetopic>${dynamicvolumetopic}</dynamicvolumetopic> 
+				<reference_altitude>${reference_altitude}</reference_altitude>
+			</plugin>
+		</gazebo>
+	</xacro:macro>
+</robot>

@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<xacro:macro name="box_model"
+	params="robot_namespace link_name mass body_length body_width body_height use_mesh_file mesh_file *origin *inertia">
+		<link name="${robot_namespace}/${link_name}_link">
+			<inertial>
+				<mass value="${mass}"/>
+				<xacro:insert_block name="origin" />
+				<xacro:insert_block name="inertia" />
+			</inertial>
+			<collision>
+				<xacro:insert_block name="origin" />
+				<geometry>
+					<xacro:if value="${use_mesh_file}">
+						<mesh filename="${mesh_file}" scale="1 1 1" />
+					</xacro:if>
+					<xacro:unless value="${use_mesh_file}">
+						<box size="${body_length} ${body_width} ${body_height}"/>
+					</xacro:unless>
+				</geometry>
+			</collision>
+			<visual>
+				<xacro:insert_block name="origin" />
+				<geometry>
+					<xacro:if value="${use_mesh_file}">
+						<mesh filename="${mesh_file}" scale="1 1 1" />
+					</xacro:if>
+					<xacro:unless value="${use_mesh_file}">
+						<box size="${body_length} ${body_width} ${body_height}"/>
+					</xacro:unless>
+				</geometry>
+			</visual>
+		</link>
+		<gazebo reference="${robot_namespace}/${link_name}_link">
+			<kp>1000000.0</kp>
+			<kd>1000000.0</kd>
+			<mu1>10.0</mu1>
+			<mu2>10.0</mu2>
+    		</gazebo>
+	</xacro:macro>
+
+	<xacro:macro name="cylinder_model"
+	params="robot_namespace link_name mass body_radius body_length use_mesh_file mesh_file *origin *inertia">
+		<link name="${robot_namespace}/${link_name}_link">
+			<inertial>
+				<mass value="${mass}"/>
+				<xacro:insert_block name="origin" />
+				<xacro:insert_block name="inertia" />
+			</inertial>
+			<collision>
+				<xacro:insert_block name="origin" />
+				<geometry>
+					<xacro:if value="${use_mesh_file}">
+						<mesh filename="${mesh_file}" scale="1 1 1" />
+					</xacro:if>
+					<xacro:unless value="${use_mesh_file}">
+						<cylinder length="${body_length}" radius="${body_radius}"/> <!-- [m] [m] [m] -->
+					</xacro:unless>
+				</geometry>
+			</collision>
+			<visual>
+				<xacro:insert_block name="origin" />
+				<geometry>
+					<xacro:if value="${use_mesh_file}">
+						<mesh filename="${mesh_file}" scale="1 1 1" />
+					</xacro:if>
+					<xacro:unless value="${use_mesh_file}">
+						<cylinder length="${body_length}" radius="${body_radius}"/> <!-- [m] [m] [m] -->
+					</xacro:unless>
+				</geometry>
+			</visual>
+		</link>
+		<gazebo reference="${robot_namespace}/${link_name}_link">
+			<kp>1000000.0</kp>
+			<kd>1000000.0</kd>
+			<mu1>10.0</mu1>
+			<mu2>10.0</mu2>
+    		</gazebo>
+	</xacro:macro>
+</robot>

@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<robot name="blimp" xmlns:xacro="http://ros.org/wiki/xacro">
+	<!--*****************  component description  *****************-->
+	<xacro:include filename="$(find blimp_description)/urdf/plugin_control.xacro" />
+	<xacro:include filename="$(find blimp_description)/urdf/plugin_sensors.xacro" />
+	<xacro:include filename="$(find blimp_description)/urdf/plugin_physics.xacro" />
+
+	<!--*****************  property description  *****************-->
+	<xacro:include filename="$(find blimp_description)/urdf/description_property.xacro"/>
+
+	<!--*****************  mechanics description	 *****************-->
+	<xacro:include filename="$(find blimp_description)/urdf/model_xacro.xacro" />
+	<xacro:include filename="$(find blimp_description)/urdf/description_link.xacro"/>
+
+	<!--*****************  controller description  *****************-->
+	<xacro:include filename="$(find blimp_description)/urdf/description_controller.xacro"/>
+
+	<!--*****************  sensor description  *****************-->
+	<xacro:include filename="$(find blimp_description)/urdf/description_sensor.xacro"/>
+
+	<!--*****************  physics and extra plugins description  *****************-->
+	<xacro:include filename="$(find blimp_description)/urdf/description_plugin.xacro"/>
+
+	
+</robot>

@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<robot name="sphere" xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <static>true</static>
+    <link name="target_link">
+    <visual name="visual_04">
+        <transparency>0.4</transparency>
+        <geometry>
+            <sphere><radius>0.5</radius></sphere>
+        </geometry>
+        <material><script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Blue</name>
+        </script></material>
+    </visual>
+    </link>
+
+</robot>

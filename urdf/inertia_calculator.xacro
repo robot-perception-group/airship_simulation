@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<xacro:macro name="cuboid_inertia" params="x y z mass">
+		<inertia ixx="${0.0833333 * mass * (y*y + z*z)}" ixy="0.0" ixz="0.0"
+		iyy="${0.0833333 * mass * (x*x + z*z)}" iyz="0.0"
+		izz="${0.0833333 * mass * (x*x + y*y)}" />
+	</xacro:macro>
+
+	<xacro:macro name="cylinder_inertia" params="r h mass">
+		<inertia ixx="${0.0833333 * mass * (3*r*r + h*h)}" ixy="0.0" ixz="0.0"
+		iyy="${0.0833333 * mass * (3*r*r + h*h)}" iyz="0.0"
+		izz="${0.5 * mass * (r*r)}" />
+	</xacro:macro>
+
+	<xacro:macro name="hollow_cylinder_inertia" params="r1 r2 h mass">
+		<inertia ixx="${0.0833333 * mass * (3*(r1*r1 + r2*r2) + h*h)}" ixy="0.0" ixz="0.0"
+		iyy="${0.0833333 * mass * (3*(r1*r1 + r2*r2) + h*h)}" iyz="0.0"
+		izz="${0.5 * mass * (r1*r1 + r2*r2)}" />
+	</xacro:macro>
+
+	<xacro:macro name="ellipsoid_inertia" params="a b c mass">
+		<inertia ixx="${0.2 * mass * (b*b + c*c)}" ixy="0.0" ixz="0.0"
+		iyy="${0.2 * mass * (a*a + c*c}" iyz="0.0"
+		izz="${0.2 * mass * (a*a + b*b)}" />
+	</xacro:macro>
+
+</robot>
