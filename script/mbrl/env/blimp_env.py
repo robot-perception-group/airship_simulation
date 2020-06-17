@@ -118,8 +118,13 @@ class BlimpEnv:
         self.reward = 0
 
         # target flag
-        self.teleokeyboard_flag = False
-        self.interactive_target_flag = False
+        '''
+        None = none
+        1 = teleokeyboard
+        2 = interactive_target
+        3 = moving_target
+        '''
+        self.target_flag = None
 
         rospy.loginfo("[Blimp Environment Node] Load and Initialize Parameters Finished")
 
@@ -212,8 +217,8 @@ class BlimpEnv:
         :param msg:
         :return:
         """
-        self.interactive_target_flag = True
-        if (self.teleokeyboard_flag == False):
+        if (self.target_flag >= 2 or self.target_flag==None):
+            self.target_flag = 2
             self.target_pose = msg.markers[0].pose
 
         # a = self.target_pose.orientation.x
@@ -246,7 +251,8 @@ class BlimpEnv:
         :param msg:
         :return:
         """
-        if (self.teleokeyboard_flag == False and self.interactive_target_flag == False):
+        if (self.target_flag >= 3 or self.target_flag==None):
+            self.target_flag = 3
             self.target_pose = msg
 
     def _controllercmd_callback(self, msg):
@@ -387,8 +393,8 @@ class BlimpEnv:
         key_z = msg.linear.z
         key_yaw = msg.angular.z
 
-        self.teleokeyboard_flag = True;
-        self._transform_keyboard_to_motorcmd(key_x, key_z, key_yaw);
+        self.target_flag = 1
+        self._transform_keyboard_to_motorcmd(key_x, key_z, key_yaw)
 
     def _transform_keyboard_to_motorcmd(self, key_x, key_z, key_yaw):
         """
@@ -411,7 +417,7 @@ class BlimpEnv:
         elif(key_x < 0 and key_z < 0): key_pitch = 1
         else: key_pitch = 0
 
-        if (self.teleokeyboard_flag):
+        if (self.target_flag >= 1 or self.target_flag==None):
             self.stick_angle = atan((key_yaw+abs(key_x))/(abs(key_z)+0.001))
             self.elv1_angle = 0*key_row + pi/36*key_pitch + 0*key_yaw
             self.elv2_angle = 0*key_row + pi/36*key_pitch + 0*key_yaw
