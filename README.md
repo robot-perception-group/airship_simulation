@@ -6,7 +6,7 @@ Blimp Robot Description File
 
 All Code in this repository - unless otherwise stated in local license or code headers is
 
-Copyright 2018 Max Planck Institute for Intelligent Systems
+Copyright 2020 Max Planck Institute for Intelligent Systems
 
 Licensed under the terms of the GNU General Public Licence (GPL) v3 or higher.
 See: https://www.gnu.org/licenses/gpl-3.0.en.html
