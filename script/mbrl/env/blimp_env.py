@@ -17,28 +17,6 @@ from visualization_msgs.msg import *
 
 from gazeboConnection import GazeboConnection
 
-"""
-blimp_node:
-interact with environment and samples data
-"""
-"""
-Publish Topic:
-    type: std_msgs/Float64
-    name: /blimp/botfin_joint_position_controller/command
-          /blimp/topfin_joint_position_controller/command
-          /blimp/leftfin_joint_position_controller/command
-          /blimp/rightfin_joint_position_controller/command
-          /blimp/stick_joint_position_controller/command
-
-    type: mav_msgs/Actuators
-    name: /blimp/command/motor_speed
-"""
-"""
-Subscribe Topic:
-    type: geometry_msgs/Twist
-    name: /blimp/teleokeyboardcmd
-"""
-
 class BlimpEnv:
 
     def __init__(self):
@@ -54,15 +32,6 @@ class BlimpEnv:
         self._loop()
 
     def _load(self):
-        """ load params """
-        """
-        limit radians: stick_angle [-1.56, 1.56]
-                       elv_angle [-0.087, 0.087]
-                       rud_angle [-0.087, 0.087]
-        limit speed: motor1_speed [-890, 890]
-                     motor2_speed [-890, 890]
-                     motor3_speed [-100, 100]
-        """
         rospy.loginfo("[Blimp Environment Node] Load and Initialize Parameters...")
 
         self.cnt = 0
@@ -89,11 +58,18 @@ class BlimpEnv:
         self.fin_rec = []
         self.motor_rec = []
 
-        # actuator limit
+        """
+        limit radians: stick_angle [-1.56, 1.56]
+                       elv_angle [-0.087, 0.087]
+                       rud_angle [-0.087, 0.087]
+        limit speed: motor1_speed [-100, 100]
+                     motor2_speed [-100, 100]
+                     motor3_speed [-30, 30]
+        """
         self.STICK_LIMIT = pi/2
         self.FIN_LIMIT = pi/36
         self.MOTOR_LIMIT = 100
-        self.MOTOR3_LIMIT = 70
+        self.MOTOR3_LIMIT = 30
 
         # action space
         # m1 m2 m3 s ftop fbot fleft fright
@@ -221,23 +197,9 @@ class BlimpEnv:
             self.target_flag = 2
             self.target_pose = msg.markers[0].pose
 
-        # a = self.target_pose.orientation.x
-        # b = self.target_pose.orientation.y
-        # c = self.target_pose.orientation.z
-        # d = self.target_pose.orientation.w
-        # quaternion = (a,b,c,d)
-        # from Quaternion to Euler Angle
-        # euler = tf.transformations.euler_from_quaternion(quaternion)
-        # phi = euler[0]
-        # the = -1*euler[1]
-        # psi = -1*euler[2]
-
-        # print("================================")
-        # print ("x,y,z = %2.5f, %2.5f, %2.5f" % (self.target_pose.position.x,self.target_pose.position.y,self.target_pose.position.z))
-        # print ("phi,the,psi = %2.5f, %2.5f, %2.5f" % (phi, the, psi))
-
     def _moving_target_callback(self, msg):
         """
+        geometry_msgs/Pose: 
         geometry_msgs/Point position
           float64 x
           float64 y
@@ -316,15 +278,6 @@ class BlimpEnv:
         self.angular_velocity = [p,q,r]
         self.linear_acceleration = [ax,ay,az]
 
-        # self.cnt += 1
-        # if self.cnt%50 == 0:
-        #     if self.cnt > 2000: self.cnt=0
-            # print("==================================================")
-            # print("phi, the, psi = %2.5f, %2.5f, %2.5f"%(phi,the,psi))
-            # print("p, q, r = %2.5f, %2.5f, %2.5f"%(p,q,r))
-            # print("ax, ay, az = %2.5f, %2.5f, %2.5f"%(ax,ay,az))
-
-
     def _gps_callback(self, msg):
         """
         geometry_msgs/PointStamped:
@@ -341,12 +294,6 @@ class BlimpEnv:
         :return:
         """
         self.location = msg
-
-        # self.cnt += 1
-        # if self.cnt%50 == 0:
-        #     if self.cnt > 2000: self.cnt=0
-        #     print("==================================================")
-        #     print ("x,y,z = %2.5f, %2.5f, %2.5f" % (msg.point.x, msg.point.y, msg.point.z))
 
     def _velocity_callback(self, msg):
         """
@@ -366,16 +313,8 @@ class BlimpEnv:
         """
         self.velocity = msg
 
-        # self.cnt += 1
-        # if self.cnt%5 == 0:
-        #     if self.cnt > 2000: self.cnt=0
-        #     print("==================================================")
-        #     print ("x,y,z = %2.5f, %2.5f, %2.5f" % (msg.twist.linear.x, msg.twist.linear.y, msg.twist.linear.z))
-
     def _teleokeyboardcmd_callback(self, msg):
         """
-        pass the teleokeyboardcmd to motor/fin command
-
         twist:
         geometry_msgs/Vector3 linear
             float64 x
@@ -397,16 +336,6 @@ class BlimpEnv:
         self._transform_keyboard_to_motorcmd(key_x, key_z, key_yaw)
 
     def _transform_keyboard_to_motorcmd(self, key_x, key_z, key_yaw):
-        """
-        Executed movements
-        :param stick_angle:
-        :param elv_angle:
-        :param rud_angle:
-        :param motor1_speed:
-        :param motor2_speed:
-        :param motor3_speed:
-        :return:
-        """
         if(key_x > 0): key_row = 1
         elif(key_x == 0): key_row = 0
         else: key_row = -1
@@ -489,7 +418,6 @@ class BlimpEnv:
             - 0
             normalized:
             - 0
-        ex: '{angular_velocities:[100,100,10]}'
         """
         motor1_limit = self._limit(self.motor1_speed, self.MOTOR_LIMIT)
         motor2_limit = -self._limit(self.motor2_speed, self.MOTOR_LIMIT)
@@ -504,8 +432,6 @@ class BlimpEnv:
 
     def _limit(self, target, limit):
         """
-        define target upper/lower bound
-
         :param target:
         :param limit:
         :return:
@@ -532,9 +458,6 @@ class BlimpEnv:
             self.RATE.sleep()
 
     def _reward(self):
-        """
-        define reward function as negtive distance from blimp to target location + negative control effort
-        """
         # define reward distance
         target_pose = self.target_pose
         dist_x = target_pose.position.x - self.location.point.x
@@ -589,16 +512,6 @@ class BlimpEnv:
         reward = -0.4*reward_distance - 0.4*reward_orientation - 0.1*reward_orientation_velocity - 0.1*reward_action
 
         self.pub_reward.publish(reward)
-
-        # self.cnt += 1
-        # if self.cnt%50 == 0:
-        #     print("===================================")
-        #     print("dist_x=%2.3f, dist_y=%2.3f, dist_z=%2.3f"%(dist_x,dist_y,dist_z))
-        #     print("reward_distance = %2.3f"%reward_distance)
-        #     print("ori_phi=%2.3f, ori_the=%2.3f, ori_psi=%2.3f"%(ori_phi,ori_the,ori_psi))
-        #     print("reward_orientation = %2.3f"%reward_orientation)
-        #     print("reward_action = %2.3f"%reward_action)
-        #     if self.cnt > 2000: self.cnt=0
 
 if __name__ == "__main__":
     BlimpEnv()
