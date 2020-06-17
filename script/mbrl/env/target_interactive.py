@@ -41,7 +41,7 @@ import copy
 import time 
 import tf
 from random import random
-from math import sin
+from math import pi, sin
 import numpy as np
 
 server = None
@@ -188,6 +188,6 @@ if __name__=="__main__":
 
         rospy.Timer(rospy.Duration(0.01), frameCallback)
 
-        time.sleep(1000)
+        time.sleep(120)
 
     rospy.spin()
