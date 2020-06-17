@@ -38,7 +38,7 @@ from tf.transformations import quaternion_from_euler
 
 import rospy
 import copy
-import time
+import time 
 import tf
 from random import random
 from math import sin
@@ -171,27 +171,13 @@ if __name__=="__main__":
 
     while not rospy.is_shutdown():
         # Task: take off
-        x = np.random.uniform(-7,7)
-        y = np.random.uniform(-7,7)
+        x = np.random.uniform(-10,10)
+        y = np.random.uniform(-10,10)
         z = 7
 
-        # Task: land
-        # x = np.random.uniform(-5,5)
-        # y = np.random.uniform(-5,5)
-        # z = 0
-
-        # Task: hovering
-        # x = np.random.uniform(-5,5)
-        # y = np.random.uniform(-5,5)
-        # z = 4
-
-        # Test Marker
-        # x = 5
-        # y = 5
-        # z = 7
         phi = 0
         the = 0
-        psi = 0
+        psi = -1*np.random.uniform(-pi,pi)
         q = quaternion_from_euler(phi, the, psi)
 
         position = Point( x, y, z)

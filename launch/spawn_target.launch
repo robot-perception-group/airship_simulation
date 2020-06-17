@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 
 <launch>
+
 	<!-- <node name="target" pkg="blimp_description" type="target_interactive.py" output="screen"/> -->
-	<node name="target" pkg="blimp_description" type="target_moving.py" output="screen"/>
+	<!-- <node name="target" pkg="blimp_description" type="target_moving.py" output="screen"/> -->
 
 	<!--<node name="rviz" pkg="rviz" type="rviz" />-->
 

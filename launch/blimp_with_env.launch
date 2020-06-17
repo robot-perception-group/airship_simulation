@@ -13,7 +13,7 @@
 	<arg name="enable_ground_truth" default="true" />
 	<arg name="enable_mavlink_interface" default="true"/>
 
-	<arg name="world_name" default="arena_RAL"/>
+	<arg name="world_name" default="basic"/>
 	<arg name="debug" default="false"/>
 	<arg name="gui" default="true"/>
 	<arg name="paused" default="false"/>
@@ -21,11 +21,11 @@
 	<arg name="wait_to_record_bag" default="false"/>
 	<arg name="verbose" default="true"/>
 
-	<arg name="rvizconfig" default="$(find blimp_description)/rviz/blimp_target.rviz" />
+	<arg name="rvizconfig" default="$(find blimp_description)/rviz/blimp.rviz" />
 
-	<arg name="X" default="-9.0"/>
-	<arg name="Y" default="-9.0"/>
-	<arg name="Z" default="0.1"/>
+	<arg name="X" default="0.0"/>
+	<arg name="Y" default="0.0"/>
+	<arg name="Z" default="0.0"/>
 
 	<!--********** load env **********-->
  	<env name="GAZEBO_MODEL_PATH" value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models"/>
@@ -68,7 +68,7 @@
 <!-- 		<node name="image_view" pkg="image_view" type="image_view" respawn="false" output="screen">
 			<remap from="image" to="/blimp/blimp/xtion/rgb/image_raw"/>
 		</node> -->
-		<!--<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />-->
+		<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />
 		<node name="blimp_env" pkg="blimp_description" type="blimp_env.py" output="screen"/>
 	</group>	
 

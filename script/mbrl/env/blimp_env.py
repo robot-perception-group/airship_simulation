@@ -186,6 +186,7 @@ class BlimpEnv:
         """
 
         self.target_pose = msg.markers[0].pose
+        print(self.target_pose)
 
     def _moving_target_callback(self, msg):
         """
