@@ -9,7 +9,7 @@
 # NO_ROS                            bool    Build without any ROS dependencies.
 
 cmake_minimum_required(VERSION 2.8.3)
-project(finliftdrag)
+project(finliftdrag_plugin)
 
 #
 #if ( ${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR} )
