@@ -1,0 +1,118 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+	<!-- wind -->
+
+	<xacro:if value="$(arg enable_wind)">
+		<xacro:wind_plugin_macro
+			namespace="${namespace}"
+			linkname="${namespace}/blimp_body_link"
+			xyz_offset="0 0 0"
+			wind_direction="-1 0 0"
+			wind_force_mean="0"
+			wind_force_variance="0.03"
+			wind_gust_direction="0 -1 0"
+			wind_gust_duration="1"
+			wind_gust_start="5"
+			wind_gust_force_mean="5"
+			wind_gust_force_variance="0.15"
+			wind_speed_mean="0"
+			use_custom_static_wind_field="false"
+			custom_wind_field_path="/home/yliu_local/MAVOCAP_ws/src/blimp_description/worlds/wind_field.txt"> 
+		</xacro:wind_plugin_macro>
+	</xacro:if>
+
+	<!-- aerodynamic -->
+	<xacro:if value="$(arg enable_physics)">
+		<xacro:property name="bot_rud_liftdrag_upward">
+			<upward>0 -1 0</upward>
+		</xacro:property>
+		<xacro:property name="bot_rud_liftdrag_forward">
+			<forward>1 0 0</forward>
+		</xacro:property>
+		<xacro:property name="bot_rud_liftdrag_cp">
+			<cp>0 0 0</cp>
+		</xacro:property>
+		<xacro:property name="top_rud_liftdrag_upward">
+			<upward>0 1 0</upward>
+		</xacro:property>
+		<xacro:property name="top_rud_liftdrag_forward">
+			<forward>1 0 0</forward>
+		</xacro:property>
+		<xacro:property name="top_rud_liftdrag_cp">
+			<cp>0 0 0</cp>
+		</xacro:property>
+		<xacro:property name="left_elv_liftdrag_upward">
+			<upward>0 1 0</upward>
+		</xacro:property>
+		<xacro:property name="left_elv_liftdrag_forward">
+			<forward>1 0 0</forward>
+		</xacro:property>
+		<xacro:property name="left_elv_liftdrag_cp">
+			<cp>0 0 0</cp>
+		</xacro:property>
+		<xacro:property name="right_elv_liftdrag_upward">
+			<upward>0 -1 0</upward>
+		</xacro:property>
+		<xacro:property name="right_elv_liftdrag_forward">
+			<forward>1 0 0</forward>
+		</xacro:property>
+		<xacro:property name="right_elv_liftdrag_cp">
+			<cp>0 0 0</cp>
+		</xacro:property>
+		<xacro:finliftdrag
+			namespace="${namespace}"
+			link_name="${namespace}/bot_rud_joint_link"
+			air_density="${air_density}"
+			area="${area_blade}">
+			<xacro:insert_block name="bot_rud_liftdrag_upward" />
+			<xacro:insert_block name="bot_rud_liftdrag_forward" />
+			<xacro:insert_block name="bot_rud_liftdrag_cp" />
+		</xacro:finliftdrag>
+		<xacro:finliftdrag
+			namespace="${namespace}"
+			link_name="${namespace}/top_rud_joint_link"
+			air_density="${air_density}"
+			area="${area_blade}">
+			<xacro:insert_block name="top_rud_liftdrag_upward" />
+			<xacro:insert_block name="top_rud_liftdrag_forward" />
+			<xacro:insert_block name="top_rud_liftdrag_cp" />
+		</xacro:finliftdrag>
+		<xacro:finliftdrag
+			namespace="${namespace}"
+			link_name="${namespace}/left_elv_joint_link"
+			air_density="${air_density}"
+			area="${area_blade}">
+			<xacro:insert_block name="left_elv_liftdrag_upward" />
+			<xacro:insert_block name="left_elv_liftdrag_forward" />
+			<xacro:insert_block name="left_elv_liftdrag_cp" />
+		</xacro:finliftdrag>
+		<xacro:finliftdrag
+			namespace="${namespace}"
+			link_name="${namespace}/right_elv_joint_link"
+			air_density="${air_density}"
+			area="${area_blade}">
+			<xacro:insert_block name="right_elv_liftdrag_upward" />
+			<xacro:insert_block name="right_elv_liftdrag_forward" />
+			<xacro:insert_block name="right_elv_liftdrag_cp" />
+		</xacro:finliftdrag> 
+	</xacro:if>
+
+	<!-- buoyancy -->
+	<xacro:if value="$(arg enable_physics)">
+		<xacro:dynamic_volume
+			namespace="${namespace}"
+			linkname="${namespace}/blimp_body_link"
+			dynamicvolumetopic="dynamicvolumetopic"
+			reference_altitude="341.0"/>
+	</xacro:if>
+
+	<!-- logger -->
+	<xacro:if value="$(arg enable_logging)">
+	   <xacro:bag_plugin_macro
+	      namespace="${namespace}"
+	      bag_file="$(arg log_file)"
+	      rotor_velocity_slowdown_sim="${rotor_velocity_slowdown_sim}"
+	      wait_to_record_bag="$(arg wait_to_record_bag)" />
+	</xacro:if>
+
+</robot>
