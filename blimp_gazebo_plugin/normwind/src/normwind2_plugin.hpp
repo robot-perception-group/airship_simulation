@@ -20,8 +20,8 @@
  */
 
 
-#ifndef ROTORS_GAZEBO_PLUGINS_NORMWIND_PLUGIN_H
-#define ROTORS_GAZEBO_PLUGINS_NORMWIND_PLUGIN_H
+#ifndef ROTORS_GAZEBO_PLUGINS_GAZEBO_WIND_PLUGIN_H
+#define ROTORS_GAZEBO_PLUGINS_GAZEBO_WIND_PLUGIN_H
 
 #include <string>
 #include <random>
@@ -32,7 +32,7 @@
 
 #include <mav_msgs/default_topics.h>  // This comes from the mav_comm repo
 
-#include "common.h"
+#include "rotors_gazebo_plugins/common.h"
 
 #include "WindSpeed.pb.h"             // Wind speed message
 #include "WrenchStamped.pb.h"         // Wind force message

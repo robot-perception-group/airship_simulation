@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-#include "normwind_plugin.hpp"
+#include "normwind_plugin.h"
 
 #include <fstream>
 #include <math.h>
@@ -157,10 +157,10 @@ void GazeboWindPlugin::OnUpdate(const common::UpdateInfo& _info) {
     double wind_strength = wind_force_mean_;
     // Get normal distribution wind direction
     ignition::math::Vector3d wind_direction;
-    wind_direction.X() = wind_direction_distribution_X_(wind_direction_generator_);
-    wind_direction.Y() = wind_direction_distribution_Y_(wind_direction_generator_);
-    wind_direction.Z() = wind_direction_distribution_Z_(wind_direction_generator_);
-    ignition::math::Vector3d wind = wind_strength * wind_direction;
+    wind_direction_.X() = wind_direction_distribution_X_(wind_direction_generator_);
+    wind_direction_.Y() = wind_direction_distribution_Y_(wind_direction_generator_);
+    wind_direction_.Z() = wind_direction_distribution_Z_(wind_direction_generator_);
+    ignition::math::Vector3d wind = wind_strength * wind_direction_;
     // Apply a force from the constant wind to the link.
     link_->AddForceAtRelativePosition(wind, xyz_offset_);
 
@@ -170,10 +170,10 @@ void GazeboWindPlugin::OnUpdate(const common::UpdateInfo& _info) {
       double wind_gust_strength = wind_gust_force_mean_;
       // Get normal distribution wind gust direction
       ignition::math::Vector3d wind_gust_direction;
-      wind_gust_direction.X() = wind_gust_direction_distribution_X_(wind_gust_direction_generator_);
-      wind_gust_direction.Y() = wind_gust_direction_distribution_Y_(wind_gust_direction_generator_);
-      wind_gust_direction.Z() = wind_gust_direction_distribution_Z_(wind_gust_direction_generator_);
-      wind_gust = wind_gust_strength * wind_gust_direction;
+      wind_gust_direction_.X() = wind_gust_direction_distribution_X_(wind_gust_direction_generator_);
+      wind_gust_direction_.Y() = wind_gust_direction_distribution_Y_(wind_gust_direction_generator_);
+      wind_gust_direction_.Z() = wind_gust_direction_distribution_Z_(wind_gust_direction_generator_);
+      wind_gust = wind_gust_strength * wind_gust_direction_;
       // Apply a force from the wind gust to the link.
       link_->AddForceAtRelativePosition(wind_gust, xyz_offset_);
     }
@@ -197,7 +197,7 @@ void GazeboWindPlugin::OnUpdate(const common::UpdateInfo& _info) {
     wind_force_pub_->Publish(wrench_stamped_msg_);
 
     // Calculate the wind speed.
-    wind_velocity = wind_speed_mean_ * wind_direction;
+    wind_velocity = wind_speed_mean_ * wind_direction_;
   } else {
     // Get the current position of the aircraft in world coordinates.
     ignition::math::Vector3d link_position = link_->WorldPose().Pos();
@@ -303,7 +303,10 @@ void GazeboWindPlugin::OnUpdate(const common::UpdateInfo& _info) {
       // Interpolate wind velocity at aircraft position.
       wind_velocity = TrilinearInterpolation(
         link_position, wind_at_vertices, interpolation_points);
-    } 
+    } else {
+      // Set the wind velocity to the default constant value specified by user.
+      wind_velocity = wind_speed_mean_ * wind_direction_;
+    }
   }
   
   wind_speed_msg_.mutable_header()->set_frame_id(frame_id_);

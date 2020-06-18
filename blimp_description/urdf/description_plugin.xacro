@@ -1,23 +1,24 @@
 <?xml version="1.0" ?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 	<!-- wind -->
-
 	<xacro:if value="$(arg enable_wind)">
 		<xacro:wind_plugin_macro
 			namespace="${namespace}"
 			linkname="${namespace}/blimp_body_link"
 			xyz_offset="0 0 0"
-			wind_direction="-1 0 0"
-			wind_force_mean="0"
-			wind_force_variance="0.03"
-			wind_gust_direction="0 -1 0"
-			wind_gust_duration="1"
-			wind_gust_start="5"
+			wind_direction_mean="0"
+			wind_direction_variance="1"
+			wind_force_mean="3"
+			wind_force_variance="1"
+			wind_gust_direction_mean="0"
+			wind_gust_direction_variance="1"
+			wind_gust_duration="2"
+			wind_gust_start="2"
 			wind_gust_force_mean="5"
-			wind_gust_force_variance="0.15"
-			wind_speed_mean="0"
+			wind_speed_mean="10"
+			wind_speed_variance="40"
 			use_custom_static_wind_field="false"
-			custom_wind_field_path="/home/yliu_local/MAVOCAP_ws/src/blimp_description/worlds/wind_field.txt"> 
+			custom_wind_field_path="~/blimp_simulator/blimp_description/worlds/wind_field.txt"> 
 		</xacro:wind_plugin_macro>
 	</xacro:if>
 
