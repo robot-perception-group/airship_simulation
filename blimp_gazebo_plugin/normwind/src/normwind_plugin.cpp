@@ -22,10 +22,15 @@
 #include "normwind_plugin.hpp"
 #include "common.h"
 
+#include <fstream>
+#include <math.h>
+
+#include "ConnectGazeboToRosTopic.pb.h"
+
 namespace gazebo {
 
 GazeboWindPlugin::~GazeboWindPlugin() {
-  update_connection_->~Connection();
+
 }
 
 void GazeboWindPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {

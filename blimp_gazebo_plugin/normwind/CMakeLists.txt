@@ -58,11 +58,6 @@ message(STATUS "CMAKE_BINARY_DIR = ${CMAKE_BINARY_DIR}")
 # that need to be installed.
 set(targets_to_install "")
 
-#include sdf library
-include_directories(${/usr/include/sdformat-6.2/sdf})
-
-
-
 # =============================================================================================== #
 # ======================================== STATUS MESSAGES ====================================== #
 # =============================================================================================== #
@@ -101,13 +96,6 @@ add_definitions(-DROS_ASSERT_ENABLED)
 
 if (NOT NO_ROS)
   find_package(catkin REQUIRED COMPONENTS
-	controller_manager
-	gazebo_ros
-	joint_state_publisher
-	robot_state_publisher
-	rospy
-	roscpp
-	rviz
     gazebo_plugins
     cv_bridge
     geometry_msgs
@@ -125,10 +113,10 @@ endif()
 
 message(STATUS "CMAKE_BINARY_DIR = ${CMAKE_BINARY_DIR}" )
 
-find_package(Eigen)
+find_package(Eigen )
 find_package(gazebo_dev QUIET)
 if (NOT GAZEBO_DEV_FOUND)
-  find_package(gazebo REQUIRED)
+  find_package(gazebo )
 endif()
 
 if(${gazebo_VERSION_MAJOR} LESS 9)
@@ -147,8 +135,8 @@ if(${gazebo_VERSION_MAJOR} LESS 9)
 
 endif()
 
-find_package(OpenCV)
-find_package(Glog)
+find_package(OpenCV )
+find_package(Glog )
 link_directories(${GAZEBO_LIBRARY_DIRS})
 include_directories(${GAZEBO_INCLUDE_DIRS})
 include_directories(${OpenCV_INCLUDE_DIRS})
@@ -190,7 +178,7 @@ message(STATUS "PROTOBUF_IMPORT_DIRS = " ${PROTOBUF_IMPORT_DIRS})
 # protobuf required for publishing/subscribing to Gazebo
 # messages
 # WARNING: THIS MUST BE RUN AFTER PROTOBUF_IMPORT_DIRS IS SETUP
-find_package(Protobuf)
+find_package(Protobuf REQUIRED)
 pkg_check_modules(PROTOBUF protobuf)
 
 # Protobuf version check
@@ -225,13 +213,15 @@ link_libraries(mav_msgs)
 include_directories(include ${catkin_INCLUDE_DIRS} ${GAZEBO_MSG_INCLUDE_DIRS})
 include_directories(${Eigen_INCLUDE_DIRS})
 
-#========================================= DynamicVolume PLUGIN ==========================================//
-add_library(${PROJECT_NAME} SHARED src/normwind_plugin.cpp)
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
-# =============================================================================================== #
-# ======================================= EXTERNAL LIBRARIES ==================================== #
-# =============================================================================================== #
+#========================================= normwind PLUGIN ===========================================//
+  add_library(${PROJECT_NAME} SHARED src/normwind_plugin.cpp)
+  target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+  if (NOT NO_ROS)
+    add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
+  endif()
+
+
 
 message(STATUS "CMAKE_INSTALL_PREFIX = ${CMAKE_INSTALL_PREFIX}")
 if (NOT NO_ROS)
@@ -250,6 +240,5 @@ install(
   DESTINATION ${BIN_DESTINATION}
   LIBRARY DESTINATION ${LIB_DESTINATION}
 )
-
 
 #message(FATAL_ERROR "Reached EOF.")

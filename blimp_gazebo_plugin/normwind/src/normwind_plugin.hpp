@@ -30,13 +30,15 @@
 #include <gazebo/gazebo.hh>
 #include <gazebo/physics/physics.hh>
 
+#include "common.h"
+
 #include "Wind.pb.h"
 
 namespace gazebo {
 // Default values
-static const std::string kDefaultNamespace = "";
 static const std::string kDefaultFrameId = "world";
 static const std::string kDefaultLinkName = "base_link";
+static const std::string kDefaultWindSpeedPubTopic = "wind_speed";
 
 static constexpr double kDefaultWindVelocityMean = 0.0;
 static constexpr double kDefaultWindVelocityMax = 100.0;
