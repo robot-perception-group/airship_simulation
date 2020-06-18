@@ -1,5 +1,5 @@
 ![Blimp Description file launch in Gazebo](image/blimp.png)
-Blimp Robot Description File  testetsetest
+Blimp Robot Description File 
 =================================================================
 
 # Copyright and License
