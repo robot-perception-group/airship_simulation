@@ -32,6 +32,7 @@ Build packages with **catkin_make**
 # Additional Requirements
 * [blimpRL] (https://github.com/ootang2018/blimpRL)
 * [aircap] (https://github.com/robot-perception-group/AIRCAP)
+* [tensorflow] (https://www.tensorflow.org/)
 
 Installation Instructions - Ubuntu 18.04 with ROS Melodic and Gazebo 9
 ---------------------------------------------------------------------------
@@ -88,16 +89,6 @@ $ echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
 $ source ~/.bashrc
 ```
 
-5. Update the pre-installed Gazebo version. This fix the issue with the `error in REST request for accessing api.ignition.org`
-
-```console
-$ sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
-$ wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
-$ sudo apt update
-$ sudo apt install gazebo9 gazebo9-* ros-melodic-gazebo-*
-$ sudo apt upgrade
-```
-
 Basic Usage
 ----------------------------------------------------------
 After installing, you can test with the following commands in a terminal
@@ -151,16 +142,18 @@ $ pip install pyyaml
 $ pip install -r requirements.txt
 $ cd ~/catkin_ws_py3
 $ catkin_make
+$ source devel/setup.bash
 ```
 
-After compiling with `catkin_make`, it can be tested with
+After compiling with `catkin_make` and spawn the gazebo environment, it can be tested with
 ```console
-$ roslaunch blimp_description blimp_with_env.launch
-$ roslaunch blimp_description spawn_target.launch
 $ roslaunch mbrl_pets training.launch
 ```
 you should be able to see training started
 
+
+AirCap
+----------------------------------------------------------
 Finally, if AirCap is installed:
 ```console
 $ cd aircap/script/simulation
