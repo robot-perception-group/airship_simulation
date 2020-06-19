@@ -154,7 +154,7 @@ you should be able to see training started
 
 AirCap
 ----------------------------------------------------------
-Finally, if AirCap is installed:
+If AirCap is installed:
 ```console
 $ cd aircap/script/simulation
 $ bash setup_mavocap_gazebo.sh 
