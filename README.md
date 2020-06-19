@@ -21,7 +21,7 @@ ROS packages:
 # Compiling
 Link or copy all flight and optional packages required into the *src* folder of your catkin workspace.
 
-Build packages with **catkin_make**
+Build packages with **catkin build**
 
 # Requirements
 * [ROS] (http://wiki.ros.org/melodic) 
@@ -78,7 +78,7 @@ you might need to look into github page (https://github.com/ootang2018/AirCap.gi
 
 ```console
 $ rosdep install --from-paths src -i
-$ catkin_make
+$ catkin build
 $ source devel/setup.bash
 ```
 
@@ -121,13 +121,13 @@ $ rviz
 
 blimpRL
 ----------------------------------------------------------
-blimpRL package contains different RL agents. To compile the code, it is required to create a separate catkin workspace that has to be compiled with python3. Therefore, it is also recommended to create virtual environment such as [miniconda](https://docs.conda.io/en/latest/miniconda.html) to separate into different workspaces. 
+blimpRL package contains different RL agents. To compile the code, it is required to create a separate catkin workspace that has to be compiled with python3. Therefore, it is also recommended to create a virtual environment using, i.e. [miniconda](https://docs.conda.io/en/latest/miniconda.html), to separate workspaces with different python version. 
 ```console
-$ conda create --"name" python=3
-$ conda activate "name"
+$ conda create --py3 python=3
+$ conda activate py3
 ```
 
-create a catkin workspace and compile with python3
+create a new catkin workspace and build the environment with catkin and python3
 ```console
 $ mkdir -p ~/catkin_ws_py3/src
 $ cd ~/catkin_ws_py3/src
@@ -137,15 +137,14 @@ $ catkin init
 $ cd ~/catkin_ws_py3/src
 $ git clone https://github.com/ootang2018/blimpRL
 $ cd blimpRL
-$ pip install rospkg
-$ pip install pyyaml
+$ pip install rospkg pyyaml
 $ pip install -r requirements.txt
+$ cp catkin_make_with_py3.sh ~/catkin_ws_py3
 $ cd ~/catkin_ws_py3
-$ catkin_make
 $ source devel/setup.bash
 ```
 
-After compiling with `catkin_make` and spawn the gazebo environment, it can be tested with
+After compiling with `catkin build` and spawn the gazebo environment, it can be tested with
 ```console
 $ roslaunch mbrl_pets training.launch
 ```
