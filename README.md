@@ -15,8 +15,8 @@ See: https://www.gnu.org/licenses/gpl-3.0.en.html
 # Contents
 ROS packages:
 
-* /blimp_description -- including blimp xml files that described the robot and supports Gazebo/ROS styled simulation. Several c++ physics plugins
-* /blimp_description/script/mbrl -- python/ROS api
+* /blimp_description -- including blimp xml files that described the robot and supports Gazebo/ROS styled simulation. 
+* /blimp_gazebo_plugin -- some gazebo plugins
 
 # Compiling
 Link or copy all flight and optional packages required into the *src* folder of your catkin workspace.
