@@ -28,7 +28,6 @@ Build packages with **catkin_make**
 * [mav_msgs] (http://wiki.ros.org/mav_msgs)
 * [Gazebo] (http://gazebosim.org/) -- tested with Gazebo 9.0
 * [rotors_simulator] (https://github.com/ethz-asl/rotors_simulator)
-* [BebopS] (https://github.com/gsilano/BebopS)
 
 # Additional Requirements
 * [blimpRL] (https://github.com/ootang2018/blimpRL)
@@ -62,9 +61,8 @@ $ catkin init
 $ cd ~/catkin_ws/src
 $ git clone -b med18_gazebo9 https://github.com/gsilano/rotors_simulator.git
 $ git clone -b med18_gazebo9 https://github.com/gsilano/mav_comm.git
-$ git clone -b dev/gazebo9 https://github.com/gsilano/BebopS.git
 $ git clone git clone https://github.com/ros-teleop/teleop_twist_keyboard
-$ git clone https://github.com/ootang2018/blimp_description.git
+$ git clone https://github.com/ootang2018/blimp_simulation.git
 $ cd ~/catkin_ws
 ```
 
@@ -75,7 +73,7 @@ $ git clone https://github.com/ootang2018/AirCap.git
 ```
 you might need to look into github page (https://github.com/ootang2018/AirCap.git) for more installation instruction
 
-3. Build your workspace with `python_catkin_tools` (therefore you need `python_catkin_tools`)
+3. Build your workspace with `python_catkin_tools` 
 
 ```console
 $ rosdep install --from-paths src -i
@@ -103,7 +101,6 @@ $ sudo apt upgrade
 Basic Usage
 ----------------------------------------------------------
 After installing, you can test with the following commands in a terminal
-
 ```console
 $ roslaunch blimp_description blimp_with_env.launch  
 $ roslaunch blimp_description teleokeyboard.launch 
@@ -111,7 +108,6 @@ $ roslaunch blimp_description teleokeyboard.launch
 You should see blimp in gazebo environment and be able to fly it via teleokeyboard
 
 To fly with blimp, it is necessary to generate thrust with the rotors, this is achieved by sending commands as follows:
-
  ```console
 $ rostopic pub /blimp/command/motor_speed mav_msgs/Actuators '{angular_velocities: [100, 100, 0]}'
 ```
@@ -120,7 +116,6 @@ To speed up the simulation, a certain set of parameters can be included by varyi
 `enable_meshes` (it enables the mesh of the blimp), `enable_sensors` (it enables the ground truth sensor), `enable_wind_plugin` (external disturbances will be simulated)
 
 These value can be modified before simulating the blimp behavior acting on the launch file:
-
 ```console
 $ roslaunch blimp_description blimp_with_env.launch enable_meshes:=false
 ```
@@ -133,23 +128,38 @@ $ rviz
 ``` 
 ![interactive marker](image/interactive_marker.png)
 
-blimpRL integration
+blimpRL
 ----------------------------------------------------------
-blimpRL package contains different RL agents. To compile the code, it is required to create a separate catkin workspace that has to be compiled with python3. Therefore, it is also recommended to create virtual environment such as [miniconda](https://docs.conda.io/en/latest/miniconda.html) to separate workspace. 
-
+blimpRL package contains different RL agents. To compile the code, it is required to create a separate catkin workspace that has to be compiled with python3. Therefore, it is also recommended to create virtual environment such as [miniconda](https://docs.conda.io/en/latest/miniconda.html) to separate into different workspaces. 
 ```console
-$ mkdir -p ~/catkin_ws_py3/src
-$ cd ~/catkin_ws/src
-$ catkin_init_workspace  # initialize your catkin workspace
-$ cd ~/catkin_ws/
-$ catkin init
-$ cd ~/catkin_ws/src
-$ git clone https://github.com/ootang2018/blimpRL
-$ cd blimpRL
-$ cp catkin_make_with_py3.sh ~/catkin_ws_py3
-$ . catkin_make_with_py3.sh
+$ conda create --"name" python=3
+$ conda activate "name"
 ```
 
+create a catkin workspace and compile with python3
+```console
+$ mkdir -p ~/catkin_ws_py3/src
+$ cd ~/catkin_ws_py3/src
+$ catkin_init_workspace  # initialize your catkin workspace
+$ cd ~/catkin_ws_py3/
+$ catkin init
+$ cd ~/catkin_ws_py3/src
+$ git clone https://github.com/ootang2018/blimpRL
+$ cd blimpRL
+$ pip install rospkg
+$ pip install pyyaml
+$ pip install -r requirements.txt
+$ cd ~/catkin_ws_py3
+$ catkin_make
+```
+
+After compiling with `catkin_make`, it can be tested with
+```console
+$ roslaunch blimp_description blimp_with_env.launch
+$ roslaunch blimp_description spawn_target.launch
+$ roslaunch mbrl_pets training.launch
+```
+you should be able to see training started
 
 Finally, if AirCap is installed:
 ```console
