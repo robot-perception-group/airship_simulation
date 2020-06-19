@@ -72,6 +72,7 @@ and optionally
 $ git clone https://github.com/ootang2018/AirCap.git
 
 ```
+you might need to look into their github page for more installation instruction
 
 3. Build your workspace with `python_catkin_tools` (therefore you need `python_catkin_tools`)
 
