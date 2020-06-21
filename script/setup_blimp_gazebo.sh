@@ -1,6 +1,6 @@
 #!/bin/bash
 
-enable_wind=true
+enable_wind=false
 
 WORLD="basic"
 
