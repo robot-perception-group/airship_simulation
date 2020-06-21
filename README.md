@@ -32,7 +32,6 @@ Build packages with **catkin build**
 # Additional Requirements
 * [blimpRL] (https://github.com/ootang2018/blimpRL)
 * [aircap] (https://github.com/robot-perception-group/AIRCAP)
-* [tensorflow] (https://www.tensorflow.org/)
 
 Installation Instructions - Ubuntu 18.04 with ROS Melodic and Gazebo 9
 ---------------------------------------------------------------------------
@@ -137,7 +136,6 @@ $ catkin init
 $ cd ~/catkin_ws_py3/src
 $ git clone https://github.com/ootang2018/blimpRL
 $ cd blimpRL
-$ pip install rospkg pyyaml
 $ pip install -r requirements.txt
 $ cp catkin_make_with_py3.sh ~/catkin_ws_py3
 $ cd ~/catkin_ws_py3
