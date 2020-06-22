@@ -122,7 +122,7 @@ blimpRL
 ----------------------------------------------------------
 blimpRL package contains different RL agents. To compile the code, it is required to create a separate catkin workspace that has to be compiled with python3. Therefore, it is also recommended to create a virtual environment using, i.e. [miniconda](https://docs.conda.io/en/latest/miniconda.html), to separate workspaces with different python version. 
 ```console
-$ conda create --py3 python=3
+$ conda create --name py3 python=3
 $ conda activate py3
 ```
 
