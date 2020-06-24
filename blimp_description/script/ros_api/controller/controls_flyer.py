@@ -142,11 +142,12 @@ class ControlsFlyer():
             self.unwrap_obs(obs)
 
             if time_step%50 == 0:
+
                 print("----------------------------")
-                print("action[0]=%2.5f, action[1]=%2.5f" % (self.action[0], self.action[1]))
-                print("cmd[0]=%2.3f, cmd[1]=%2.3f, cmd[2]=%2.3f, cmd[3]=%2.3f" % (self.cmd_rotor[0],self.cmd_rotor[1],self.cmd_rotor[2],self.cmd_rotor[3]))
-                # print("(x,y,z)=(%2.1f, %2.1f, %2.1f)" % (self.local_position_target[0], self.local_position_target[1], self.local_position_target[2]))
-                print("(phi,the,psi)=((%2.3f, %2.3f, %2.3f))" % (self.attitude[0], self.attitude[1], self.attitude[2]))
+                print("action = %2.3f, %2.3f, %2.3f" % (self.action[0], self.action[1], self.action[2]))
+                print("cmd[0] = %2.3f, cmd[1]=%2.3f, cmd[2]=%2.3f, cmd[3]=%2.3f" % (self.cmd_rotor[0],self.cmd_rotor[1],self.cmd_rotor[2],self.cmd_rotor[3]))
+                print("(x,y,z) = ", self.local_position_target - self.local_position)
+                print("(phi,the,psi) = ", self.attitude - self.attitude_target)
                 total_reward+=reward
 
         obs = self.env.reset()

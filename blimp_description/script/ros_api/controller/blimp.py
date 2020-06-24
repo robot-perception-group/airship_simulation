@@ -263,9 +263,7 @@ class BlimpEnv():
         :return:
         """
         target_pose = msg.markers[0].pose
-        print("Interactive Target Pose")
-        print(target_pose)
-        print("=============================")
+
         euler = self._euler_from_pose(target_pose)
         target_phi, target_the, target_psi = 0, 0, euler[2]
         self.target_angle = [target_phi, target_the, target_psi]
@@ -275,6 +273,11 @@ class BlimpEnv():
         target_pose.position.z = target_pose.position.z*-1
         self.target_position = [target_pose.position.x, target_pose.position.y, target_pose.position.z]
         # self.target_position = [0, 0, -7]
+
+        print("Interactive Target Pose")
+        print("=============================")
+        print("position = ",self.target_position)
+        print("angle = ",self.target_angle)
     
     def _moving_target_callback(self, msg):
         """
