@@ -64,10 +64,10 @@
 		<node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"	output="screen" args="revolute_joint_state_controller stick_joint_position_controller botfin_joint_position_controller topfin_joint_position_controller leftfin_joint_position_controller rightfin_joint_position_controller"/>
 		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
 		<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
-		<node name="image_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+		<!--<node name="image_view" pkg="image_view" type="image_view" respawn="false" output="screen">
 			<remap from="image" to="/blimp/blimp/xtion/rgb/image_raw"/>
-		</node> 
-		<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />
+		</node> -->
+		<!--<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />-->
 		<node name="blimp_env" pkg="blimp_description" type="blimp_env.py" output="screen"/>
 	</group>	
 </launch>
