@@ -1,11 +1,11 @@
 #!/bin/bash
 
 
-ROBOS=$1
+ROBOS=1
 
-COMSUCCESSRATE=$2
+COMSUCCESSRATE=100
 
-NAME=$3
+NAME=test
 
 WORLD="arena_RAL"
 
@@ -47,11 +47,12 @@ screen -d -m -S GCSVIS screen sh -c "rosrun gcs_visualization gcs_visualization_
 
 sleep 3
 
-echo "Starting AIRCAP for robot $id"
+echo "Starting BLIMP Spawning"
 screen -d -m -S BLIMP1 screen sh -c "conda activate py2; roslaunch blimp_description blimp_without_env.launch roboID:=1 --screen"
 
 sleep 3
 
+echo "Starting AIRCAP for robot $id"
 screen -d -m -S AIRCAP1 screen sh -c "roslaunch aircap simulation.launch robotID:=1 numRobots:=$ROBOS comSuccessRate:=$COMSUCCESSRATE --screen"
 
 sleep 1

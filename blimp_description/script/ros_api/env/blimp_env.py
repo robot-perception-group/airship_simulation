@@ -439,6 +439,7 @@ class BlimpEnv:
         self.pub_motor_speed.publish(all_motor_speed)
         self.motor_rec = [motor1_limit, motor2_limit, motor3_limit]
 
+
     def _limit(self, target, limit):
         """
         :param target:
@@ -454,7 +455,7 @@ class BlimpEnv:
         obs_nor = obs_limit/limit
         return obs_nor
 
-    def _action_publish(self):
+    def _update_action(self):
         self._fin_attitude_publish()
         self._stick_attitude_publish()
         self._motor_speed_publish()
@@ -462,7 +463,7 @@ class BlimpEnv:
     def _loop(self):
         rospy.loginfo("[Blimp Environment Node] Activated")
         while not rospy.is_shutdown():
-            self._action_publish()
+            self._update_action()
             self._reward()
             self.RATE.sleep()
 
