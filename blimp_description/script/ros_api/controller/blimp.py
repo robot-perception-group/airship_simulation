@@ -32,8 +32,9 @@ class BlimpActionSpace():
 
 class BlimpObservationSpace():
     def __init__(self):
-        self.observation_space = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        self.high = np.array([pi, pi, pi, pi, pi, pi, 10, 10, 10, 5, 5, 5, 3 ,3 ,3])
+
+        self.observation_space = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.high = np.array([pi, pi, pi, pi, pi, pi, pi/2, pi/4, pi/4, 10, 10, 10, 10 ,10 ,10 , 5, 2.5, 2.5, 2, 1, 1])
         self.low = -self.high
         self.shape = self.observation_space.shape
         self.dO = self.observation_space.shape[0]
@@ -56,7 +57,8 @@ class BlimpEnv():
         rospy.loginfo("[Control Node] Load and Initialize Parameters...")
 
         self.RATE = rospy.Rate(100) # loop frequency
-        self.GRAVITY = -9.8
+        self.GRAVITY = 9.81
+        self.cnt = 0
 
         # action noise
         noise_stddev = 0.1
@@ -171,12 +173,12 @@ class BlimpEnv():
         d = msg.orientation.w
 
         p = msg.angular_velocity.x
-        q = msg.angular_velocity.y
+        q = -1*msg.angular_velocity.y
         r = -1*msg.angular_velocity.z
 
-        ax = msg.linear_acceleration.x
-        ay = -1*msg.linear_acceleration.y
-        az = msg.linear_acceleration.z+self.GRAVITY
+        ax = -1*msg.linear_acceleration.x
+        ay = msg.linear_acceleration.y
+        az = -1*msg.linear_acceleration.z + self.GRAVITY
 
         # from Quaternion to Euler Angle
         euler = MyTF.euler_from_quaternion(a,b,c,d)
@@ -184,6 +186,8 @@ class BlimpEnv():
         phi = euler[0]
         the = -1*euler[1]
         psi = -1*euler[2]
+
+        # NED Frame
         self.angle = [phi,the,psi]
         self.angular_velocity = [p,q,r]
         self.linear_acceleration = [ax,ay,az]
@@ -204,6 +208,10 @@ class BlimpEnv():
         :return:
         """
         location = msg
+
+        # NED Frame
+        location.point.y = location.point.y * -1
+        location.point.z = location.point.z * -1
         self.position = [location.point.x, location.point.y, location.point.z]
 
     def _velocity_callback(self, msg):
@@ -223,6 +231,10 @@ class BlimpEnv():
             float64 z
         """
         velocity = msg
+
+        # NED Frame
+        velocity.twist.linear.y = velocity.twist.linear.y * -1
+        velocity.twist.linear.z = velocity.twist.linear.z * -1
         self.velocity = [velocity.twist.linear.x, velocity.twist.linear.y, velocity.twist.linear.z]
 
     def _interactive_target_callback(self, msg):
@@ -257,8 +269,12 @@ class BlimpEnv():
         euler = self._euler_from_pose(target_pose)
         target_phi, target_the, target_psi = 0, 0, euler[2]
         self.target_angle = [target_phi, target_the, target_psi]
+
+        # NED Frame
+        target_pose.position.y = target_pose.position.y*-1
+        target_pose.position.z = target_pose.position.z*-1
         self.target_position = [target_pose.position.x, target_pose.position.y, target_pose.position.z]
-        # self.target_position = [0, 0, 7]
+        # self.target_position = [0, 0, -7]
     
     def _moving_target_callback(self, msg):
         """
@@ -280,8 +296,12 @@ class BlimpEnv():
         euler = self._euler_from_pose(target_pose)
         target_phi, target_the, target_psi = 0, 0, euler[2]
         self.target_angle = [target_phi, target_the, target_psi]
+
+        # NED Frame
+        target_pose.position.y = target_pose.position.y*-1
+        target_pose.position.z = target_pose.position.z*-1
         self.target_position = [target_pose.position.x, target_pose.position.y, target_pose.position.z]
-        # self.target_position = [0, 0, 7]
+        # self.target_position = [0, 0, -7]
 
     def _euler_from_pose(self, pose):
         a = pose.orientation.x

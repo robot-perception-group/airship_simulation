@@ -6,12 +6,12 @@
 
 	<arg name="is_input_joystick" default="false"/>
 	<arg name="enable_meshes" default="true"/>
-	<arg name="enable_wind" default="true"/>
+	<arg name="enable_wind" default="false"/>
 	<arg name="enable_physics" default="true"/>
 	<arg name="enable_sensors" default="true"/>
 	<arg name="enable_logging" default="false" />
 	<arg name="enable_ground_truth" default="true" />
-	<arg name="enable_mavlink_interface" default="true"/>
+	<arg name="enable_mavlink_interface" default="false"/>
 
 	<arg name="world_name" default="basic"/>
 	<arg name="debug" default="false"/>

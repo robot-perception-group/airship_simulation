@@ -180,7 +180,7 @@ if __name__=="__main__":
         psi = -1*np.random.uniform(-pi,pi)
         q = quaternion_from_euler(phi, the, psi)
 
-        rospy.loginfo("[Target Node] POSE_UPDATE")
+        rospy.loginfo("[Target Node] POSE_UPDATE IN LOCAL FRAME")
         rospy.loginfo("position = (%2.1f, %2.1f, %2.1f)"%(x,y,z))
         rospy.loginfo("orientation = (%2.1f, %2.1f, %2.1f)"%(phi,the,psi))
 

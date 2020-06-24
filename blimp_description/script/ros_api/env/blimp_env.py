@@ -36,10 +36,11 @@ class BlimpEnv:
 
         self.cnt = 0
 
-        # observation bound
         self.RATE = rospy.Rate(100)
-        self.GRAVITY = -9.8
-        self.DISTANCE_BND = 7
+        self.GRAVITY = 9.81
+
+        # observation bound
+        self.DISTANCE_BND = 10
         self.ORIENTATION_BND = 1.924
         self.ORIENTATION_VELOCITY_BND = 1
 
@@ -64,12 +65,12 @@ class BlimpEnv:
                        rud_angle [-0.087, 0.087]
         limit speed: motor1_speed [-100, 100]
                      motor2_speed [-100, 100]
-                     motor3_speed [-30, 30]
+                     motor3_speed [-50, 50]
         """
         self.STICK_LIMIT = pi/2
         self.FIN_LIMIT = pi/36
         self.MOTOR_LIMIT = 100
-        self.MOTOR3_LIMIT = 30
+        self.MOTOR3_LIMIT = 50
 
         # action space
         # m1 m2 m3 s ftop fbot fleft fright
@@ -80,7 +81,7 @@ class BlimpEnv:
         # observation space
         # phi the psi phitarget thetarget psitarget p q r x y z xtarget ytarget ztarget vx vy vz ax ay az
         self.observation_space = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        self.ob_ub = np.array([pi, pi, pi, pi, pi, pi, pi/2, pi/2, pi/2, 5, 5, 5, 5 ,5 ,5 , 2.5, 2.5, 2.5, 1.25, 1.25, 1.25])
+        self.ob_ub = np.array([pi, pi, pi, pi, pi, pi, pi/2, pi/4, pi/4, 10, 10, 10, 10 ,10 ,10 , 5, 2.5, 2.5, 2, 1, 1])
         self.ob_lb = -self.ob_ub
         self.dO = 21
 
@@ -186,6 +187,11 @@ class BlimpEnv:
         """
 
         self.target_pose = msg.markers[0].pose
+
+        # NED Frame
+        self.target_pose.position.y = self.target_pose.position.y*-1
+        self.target_pose.position.z = self.target_pose.position.z*-1
+
         print(self.target_pose)
 
     def _moving_target_callback(self, msg):
@@ -206,6 +212,10 @@ class BlimpEnv:
         """
 
         self.target_pose = msg
+
+        # NED Frame
+        self.target_pose.position.y = self.target_pose.position.y*-1
+        self.target_pose.position.z = self.target_pose.position.z*-1
 
     def _controllercmd_callback(self, msg):
         self.motor1_speed = msg.data[0]
@@ -251,12 +261,12 @@ class BlimpEnv:
         quaternion = (a,b,c,d)
 
         p = msg.angular_velocity.x
-        q = msg.angular_velocity.y
+        q = -1*msg.angular_velocity.y
         r = -1*msg.angular_velocity.z
 
-        ax = msg.linear_acceleration.x
-        ay = -1*msg.linear_acceleration.y
-        az = msg.linear_acceleration.z+self.GRAVITY
+        ax = -1*msg.linear_acceleration.x
+        ay = msg.linear_acceleration.y
+        az = -1*msg.linear_acceleration.z + self.GRAVITY
 
         # from Quaternion to Euler Angle
         euler = tf.transformations.euler_from_quaternion(quaternion)
@@ -264,6 +274,8 @@ class BlimpEnv:
         phi = euler[0]
         the = -1*euler[1]
         psi = -1*euler[2]
+
+        # NED Frame
         self.angle = [phi,the,psi]
         self.angular_velocity = [p,q,r]
         self.linear_acceleration = [ax,ay,az]
@@ -285,6 +297,11 @@ class BlimpEnv:
         """
         self.location = msg
 
+        # NED Frame
+        self.location.point.y = self.location.point.y * -1
+        self.location.point.z = self.location.point.z * -1
+
+
     def _velocity_callback(self, msg):
         """
         std_msgs/Header header
@@ -302,6 +319,10 @@ class BlimpEnv:
             float64 z
         """
         self.velocity = msg
+
+        # NED Frame
+        self.velocity.twist.linear.y = self.velocity.twist.linear.y * -1
+        self.velocity.twist.linear.z = self.velocity.twist.linear.z * -1
 
     def _teleokeyboardcmd_callback(self, msg):
         """
@@ -340,8 +361,8 @@ class BlimpEnv:
         self.elv2_angle = 0*key_row + pi/36*key_pitch + 0*key_yaw
         self.rud1_angle = 0*key_row + 0*key_pitch + pi/36*key_yaw
         self.rud2_angle = 0*key_row + 0*key_pitch + pi/36*key_yaw
-        self.motor1_speed = ( 1*key_x + 1*key_z + 0*key_yaw )*20
-        self.motor2_speed = ( 1*key_x + 1*key_z + 0*key_yaw )*20
+        self.motor1_speed = -( 1*key_x + 1*key_z + 0*key_yaw )*20
+        self.motor2_speed = -( 1*key_x + 1*key_z + 0*key_yaw )*20
         self.motor3_speed = ( 0*key_x + 0*key_z + 1*key_yaw )*10
 
     def _fin_attitude_publish(self):
@@ -407,7 +428,7 @@ class BlimpEnv:
             normalized:
             - 0
         """
-        motor1_limit = self._limit(self.motor1_speed, self.MOTOR_LIMIT)
+        motor1_limit = +self._limit(self.motor1_speed, self.MOTOR_LIMIT)
         motor2_limit = -self._limit(self.motor2_speed, self.MOTOR_LIMIT)
         motor3_limit = self._limit(self.motor3_speed, self.MOTOR3_LIMIT)
 
