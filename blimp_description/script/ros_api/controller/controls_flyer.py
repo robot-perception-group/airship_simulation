@@ -12,10 +12,11 @@ class ControlsFlyer():
 
     def __init__(self):
         self.env = BlimpEnv()
+        self.trajectory_generator = TrajectoryGenerator()
         self.controller = RotorController()
         self.mixer = BlimpMixer()
 
-        self.test_trajectory_file = 'test_trajectory.txt'
+        # self.test_trajectory_file = 'test_trajectory.txt'
 
         self.local_position_target = np.array([0.0,0.0,0.0])
         self.local_position = np.array([0.0,0.0,0.0])
@@ -23,6 +24,8 @@ class ControlsFlyer():
         self.local_velocity = np.array([0.0,0.0,0.0])
         self.local_acceleration_target = np.array([0.0,0.0,0.0])
 
+        self.position_target_waypoint = np.array([0.0,0.0,0.0])
+        self.attitude_target_waypoint = np.array([0.0,0.0,0.0])
         self.position_trajectory = []
         self.yaw_trajectory = []
         self.time_trajectory = []
@@ -38,14 +41,14 @@ class ControlsFlyer():
         self.cmd_vtol = np.array([0.0,0.0,0.0,0.0])
 
 
-    def load_test_trajectory(self,time_mult=1.0):
+    def load_trajectory(self,time_mult=1.0):
         """Loads the test_trajectory.txt
 
         Args:
             time_mult: a multiplier to decrease the total time of the trajectory
-
         """
-        data  = np.loadtxt(self.test_trajectory_file, delimiter=',', dtype='Float64')
+        # data  = np.loadtxt(self.test_trajectory_file, delimiter=',', dtype='Float64')
+        data = self.trajectory_generator.linear_trajectory_generate(self.local_position, self.position_target_waypoint)
         position_trajectory = []
         time_trajectory = []
         yaw_trajectory = []
@@ -59,13 +62,13 @@ class ControlsFlyer():
         return(position_trajectory,time_trajectory,yaw_trajectory)
 
     def position_controller(self):
-        # (self.local_position_target,
-        #  self.local_velocity_target,
-        #  yaw_cmd) = self.controller.trajectory_control(
-        #          self.position_trajectory,
-        #          self.yaw_trajectory,
-        #          self.time_trajectory, time.time())
-        # self.attitude_target = np.array((0.0, 0.0, yaw_cmd))
+        (self.local_position_target,
+         self.local_velocity_target,
+         yaw_cmd) = self.controller.trajectory_control(
+                 self.position_trajectory,
+                 self.yaw_trajectory,
+                 self.time_trajectory, time.time())
+        self.attitude_target = np.array((0.0, 0.0, yaw_cmd))
         acceleration_cmd = self.controller.lateral_position_control(
                 self.local_position_target[0:2],
                 self.local_velocity_target[0:2],
@@ -121,18 +124,18 @@ class ControlsFlyer():
         target_position = obs[18:21]
 
         self.local_position = np.array(position)
-        self.local_position_target = np.array(target_position)
+        self.position_target_waypoint = np.array(target_position)
         self.local_velocity = np.array(velocity)
         self.attitude = np.array(angle)
-        self.attitude_target = np.array(target_angle)
+        self.attitude_target_waypoint = np.array(target_angle)
         self.body_rate = np.array(angular_velocity)
 
     def start(self):
         time_step=0
         total_reward=0
-        # self.position_trajectory, self.time_trajectory, self.yaw_trajectory = self.load_test_trajectory(time_mult=0.5)
         obs = self.env.reset()
         self.unwrap_obs(obs)
+        self.position_trajectory, self.time_trajectory, self.yaw_trajectory = self.load_trajectory(time_mult=0.5)
 
         while time_step < EPISODE_LENGTH:
             time_step+=1
@@ -155,6 +158,5 @@ class ControlsFlyer():
 
 if __name__ == "__main__":
     drone = ControlsFlyer()
-    drone.test_trajectory_file = './trajectories/stay_there.txt'
     time.sleep(2)
     drone.start()

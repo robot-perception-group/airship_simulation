@@ -25,8 +25,8 @@ class BlimpEnv:
         self._load()
         self._create_pubs_subs()
 
-        self.gaz = GazeboConnection(True, "WORLD")
-        self.gaz.unpauseSim()
+        # self.gaz = GazeboConnection(True, "WORLD")
+        # self.gaz.unpauseSim()
         rospy.loginfo("[Blimp Environment Node] Initialized")
 
         self._loop()
