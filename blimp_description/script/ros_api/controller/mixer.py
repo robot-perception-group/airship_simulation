@@ -21,7 +21,7 @@ class BlimpMixer:
 		self.action[0] = 20*r1 + 20*r2 + 1*r4
 		self.action[1] = -20*r1 + 20*r2 + 1*r4
 		self.action[2] = 20*r3
-		self.action[3] = 0
+		self.action[3] = abs(r3/(r2+1))
 		self.action[4] = 0
 		self.action[5] = 0
 		self.action[6] = 0
