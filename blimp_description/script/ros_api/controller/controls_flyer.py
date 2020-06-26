@@ -5,6 +5,7 @@ import rospy
 
 from std_msgs.msg import Header
 from geometry_msgs.msg import PoseArray, Pose
+from nav_msgs.msg import Odometry
 from blimp import BlimpEnv
 from rotor_controller import RotorController
 from mixer import BlimpMixer
@@ -23,7 +24,7 @@ class ControlsFlyer():
         self.cnt=0
         self.MPC_HORIZON = 15
 
-        self.local_position_target = np.array([0.0,0.0,-1.0])
+        self.local_position_target = np.array([0.0,0.0,-3.0])
         self.local_position = np.array([0.0,0.0,0.0])
         self.local_velocity_target = np.array([0.0,0.0,0.0])
         self.local_velocity = np.array([0.0,0.0,0.0])
@@ -49,8 +50,8 @@ class ControlsFlyer():
             PoseArray,
             self.trajectory_callback)
         self.MPC_target_publisher = rospy.Publisher(
-            "/blimp/MPC_target",
-            Pose,
+            "/actorpose",
+            Odometry,
             queue_size=1)
         self.MPC_rviz_trajectory_publisher = rospy.Publisher(
             "/blimp/MPC_rviz_trajectory",
@@ -96,9 +97,9 @@ class ControlsFlyer():
             time_trajectory.append(0.1*i*time_mult+current_time)
             
             temp_pose_msg = Pose()
-            temp_pose_msg.position.x = y
-            temp_pose_msg.position.y = x
-            temp_pose_msg.position.z = -z
+            temp_pose_msg.position.x = y 
+            temp_pose_msg.position.y = x 
+            temp_pose_msg.position.z = -z 
             MPC_rviz_trajectory.poses.append(temp_pose_msg)
 
         for i in range(0, self.MPC_HORIZON-1):
@@ -110,29 +111,48 @@ class ControlsFlyer():
         self.yaw_trajectory = np.array(yaw_trajectory)
         self.MPC_rviz_trajectory_publisher.publish(MPC_rviz_trajectory)
 
-        self.cnt+=1
-        if self.cnt%10==0:
-            print("poisition_traj=", self.position_trajectory[0])
-
+        # self.cnt+=1
+        # if self.cnt%10==0:
+        #     print("---------------")
+        #     print("MPC_traj=",position_trajectory[0])
 
     def MPC_target_publish(self):
         """
-        geometry_msgs/Pose: 
-        geometry_msgs/Point position
-          float64 x
-          float64 y
-          float64 z
-        geometry_msgs/Quaternion orientation
-          float64 x
-          float64 y
-          float64 z
-          float64 w
+        std_msgs/Header header
+          uint32 seq
+          time stamp
+          string frame_id
+        string child_frame_id
+        geometry_msgs/PoseWithCovariance pose
+          geometry_msgs/Pose pose
+            geometry_msgs/Point position
+              float64 x
+              float64 y
+              float64 z
+            geometry_msgs/Quaternion orientation
+              float64 x
+              float64 y
+              float64 z
+              float64 w
+          float64[36] covariance
+        geometry_msgs/TwistWithCovariance twist
+          geometry_msgs/Twist twist
+            geometry_msgs/Vector3 linear
+              float64 x
+              float64 y
+              float64 z
+            geometry_msgs/Vector3 angular
+              float64 x
+              float64 y
+              float64 z
+          float64[36] covariance
         """
-        target_pose = Pose()
+        target_pose = Odometry()
         #NED
-        target_pose.position.x = self.waypoint_target[0]; target_pose.position.y = self.waypoint_target[1]; target_pose.position.z = self.waypoint_target[2];
-        x, y, z, w = MyTF.quaternion_from_euler(self.waypoint_attitude_target[0],self.waypoint_attitude_target[1], self.waypoint_attitude_target[2])
-        target_pose.orientation.x = x; target_pose.orientation.y = y; target_pose.orientation.z = z; target_pose.orientation.w = w;
+        target_pose.header.frame_id="world"
+        target_pose.pose.pose.position.x = -self.waypoint_target[1]; 
+        target_pose.pose.pose.position.y = self.waypoint_target[0]; 
+        target_pose.pose.pose.position.z = self.waypoint_target[2];
         self.MPC_target_publisher.publish(target_pose)
 
     def position_controller(self):
@@ -143,6 +163,7 @@ class ControlsFlyer():
                  self.position_trajectory,
                  self.yaw_trajectory,
                  self.time_trajectory, time.time())
+        self.local_position_target = self.position_trajectory[3]
         self.attitude_target = np.array((0.0, 0.0, yaw_cmd))
         acceleration_cmd = self.controller.lateral_position_control(
                 self.local_position_target[0:2],
@@ -199,6 +220,7 @@ class ControlsFlyer():
 
         self.local_position = np.array(position)
         self.waypoint_target = np.array(target_position)
+        # self.waypoint_target = np.array([0,0,-7])
         self.local_velocity = np.array(velocity)
         self.attitude = np.array(angle)
         self.waypoint_attitude_target = np.array(target_angle)
@@ -221,11 +243,11 @@ class ControlsFlyer():
 
             if time_step%10 == 0:
                 total_reward+=reward
-                # print("----------------------------")
+                print("----------------------------")
                 # print("action = %2.3f, %2.3f, %2.3f, %2.3f" % (self.action[0], self.action[1], self.action[2], self.action[3]))
                 # print("cmd[0] = %2.3f, cmd[1]=%2.3f, cmd[2]=%2.3f, cmd[3]=%2.3f" % (self.cmd_rotor[0],self.cmd_rotor[1],self.cmd_rotor[2],self.cmd_rotor[3]))
                 # # print("target poisition = ", self.local_position_target)
-                # # print("(x,y,z) = ", self.local_position)
+                print("(x,y,z) = ", self.local_position)
                 # print("(phi,the,psi) = ", self.attitude)
 
         obs = self.env.reset()

@@ -23,9 +23,9 @@
 
 	<arg name="rvizconfig" default="$(find blimp_description)/rviz/blimp.rviz" />
 
-	<arg name="X" default="-9.0"/>
-	<arg name="Y" default="-9.0"/>
-	<arg name="Z" default="1"/>
+	<arg name="X" default="0.0"/>
+	<arg name="Y" default="0.0"/>
+	<arg name="Z" default="0.5"/>
 
 	<!--********** spawn model **********-->
 	<group ns="$(arg uav_name)">

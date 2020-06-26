@@ -7,7 +7,7 @@ COMSUCCESSRATE=100
 
 NAME=test
 
-WORLD="arena_RAL"
+WORLD="basic"
 
 enable_wind=false
 
@@ -50,18 +50,19 @@ sleep 3
 echo "Starting BLIMP Spawning"
 screen -d -m -S BLIMP1 screen sh -c "conda activate py2; roslaunch blimp_description blimp_without_env.launch roboID:=1 --screen"
 
-sleep 3
+sleep 10
+
+echo "Spawning target"
+screen -dm -S TARGET screen sh -c "conda activate py2; roslaunch blimp_description spawn_target.launch"
+
+sleep 1
 
 echo "Starting AIRCAP for robot $id"
 screen -d -m -S AIRCAP1 screen sh -c "roslaunch aircap simulation.launch robotID:=1 numRobots:=$ROBOS comSuccessRate:=$COMSUCCESSRATE --screen"
 
 sleep 1
 
-# spawn target
-echo "Spawning target"
-screen -dm -S TARGET screen sh -c "conda activate py2; roslaunch blimp_description spawn_target.launch"
 
-sleep 1
 
 echo "Checking robot status"
 result=1
