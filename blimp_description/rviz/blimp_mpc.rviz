@@ -9,6 +9,8 @@ Panels:
         - /TF1/Tree1
         - /PoseArray1
         - /PoseArray1/Status1
+        - /Odometry1
+        - /Odometry1/Shape1
       Splitter Ratio: 0.5
     Tree Height: 848
   - Class: rviz/Selection
@@ -57,13 +59,13 @@ Visualization Manager:
       Value: true
     - Class: rviz/InteractiveMarkers
       Enable Transparency: true
-      Enabled: true
+      Enabled: false
       Name: InteractiveMarkers
       Show Axes: false
       Show Descriptions: true
       Show Visual Aids: false
       Update Topic: /target/update
-      Value: true
+      Value: false
     - Alpha: 1
       Class: rviz/RobotModel
       Collision Enabled: false
@@ -261,6 +263,40 @@ Visualization Manager:
       Topic: /blimp/MPC_rviz_trajectory
       Unreliable: false
       Value: true
+    - Angle Tolerance: 0.10000000149011612
+      Class: rviz/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
+      Enabled: true
+      Keep: 100
+      Name: Odometry
+      Position Tolerance: 0.10000000149011612
+      Shape:
+        Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.10000000149011612
+        Color: 252; 233; 79
+        Head Length: 0.10000000149011612
+        Head Radius: 0.10000000149011612
+        Shaft Length: 1
+        Shaft Radius: 0.009999999776482582
+        Value: Arrow
+      Topic: /blimp/ground_truth/odometry
+      Unreliable: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -289,25 +325,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 11.992048263549805
+      Distance: 19.549436569213867
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.8928280472755432
-        Y: 0.27449673414230347
-        Z: 4.357419013977051
+        X: -5.310873031616211
+        Y: -2.5115511417388916
+        Z: 4.140198707580566
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.5697963237762451
+      Pitch: -0.14520247280597687
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.723954200744629
+      Yaw: 4.783973693847656
     Saved: ~
 Window Geometry:
   Displays:
@@ -325,5 +361,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1853
-  X: -65
+  X: 67
   Y: 141
