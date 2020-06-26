@@ -40,7 +40,7 @@
       <filename>talk_b.dae</filename>
       <interpolate_x>true</interpolate_x>
     </animation>
-
+<!--
     <plugin name="actor1_plugin" filename="libactor_custom.so">
       <target>0 8 1.2138</target>
       <target_weight>1.15</target_weight>
@@ -51,7 +51,7 @@
         <model>ground_plane</model>
       </ignore_obstacles>
     </plugin>
-  </actor>
+  </actor>-->
     <gui>
       <camera name="user_camera">
         <pose>0 0 30 0 1.57 1.57</pose>

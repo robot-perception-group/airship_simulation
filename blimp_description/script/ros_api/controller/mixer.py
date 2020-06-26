@@ -6,22 +6,26 @@ H = 2 #[m]
 
 class BlimpMixer:
 	def __init__(self):
-		self.counter = 0
+		self.PITCH_OFFSET = 0.06
 		self.action = [0,0,0,0,0,0,0,0]
 		pass
 
 	def mix(self, rotor_cmd=np.array([0,0,0,0]), vtol_cmd=np.array([0,0,0,0])):
 		#rotor_cmd:= [p, q, r, thrust]
 		
-		r1 = rotor_cmd[0]
-		r2 = rotor_cmd[1]
-		r3 = rotor_cmd[2]
+		r1 = rotor_cmd[0]/W
+		r2 = rotor_cmd[1]/L
+		r3 = rotor_cmd[2]/H
 		r4 = rotor_cmd[3]
 
-		self.action[0] = 20*r1 + 20*r2 + 1*r4
-		self.action[1] = -20*r1 + 20*r2 + 1*r4
-		self.action[2] = 20*r3
-		self.action[3] = abs(r3/(r2+1))
+		# self.action[0] = 80*r1 + 200*r2 + 1.8*r4
+		# self.action[1] = -80*r1 + 200*r2 + 1.8*r4
+		# self.action[2] = 10*r3
+
+		self.action[0] = 80*r1 + 200*r2 + 2.1*r4
+		self.action[1] = -80*r1 + 200*r2 + 2.1*r4
+		self.action[2] = 50*r3
+		self.action[3] = self.PITCH_OFFSET - 3*r2
 		self.action[4] = 0
 		self.action[5] = 0
 		self.action[6] = 0

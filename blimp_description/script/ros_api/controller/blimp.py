@@ -172,6 +172,7 @@ class BlimpEnv():
         c = msg.orientation.z
         d = msg.orientation.w
 
+        # NED Frame
         p = msg.angular_velocity.x
         q = -1*msg.angular_velocity.y
         r = -1*msg.angular_velocity.z
@@ -187,7 +188,7 @@ class BlimpEnv():
         the = -1*euler[1]
         psi = -1*euler[2]
 
-        # NED Frame
+        
         self.angle = [phi,the,psi]
         self.angular_velocity = [p,q,r]
         self.linear_acceleration = [ax,ay,az]
@@ -263,16 +264,14 @@ class BlimpEnv():
         :return:
         """
         target_pose = msg.markers[0].pose
-
-        euler = self._euler_from_pose(target_pose)
-        target_phi, target_the, target_psi = 0, 0, euler[2]
-        self.target_angle = [target_phi, target_the, target_psi]
-
+        
         # NED Frame
+        euler = self._euler_from_pose(target_pose)
+        target_phi, target_the, target_psi = 0, 0, -1*euler[2]
+        self.target_angle = [target_phi, target_the, target_psi]
         target_pose.position.y = target_pose.position.y*-1
         target_pose.position.z = target_pose.position.z*-1
         self.target_position = [target_pose.position.x, target_pose.position.y, target_pose.position.z]
-        # self.target_position = [0, 0, -7]
 
         print("Interactive Target Pose")
         print("=============================")
@@ -304,7 +303,6 @@ class BlimpEnv():
         target_pose.position.y = target_pose.position.y*-1
         target_pose.position.z = target_pose.position.z*-1
         self.target_position = [target_pose.position.x, target_pose.position.y, target_pose.position.z]
-        # self.target_position = [0, 0, -7]
 
     def _euler_from_pose(self, pose):
         a = pose.orientation.x

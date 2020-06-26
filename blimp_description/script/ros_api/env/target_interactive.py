@@ -171,13 +171,13 @@ if __name__=="__main__":
 
     while not rospy.is_shutdown():
         # Task: take off
-        x = np.random.uniform(-10,10)
-        y = np.random.uniform(-10,10)
+        x = np.random.uniform(-3,3)
+        y = np.random.uniform(-3,3)
         z = 7
 
         phi = 0
         the = 0
-        psi = -1*np.random.uniform(-pi,pi)
+        psi = np.random.uniform(-pi,pi)
         q = quaternion_from_euler(phi, the, psi)
 
         rospy.loginfo("[Target Node] POSE_UPDATE IN LOCAL FRAME")

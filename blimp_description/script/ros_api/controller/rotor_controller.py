@@ -32,7 +32,7 @@ class RotorController(object):
         self.body_rate_k_p = np.array([20., 20., 5.])
 
         # Altitude controller parameters
-        self.altitude_k_p, self.altitude_k_d = self.better_pid_config(.25, .85) ### (.1, .85)
+        self.altitude_k_p, self.altitude_k_d = self.better_pid_config(.1, .85) ### (.1, .85)
         # Yaw controller parameters
         self.yaw_k_p = 4.5
 

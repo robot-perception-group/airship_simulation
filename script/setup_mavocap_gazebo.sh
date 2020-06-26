@@ -57,6 +57,11 @@ screen -d -m -S AIRCAP1 screen sh -c "roslaunch aircap simulation.launch robotID
 
 sleep 1
 
+# spawn target
+echo "Spawning target"
+screen -dm -S TARGET screen sh -c "conda activate py2; roslaunch blimp_description spawn_target.launch"
+
+sleep 1
 
 echo "Checking robot status"
 result=1
@@ -100,10 +105,6 @@ if [ $result = 124 ]; then
 	./cleanup.sh
 	exit 1
 fi
-
-# spawn target
-echo "Spawning target"
-screen -dm -S TARGET screen sh -c "conda activate py2; roslaunch blimp_description spawn_target.launch"
 
 date
 # exit 0
