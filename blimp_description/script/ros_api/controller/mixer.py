@@ -18,13 +18,13 @@ class BlimpMixer:
 		r3 = rotor_cmd[2]
 		r4 = rotor_cmd[3]
 
-		self.action[0] = 80*r1 + 200*r2 + 1.8*r4
-		self.action[1] = -80*r1 + 200*r2 + 1.8*r4
-		self.action[2] = 10*r3
+		# self.action[0] = 80*r1 + 200*r2 + 1.8*r4
+		# self.action[1] = -80*r1 + 200*r2 + 1.8*r4
+		# self.action[2] = 10*r3
 
-		# self.action[0] = 0*r1 + 0*r2 + 0*r4
-		# self.action[1] = -0*r1 + 0*r2 + 0*r4
-		# self.action[2] = 0*r3
+		self.action[0] = 40*r1 + 40*r2 + 1.7*r4
+		self.action[1] = -40*r1 + 40*r2 + 1.7*r4
+		self.action[2] = 0*r3
 		self.action[3] = self.PITCH_OFFSET - 3*r2
 		self.action[4] = 0
 		self.action[5] = 0

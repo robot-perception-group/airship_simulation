@@ -61,9 +61,8 @@ $ catkin init
 $ cd ~/catkin_ws/src
 $ git clone -b med18_gazebo9 https://github.com/gsilano/rotors_simulator.git
 $ git clone -b med18_gazebo9 https://github.com/gsilano/mav_comm.git
-$ git clone git clone https://github.com/ros-teleop/teleop_twist_keyboard
-$ git clone https://github.com/ootang2018/blimp_simulation.git
-$ cd ~/catkin_ws
+$ git clone https://github.com/ros-teleop/teleop_twist_keyboard
+$ git clone https://github.com/ootang2018/blimp_simulation
 ```
 
 and optionally
@@ -76,6 +75,7 @@ you might need to look into github page (https://github.com/ootang2018/AirCap.gi
 3. Build your workspace with `python_catkin_tools` 
 
 ```console
+$ cd ~/catkin_ws
 $ rosdep install --from-paths src -i
 $ catkin build
 $ source devel/setup.bash
@@ -102,8 +102,8 @@ To fly with blimp, it is necessary to generate thrust with the rotors, this is a
 $ rostopic pub /blimp/command/motor_speed mav_msgs/Actuators '{angular_velocities: [100, 100, 0]}'
 ```
 
-To speed up the simulation, a certain set of parameters can be included by varying the flags: 
-`enable_meshes` (it enables the mesh of the blimp), `enable_sensors` (it enables the ground truth sensor), `enable_wind_plugin` (external disturbances will be simulated)
+There are certain set of parameters can be included by varying the flags: 
+`enable_meshes` (it enables the mesh of the blimp), `enable_sensors` (it enables the sensors), `enable_wind_plugin` (external disturbances will be simulated)
 
 These value can be modified before simulating the blimp behavior acting on the launch file:
 ```console
@@ -138,6 +138,7 @@ $ cd blimpRL
 $ pip install -r requirements.txt
 $ cp catkin_make_with_py3.sh ~/catkin_ws_py3
 $ cd ~/catkin_ws_py3
+$ bash catkin_make_with_py3.sh
 $ source devel/setup.bash
 ```
 

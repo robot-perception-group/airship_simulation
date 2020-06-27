@@ -24,7 +24,7 @@ class ControlsFlyer():
         self.cnt=0
         self.MPC_HORIZON = 15
 
-        self.local_position_target = np.array([0.0,0.0,-3.0])
+        self.local_position_target = np.array([0.0,0.0,-2.0])
         self.local_position = np.array([0.0,0.0,0.0])
         self.local_velocity_target = np.array([0.0,0.0,0.0])
         self.local_velocity = np.array([0.0,0.0,0.0])
@@ -163,7 +163,7 @@ class ControlsFlyer():
                  self.position_trajectory,
                  self.yaw_trajectory,
                  self.time_trajectory, time.time())
-        self.local_position_target = self.position_trajectory[3]
+        self.local_position_target = self.position_trajectory[2]
         self.attitude_target = np.array((0.0, 0.0, yaw_cmd))
         acceleration_cmd = self.controller.lateral_position_control(
                 self.local_position_target[0:2],
@@ -244,10 +244,10 @@ class ControlsFlyer():
             if time_step%10 == 0:
                 total_reward+=reward
                 print("----------------------------")
-                # print("action = %2.3f, %2.3f, %2.3f, %2.3f" % (self.action[0], self.action[1], self.action[2], self.action[3]))
-                # print("cmd[0] = %2.3f, cmd[1]=%2.3f, cmd[2]=%2.3f, cmd[3]=%2.3f" % (self.cmd_rotor[0],self.cmd_rotor[1],self.cmd_rotor[2],self.cmd_rotor[3]))
+                print("action = %2.3f, %2.3f, %2.3f, %2.3f" % (self.action[0], self.action[1], self.action[2], self.action[3]))
+                print("p_cmd = %2.3f, q_cmd=%2.3f, r_cmd=%2.3f, throttle_cmd=%2.3f" % (self.cmd_rotor[0],self.cmd_rotor[1],self.cmd_rotor[2],self.cmd_rotor[3]))
                 # # print("target poisition = ", self.local_position_target)
-                print("(x,y,z) = ", self.local_position)
+                # print("(x,y,z) = ", self.local_position)
                 # print("(phi,the,psi) = ", self.attitude)
 
         obs = self.env.reset()
