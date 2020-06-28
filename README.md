@@ -141,6 +141,7 @@ $ cd ~/catkin_ws_py3
 $ bash catkin_make_with_py3.sh
 $ source devel/setup.bash
 ```
+Note: depends on your virtual environment python3 directory, you might need to modify `catkin_make_with_py3.sh`.
 
 After compiling with `catkin build` and spawn the gazebo environment, it can be tested with
 ```console

@@ -21,7 +21,7 @@
 	<arg name="wait_to_record_bag" default="false"/>
 	<arg name="verbose" default="true"/>
 
-	<arg name="rvizconfig" default="$(find blimp_description)/rviz/blimp.rviz" />
+	<arg name="rvizconfig" default="$(find blimp_description)/rviz/blimp_mpc.rviz" />
 
 	<arg name="X" default="0.0"/>
 	<arg name="Y" default="0.0"/>

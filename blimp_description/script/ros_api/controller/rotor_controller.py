@@ -10,7 +10,7 @@ import numpy as np
 from frame_utils import euler2RM
 from math import sin, cos, tan, sqrt
 
-DRONE_MASS_KG = 0.5
+DRONE_MASS_KG = 0.4
 GRAVITY = -9.81
 MOI = np.array([0.005, 0.005, 0.01])
 MAX_THRUST = 70.0
