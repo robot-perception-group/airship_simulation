@@ -10,26 +10,35 @@ class BlimpMixer:
 		self.action = [0,0,0,0,0,0,0,0]
 		pass
 
-	def mix(self, rotor_cmd=np.array([0,0,0,0]), vtol_cmd=np.array([0,0,0,0])):
+	def mix(self, rotor_cmd=np.array([0,0,0,0]), plane_cmd=np.array([0,0,0,0])):
 		#rotor_cmd:= [p, q, r, thrust]
-		
 		r1 = rotor_cmd[0]
 		r2 = rotor_cmd[1]
 		r3 = rotor_cmd[2]
 		r4 = rotor_cmd[3]
 
+		#plane_cmd:= [p, q, r, thrust]
+		p1 = plane_cmd[0]
+		p2 = plane_cmd[1]
+		p3 = plane_cmd[2]
+		p4 = plane_cmd[3]
+
 		# self.action[0] = 40*r1 + 40*r2 + 1.7*r4
 		# self.action[1] = -40*r1 + 40*r2 + 1.7*r4
-		# self.action[2] = 100*r3
+		# self.action[2] = 1000*r3
 		# self.action[3] = self.PITCH_OFFSET - 3*r2
+		# self.action[4] = 0
+		# self.action[5] = 0
+		# self.action[6] = 0
+		# self.action[7] = 0
 
-		self.action[0] = 40*r1 + 40*r2 + 1.7*r4
-		self.action[1] = -40*r1 + 40*r2 + 1.7*r4
-		self.action[2] = 1000*r3
-		self.action[3] = self.PITCH_OFFSET - 3*r2
-		self.action[4] = 0
-		self.action[5] = 0
-		self.action[6] = 0
-		self.action[7] = 0
+		self.action[0] = p4
+		self.action[1] = p4
+		self.action[2] = 0
+		self.action[3] = np.pi/2
+		self.action[4] = p1
+		self.action[5] = p1
+		self.action[6] = p2
+		self.action[7] = p2		
 
 		return self.action

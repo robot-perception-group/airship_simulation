@@ -232,7 +232,7 @@
       		<parent link="${namespace}/bot_rud_part1_link" />
       		<child link="${namespace}/bot_rud_joint_link" />
 		<axis xyz="0 0 1" />
-		<limit effort="${effort_fin}" velocity="${velocity_fin}" lower="${-max_angle_fin}" upper="${max_angle_fin}" /> <!--TODO: measure the max/min angle-->
+		<limit effort="${effort_fin}" velocity="${velocity_fin}" lower="${-max_angle_fin}" upper="${max_angle_fin}" /> 
     	</joint>
 	<xacro:box_model
 		robot_namespace="${namespace}"
@@ -297,7 +297,7 @@
       		<parent link="${namespace}/left_elv_part1_link" />
       		<child link="${namespace}/left_elv_joint_link" />
 		<axis xyz="0 0 1" />
-		<limit effort="${effort_fin}" velocity="${velocity_fin}" lower="${-max_angle_fin}" upper="${max_angle_fin}" /> <!--TODO: measure the max/min angle-->
+		<limit effort="${effort_fin}" velocity="${velocity_fin}" lower="${-max_angle_fin}" upper="${max_angle_fin}" /> 
     	</joint>
 	<xacro:box_model
 		robot_namespace="${namespace}"
@@ -345,7 +345,7 @@
       		<parent link="${namespace}/right_elv_part1_link" />
       		<child link="${namespace}/right_elv_joint_link" />
 		<axis xyz="0 0 -1" />
-		<limit effort="${effort_fin}" velocity="${velocity_fin}" lower="${-max_angle_fin}" upper="${max_angle_fin}" /> <!--TODO: measure the max/min angle-->
+		<limit effort="${effort_fin}" velocity="${velocity_fin}" lower="${-max_angle_fin}" upper="${max_angle_fin}" /> 
     	</joint>
 	<xacro:box_model
 		robot_namespace="${namespace}"

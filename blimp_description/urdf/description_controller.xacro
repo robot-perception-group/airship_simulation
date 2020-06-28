@@ -1,7 +1,6 @@
 <?xml version="1.0" ?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-	<!-- TODO Instantiate controller-->
 	<xacro:controller_plugin_macro namespace="${namespace}" imu_sub_topic="imu" />
 	<gazebo>
 		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">

@@ -8,6 +8,8 @@ from geometry_msgs.msg import PoseArray, Pose
 from nav_msgs.msg import Odometry
 from blimp import BlimpEnv
 from rotor_controller import RotorController
+from plane_controller import LongitudinalAutoPilot
+from plane_controller import LateralAutoPilot
 from mixer import BlimpMixer
 from myTF import MyTF
 
@@ -18,32 +20,33 @@ class ControlsFlyer():
     def __init__(self):
         self.env = BlimpEnv()
         self._create_pubs_subs()
-        self.controller = RotorController()
+        self.rotor_controller = RotorController()
+        self.longitudinal_controller = LongitudinalAutoPilot()
+        self.lateral_controller = LateralAutoPilot()
         self.mixer = BlimpMixer()
 
         self.cnt=0
         self.MPC_HORIZON = 15
         self.SELECT_MPC_TARGET = 2
 
-        self.local_position_target = np.array([0.0,0.0,-1.5])
-        self.local_position = np.array([0.0,0.0,0.0])
-        self.local_velocity_target = np.array([0.0,0.0,0.0])
-        self.local_velocity = np.array([0.0,0.0,0.0])
-        self.local_acceleration_target = np.array([0.0,0.0,0.0])
-
         self.position_trajectory = []
         self.yaw_trajectory = []
         self.time_trajectory = []
 
+        self.local_position = np.array([0.0,0.0,0.0])
+        self.local_velocity = np.array([0.0,0.0,0.0])
         self.attitude = np.array([0.0,0.0,0.0])
-        self.attitude_target = np.array([0.0,0.0,0.0])
-
         self.body_rate = np.array([0.0,0.0,0.0])
-        self.body_rate_target = np.array([0.0,0.0,0.0])
 
-        self.thrust_cmd = 0.0
+        self.rotor_position_target = np.array([0.0,0.0,-7])
+        self.rotor_velocity_target = np.array([0.0,0.0,0.0])
+        self.rotor_acceleration_target = np.array([0.0,0.0,0.0])
+        self.rotor_attitude_target = np.array([0.0,0.0,0.0])
+        self.rotor_body_rate_target = np.array([0.0,0.0,0.0])
+
+        self.rotor_thrust_cmd = 0.0
         self.cmd_rotor = np.array([0.0,0.0,0.0,0.0])
-        self.cmd_vtol = np.array([0.0,0.0,0.0,0.0])
+        self.cmd_plane = np.array([0.0,0.0,0.0,0.0])
 
     def _create_pubs_subs(self):
         rospy.Subscriber(
@@ -156,59 +159,82 @@ class ControlsFlyer():
         target_pose.pose.pose.position.z = self.waypoint_target[2];
         self.MPC_target_publisher.publish(target_pose)
 
-    def position_controller(self):
+    ########################
+    #   rotor controller   #
+    ########################
+    def rotor_position_controller(self):
         #in NED
-        (self.local_position_target,
-         self.local_velocity_target,
-         yaw_cmd) = self.controller.trajectory_control(
+        (self.rotor_position_target,
+         self.rotor_velocity_target,
+         yaw_cmd) = self.rotor_controller.trajectory_control(
                  self.position_trajectory,
                  self.yaw_trajectory,
                  self.time_trajectory, time.time())
-        self.local_position_target = self.position_trajectory[self.SELECT_MPC_TARGET]
-        self.attitude_target = np.array((0.0, 0.0, 0.0))
-        acceleration_cmd = self.controller.lateral_position_control(
-                self.local_position_target[0:2],
-                self.local_velocity_target[0:2],
+        self.rotor_position_target = self.position_trajectory[self.SELECT_MPC_TARGET]
+        self.rotor_attitude_target = np.array((0.0, 0.0, 0.0))
+        acceleration_cmd = self.rotor_controller.lateral_position_control(
+                self.rotor_position_target[0:2],
+                self.rotor_velocity_target[0:2],
                 self.local_position[0:2],
                 self.local_velocity[0:2])
-        self.local_acceleration_target = np.array([acceleration_cmd[0],
+        self.rotor_acceleration_target = np.array([acceleration_cmd[0],
                                                    acceleration_cmd[1],
                                                    0.0])
 
-    def attitude_controller(self):
-        self.thrust_cmd = self.controller.altitude_control(
-                -self.local_position_target[2],
-                -self.local_velocity_target[2],
+    def rotor_attitude_controller(self):
+        self.rotor_thrust_cmd = self.rotor_controller.altitude_control(
+                -self.rotor_position_target[2],
+                -self.rotor_velocity_target[2],
                 -self.local_position[2],
                 -self.local_velocity[2],
                 self.attitude,
                 9.81)
-        roll_pitch_rate_cmd = self.controller.roll_pitch_controller(
-                self.local_acceleration_target[0:2],
+        roll_pitch_rate_cmd = self.rotor_controller.roll_pitch_controller(
+                self.rotor_acceleration_target[0:2],
                 self.attitude,
-                self.thrust_cmd)
-        yawrate_cmd = self.controller.yaw_control(
-                self.attitude_target[2],
+                self.rotor_thrust_cmd)
+        yawrate_cmd = self.rotor_controller.yaw_control(
+                self.rotor_attitude_target[2],
                 self.attitude[2])
-        self.body_rate_target = np.array(
+        self.rotor_body_rate_target = np.array(
                 [roll_pitch_rate_cmd[0], roll_pitch_rate_cmd[1], yawrate_cmd])
 
-    def bodyrate_controller(self):
-        moment_cmd = self.controller.body_rate_control(
-                self.body_rate_target,
+    def rotor_bodyrate_controller(self):
+        moment_cmd = self.rotor_controller.body_rate_control(
+                self.rotor_body_rate_target,
                 self.body_rate)
         self.cmd_rotor = [moment_cmd[0],
                         moment_cmd[1],
                         moment_cmd[2],
-                        self.thrust_cmd]
+                        self.rotor_thrust_cmd]
 
-    def rotor_control_update(self, obs):
-        self.position_controller()
-        self.attitude_controller()
-        self.bodyrate_controller()
+    def rotor_control_update(self):
+        self.rotor_position_controller()
+        self.rotor_attitude_controller()
+        self.rotor_bodyrate_controller()
+
+    ########################
+    #   plane controller   #
+    ########################
+    def plane_altitude_controller(self):
+        dt = 0.01
+        pitch_cmd = self.longitudinal_controller.altitude_loop(self.local_position[2], -2.5, dt) #self.local_position[2], self.waypoint_target[2], dt
+        q_cmd = self.longitudinal_controller.pitch_loop(self.attitude[1], self.body_rate[1], pitch_cmd)
+        self.cmd_plane = [0, q_cmd, 0, 35]
+
+    def plane_control_update(self):
+        self.plane_altitude_controller()
+
+
+    ########################
+    #   control interface  #
+    ########################
+    def control_update(self):
+        self.rotor_control_update()
+        self.plane_control_update()
 
     def actuation_update(self):
-        self.action = self.mixer.mix(self.cmd_rotor, self.cmd_vtol)
+        self.action = self.mixer.mix(self.cmd_rotor, self.cmd_plane)
 
     def unwrap_obs(self, obs):
         angle = obs[0:3]
@@ -237,7 +263,7 @@ class ControlsFlyer():
 
         while time_step < EPISODE_LENGTH:
             time_step+=1
-            self.rotor_control_update(obs)
+            self.control_update()
             self.actuation_update()
             obs, reward, done = self.env.step(self.action)
             self.unwrap_obs(obs)
@@ -245,11 +271,11 @@ class ControlsFlyer():
             if time_step%10 == 0:
                 total_reward+=reward
                 print("----------------------------")
-                print("action = %2.3f, %2.3f, %2.3f, %2.3f" % (self.action[0], self.action[1], self.action[2], self.action[3]))
-                print("p_cmd = %2.3f, q_cmd=%2.3f, r_cmd=%2.3f, throttle_cmd=%2.3f" % (self.cmd_rotor[0],self.cmd_rotor[1],self.cmd_rotor[2],self.cmd_rotor[3]))
-                # print("target poisition = ", self.local_position_target)
+                print("action = ", self.action)
+                print("p_cmd = %2.3f, q_cmd=%2.3f, r_cmd=%2.3f, throttle_cmd=%2.3f" % (self.cmd_plane[0],self.cmd_plane[1],self.cmd_plane[2],self.cmd_plane[3]))
+                # print("target poisition = ", self.rotor_position_target)
                 print("(x,y,z) = ", self.local_position)
-                # print("(phi,the,psi) = ", self.attitude)
+                print("(phi,the,psi) = ", self.attitude)
 
         obs = self.env.reset()
         print("total reward = ", total_reward)

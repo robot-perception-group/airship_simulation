@@ -68,7 +68,7 @@ class BlimpEnv:
                      motor3_speed [-50, 50]
         """
         self.STICK_LIMIT = pi/2
-        self.FIN_LIMIT = pi/36
+        self.FIN_LIMIT = pi/6
         self.MOTOR_LIMIT = 100
         self.MOTOR3_LIMIT = 50
 

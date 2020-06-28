@@ -24,7 +24,7 @@ class BlimpActionSpace():
     def __init__(self):
         # m1 m2 m3 s ftop fbot fleft fright
         self.action_space = np.array([0, 0, 0, 0, 0, 0, 0, 0])
-        self.high = np.array([70, 70, 30, pi/2, pi/36, pi/36, pi/36, pi/36])
+        self.high = np.array([70, 70, 30, pi/2, pi/6, pi/6, pi/6, pi/6])
         self.low = -self.high
         self.shape = self.action_space.shape
         self.dU = self.action_space.shape[0]
