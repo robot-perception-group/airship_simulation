@@ -8,7 +8,7 @@
 			xyz_offset="0 0 0"
 			wind_direction_mean="0 0 0" 
 			wind_direction_variance="9.8596"
-			wind_force_mean="5"
+			wind_force_mean="5" 
 			wind_force_variance="10"
 			wind_gust_direction_mean="0 0 0"
 			wind_gust_direction_variance="9.8596"
@@ -43,26 +43,26 @@
 			<cp>0 0 0</cp>
 		</xacro:property>
 		<xacro:property name="left_elv_liftdrag_upward">
-			<upward>0 1 0</upward>
+			<upward>0 1 0</upward> 
 		</xacro:property>
 		<xacro:property name="left_elv_liftdrag_forward">
-			<forward>1 0 0</forward>
+			<forward>1 0 0</forward>  
 		</xacro:property>
 		<xacro:property name="left_elv_liftdrag_cp">
 			<cp>0 0 0</cp>
 		</xacro:property>
 		<xacro:property name="right_elv_liftdrag_upward">
-			<upward>0 -1 0</upward>
+			<upward>0 -1 0</upward> 
 		</xacro:property>
 		<xacro:property name="right_elv_liftdrag_forward">
-			<forward>1 0 0</forward>
+			<forward>1 0 0</forward> 
 		</xacro:property>
 		<xacro:property name="right_elv_liftdrag_cp">
 			<cp>0 0 0</cp>
 		</xacro:property>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/bot_rud_part2"
+			link_name="${namespace}/bot_rud_joint_link"
 			air_density="${air_density}"
 			area="${area_fin}">
 			<xacro:insert_block name="bot_rud_liftdrag_upward" />
@@ -71,7 +71,7 @@
 		</xacro:finliftdrag>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/top_rud_part2"
+			link_name="${namespace}/top_rud_joint_link"
 			air_density="${air_density}"
 			area="${area_fin}">
 			<xacro:insert_block name="top_rud_liftdrag_upward" />
@@ -80,7 +80,7 @@
 		</xacro:finliftdrag>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/left_elv_part2"
+			link_name="${namespace}/left_elv_joint_link"
 			air_density="${air_density}"
 			area="${area_fin}">
 			<xacro:insert_block name="left_elv_liftdrag_upward" />
@@ -89,7 +89,7 @@
 		</xacro:finliftdrag>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/right_elv_part2"
+			link_name="${namespace}/right_elv_joint_link"
 			air_density="${air_density}"
 			area="${area_fin}">
 			<xacro:insert_block name="right_elv_liftdrag_upward" />

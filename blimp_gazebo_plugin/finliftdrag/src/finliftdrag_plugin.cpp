@@ -367,7 +367,7 @@ void FinLiftDragPlugin::OnUpdate()
   //      vel.GetLength() < 50.0))
   if (0)
   {
-    // gzdbg << "=============================\n";
+    gzdbg << "=============================\n";
     // gzdbg << "sensor: [" << this->GetHandle() << "]\n";
     // gzdbg << "Link: [" << this->link->GetName()
     //       << "] pose: [" << pose
@@ -389,7 +389,7 @@ void FinLiftDragPlugin::OnUpdate()
     // gzdbg << "cp momentArm: " << momentArm << "\n";
     // gzdbg << "vel: " << vel << "\n";
     // gzdbg << "wind_speed: " << wind_speed << "\n";
-    // gzdbg << "force: " << force << "\n";
+    gzdbg << "force: " << force << "\n";
     // gzdbg << "torque: " << torque << "\n";
   }
 

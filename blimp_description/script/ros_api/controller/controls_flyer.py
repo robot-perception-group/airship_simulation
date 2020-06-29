@@ -221,7 +221,7 @@ class ControlsFlyer():
         dt = 0.01
         pitch_cmd = self.longitudinal_controller.altitude_loop(self.local_position[2], -2.5, dt) #self.local_position[2], self.waypoint_target[2], dt
         q_cmd = self.longitudinal_controller.pitch_loop(self.attitude[1], self.body_rate[1], pitch_cmd)
-        # self.cmd_plane = [0, q_cmd, 0, 35]
+        self.cmd_plane = [0, q_cmd, 0, 35]
 
     def plane_control_update(self):
         self.plane_altitude_controller()
