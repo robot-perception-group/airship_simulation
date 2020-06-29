@@ -62,7 +62,7 @@
 		</xacro:property>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/bot_rud_joint_link"
+			link_name="${namespace}/bot_rud_part2"
 			air_density="${air_density}"
 			area="${area_fin}">
 			<xacro:insert_block name="bot_rud_liftdrag_upward" />
@@ -71,7 +71,7 @@
 		</xacro:finliftdrag>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/top_rud_joint_link"
+			link_name="${namespace}/top_rud_part2"
 			air_density="${air_density}"
 			area="${area_fin}">
 			<xacro:insert_block name="top_rud_liftdrag_upward" />
@@ -80,7 +80,7 @@
 		</xacro:finliftdrag>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/left_elv_joint_link"
+			link_name="${namespace}/left_elv_part2"
 			air_density="${air_density}"
 			area="${area_fin}">
 			<xacro:insert_block name="left_elv_liftdrag_upward" />
@@ -89,7 +89,7 @@
 		</xacro:finliftdrag>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/right_elv_joint_link"
+			link_name="${namespace}/right_elv_part2"
 			air_density="${air_density}"
 			area="${area_fin}">
 			<xacro:insert_block name="right_elv_liftdrag_upward" />

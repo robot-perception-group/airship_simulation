@@ -32,16 +32,17 @@ class RotorController(object):
         self.body_rate_k_p = np.array([20., 20., 5.])
 
         # Altitude controller parameters
-        self.altitude_k_p, self.altitude_k_d = self.better_pid_config(.1, .85) ### (.1, .85)
+        self.altitude_k_p, self.altitude_k_d = self.better_pid_config(.1, 1) ### (.1, .85)
         # Yaw controller parameters
-        self.yaw_k_p = 4.5
+        self.yaw_k_p = 7.
+        self.yaw_k_d = 28. ###
 
         # Roll-pitch controller parameters
         self.roll_pitch_k_p_roll = 7.
         self.roll_pitch_k_p_pitch = 7.
 
         # Lateral controller parameters
-        self.lateral_k_p, self.lateral_k_d = self.better_pid_config(.28, .95)
+        self.lateral_k_p, self.lateral_k_d = self.better_pid_config(.28, 0.95) ###(.28, .95)
         return
 
     def trajectory_control(self, position_trajectory, yaw_trajectory, time_trajectory, current_time):
@@ -194,12 +195,13 @@ class RotorController(object):
 
         return taus
 
-    def yaw_control(self, yaw_cmd, yaw):
+    def yaw_control(self, yaw_cmd, yaw, yaw_rate):
         """ Generate the target yawrate
 
         Args:
             yaw_cmd: desired vehicle yaw in radians
             yaw: vehicle yaw in radians
+            yaw_rate: vehicle yaw rate in radians/sec
 
         Returns: target yawrate in radians/sec
         """
@@ -210,5 +212,5 @@ class RotorController(object):
         elif yaw_error < -np.pi:
             yaw_error = yaw_error + 2.0*np.pi
 
-        yawrate_cmd = self.yaw_k_p*yaw_error
+        yawrate_cmd = self.yaw_k_p*yaw_error - self.yaw_k_d*yaw_rate
         return yawrate_cmd

@@ -27,7 +27,7 @@ class ControlsFlyer():
 
         self.cnt=0
         self.MPC_HORIZON = 15
-        self.SELECT_MPC_TARGET = 2
+        self.SELECT_MPC_TARGET = 3
 
         self.position_trajectory = []
         self.yaw_trajectory = []
@@ -38,7 +38,7 @@ class ControlsFlyer():
         self.attitude = np.array([0.0,0.0,0.0])
         self.body_rate = np.array([0.0,0.0,0.0])
 
-        self.rotor_position_target = np.array([0.0,0.0,-7])
+        self.rotor_position_target = np.array([0.0,0.0,0.0])
         self.rotor_velocity_target = np.array([0.0,0.0,0.0])
         self.rotor_acceleration_target = np.array([0.0,0.0,0.0])
         self.rotor_attitude_target = np.array([0.0,0.0,0.0])
@@ -171,7 +171,7 @@ class ControlsFlyer():
                  self.yaw_trajectory,
                  self.time_trajectory, time.time())
         self.rotor_position_target = self.position_trajectory[self.SELECT_MPC_TARGET]
-        self.rotor_attitude_target = np.array((0.0, 0.0, 0.0))
+        self.rotor_attitude_target = np.array((0.0, 0.0, yaw_cmd))
         acceleration_cmd = self.rotor_controller.lateral_position_control(
                 self.rotor_position_target[0:2],
                 self.rotor_velocity_target[0:2],
@@ -195,7 +195,8 @@ class ControlsFlyer():
                 self.rotor_thrust_cmd)
         yawrate_cmd = self.rotor_controller.yaw_control(
                 self.rotor_attitude_target[2],
-                self.attitude[2])
+                self.attitude[2],
+                self.body_rate[2])
         self.rotor_body_rate_target = np.array(
                 [roll_pitch_rate_cmd[0], roll_pitch_rate_cmd[1], yawrate_cmd])
 
@@ -220,7 +221,7 @@ class ControlsFlyer():
         dt = 0.01
         pitch_cmd = self.longitudinal_controller.altitude_loop(self.local_position[2], -2.5, dt) #self.local_position[2], self.waypoint_target[2], dt
         q_cmd = self.longitudinal_controller.pitch_loop(self.attitude[1], self.body_rate[1], pitch_cmd)
-        self.cmd_plane = [0, q_cmd, 0, 35]
+        # self.cmd_plane = [0, q_cmd, 0, 35]
 
     def plane_control_update(self):
         self.plane_altitude_controller()
@@ -247,7 +248,7 @@ class ControlsFlyer():
 
         self.local_position = np.array(position)
         self.waypoint_target = np.array(target_position)
-        # self.waypoint_target = np.array([0,0,-7])
+        # self.waypoint_target = np.array([0,0,-2])
         self.local_velocity = np.array(velocity)
         self.attitude = np.array(angle)
         self.waypoint_attitude_target = np.array(target_angle)
