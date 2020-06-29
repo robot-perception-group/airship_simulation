@@ -170,10 +170,9 @@ if __name__=="__main__":
     menu_handler.insert( "Second Entry", parent=sub_menu_handle, callback=processFeedback )
 
     while not rospy.is_shutdown():
-        # Task: take off
-        x = np.random.uniform(-3,3)
-        y = np.random.uniform(-3,3)
-        z = 7
+        x = np.random.uniform(-50,50)
+        y = np.random.uniform(-50,50)
+        z = 8
 
         phi = 0
         the = 0
