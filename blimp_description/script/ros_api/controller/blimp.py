@@ -24,7 +24,7 @@ class BlimpActionSpace():
     def __init__(self):
         # m1 m2 m3 s ftop fbot fleft fright
         self.action_space = np.array([0, 0, 0, 0, 0, 0, 0, 0])
-        self.high = np.array([70, 70, 50, pi/2, pi/6, pi/6, pi/6, pi/6])
+        self.high = np.array([70, 70, 30, pi/2, pi/9, pi/9, pi/9, pi/9])
         self.low = -self.high
         self.shape = self.action_space.shape
         self.dU = self.action_space.shape[0]
@@ -188,7 +188,6 @@ class BlimpEnv():
         the = -1*euler[1]
         psi = -1*euler[2]
 
-        
         self.angle = [phi,the,psi]
         self.angular_velocity = [p,q,r]
         self.linear_acceleration = [ax,ay,az]

@@ -117,11 +117,6 @@ class ControlsFlyer():
         self.yaw_trajectory = np.array(yaw_trajectory)
         self.MPC_rviz_trajectory_publisher.publish(MPC_rviz_trajectory)
 
-        # self.cnt+=1
-        # if self.cnt%10==0:
-        #     print("---------------")
-        #     print("MPC_traj=",position_trajectory[0])
-
     def MPC_target_publish(self):
         """
         std_msgs/Header header
