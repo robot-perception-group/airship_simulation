@@ -77,13 +77,14 @@ class BlimpEnv:
         self.action_space = np.array([0, 0, 0, 0, 0, 0, 0, 0])
         self.ac_ub = np.array([self.MOTOR_LIMIT, self.MOTOR_LIMIT, self.MOTOR3_LIMIT, self.STICK_LIMIT, self.FIN_LIMIT, self.FIN_LIMIT, self.FIN_LIMIT, self.FIN_LIMIT])
         self.ac_lb = -self.ac_ub
+        self.dU = self.action_space.shape[0]
 
         # observation space
         # phi the psi phitarget thetarget psitarget p q r x y z xtarget ytarget ztarget vx vy vz ax ay az
         self.observation_space = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         self.ob_ub = np.array([pi, pi, pi, pi, pi, pi, pi/2, pi/4, pi/4, 10, 10, 10, 10 ,10 ,10 , 5, 2.5, 2.5, 2, 1, 1])
         self.ob_lb = -self.ob_ub
-        self.dO = 21
+        self.dO = self.observation_space.shape[0]
 
         # msgs initialize
         self.angle = [0,0,0]
@@ -188,6 +189,10 @@ class BlimpEnv:
 
         self.target_pose = msg.markers[0].pose
 
+        euler = self._euler_from_pose(self.target_pose)
+        target_phi, target_the, target_psi = 0, 0, -1*euler[2]
+        self.target_angle = [target_phi, target_the, target_psi]
+
         # NED Frame
         self.target_pose.position.y = self.target_pose.position.y*-1
         self.target_pose.position.z = self.target_pose.position.z*-1
@@ -212,6 +217,9 @@ class BlimpEnv:
         """
 
         self.target_pose = msg
+        euler = self._euler_from_pose(target_pose)
+        target_phi, target_the, target_psi = 0, 0, euler[2]
+        self.target_angle = [target_phi, target_the, target_psi]
 
         # NED Frame
         self.target_pose.position.y = self.target_pose.position.y*-1
@@ -439,6 +447,37 @@ class BlimpEnv:
         self.pub_motor_speed.publish(all_motor_speed)
         self.motor_rec = [motor1_limit, motor2_limit, motor3_limit]
 
+    def _euler_from_pose(self, pose):
+        a = pose.orientation.x
+        b = pose.orientation.y
+        c = pose.orientation.z
+        d = pose.orientation.w
+        euler = self.euler_from_quaternion(a,b,c,d)
+        return euler  
+
+    def euler_from_quaternion(x, y, z, w):
+        t0 = +2.0 * (w * x + y * z)
+        t1 = +1.0 - 2.0 * (x * x + y * y)
+        roll = math.atan2(t0, t1)
+
+        t2 = +2.0 * (w * y - z * x)
+        t2 = +1.0 if t2 > +1.0 else t2
+        t2 = -1.0 if t2 < -1.0 else t2
+        pitch = math.asin(t2)
+
+        t3 = +2.0 * (w * z + x * y)
+        t4 = +1.0 - 2.0 * (y * y + z * z)
+        yaw = math.atan2(t3, t4)
+
+        return [roll, pitch, yaw]
+
+    def quaternion_from_euler(roll, pitch, yaw):
+        qx = np.sin(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) - np.cos(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
+        qy = np.cos(roll/2) * np.sin(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.cos(pitch/2) * np.sin(yaw/2)
+        qz = np.cos(roll/2) * np.cos(pitch/2) * np.sin(yaw/2) - np.sin(roll/2) * np.sin(pitch/2) * np.cos(yaw/2)
+        qw = np.cos(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
+
+        return [qx, qy, qz, qw]
 
     def _limit(self, target, limit):
         """
@@ -501,7 +540,7 @@ class BlimpEnv:
         reward_orientation = normalized_orientation
 
         # define orientation speed reward
-        # avoid shaking too much
+        # negative reward for shaking too much
         ori_v = self.angular_velocity
         orientation_velocity = np.sqrt(np.sum(np.square(np.array(ori_v))))
 
@@ -519,7 +558,7 @@ class BlimpEnv:
         reward_action = np.sqrt(np.sum(np.square(np.array(normalized_action))))
 
         # sum up and publish
-        reward = -0.4*reward_distance - 0.4*reward_orientation - 0.1*reward_orientation_velocity - 0.1*reward_action
+        reward = -0.6*reward_distance - 0.3*reward_orientation - 0.05*reward_orientation_velocity - 0.05*reward_action
 
         self.pub_reward.publish(reward)
 
