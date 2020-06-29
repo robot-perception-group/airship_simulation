@@ -48,6 +48,8 @@ class ControlsFlyer():
         self.cmd_rotor = np.array([0.0,0.0,0.0,0.0])
         self.cmd_plane = np.array([0.0,0.0,0.0,0.0])
 
+        self.dt = 0.01
+
     def _create_pubs_subs(self):
         rospy.Subscriber(
             "/machine_1/mpc_calculated/pose_traj",
@@ -218,12 +220,15 @@ class ControlsFlyer():
     #   plane controller   #
     ########################
     def plane_altitude_controller(self):
-        dt = 0.01
-        pitch_cmd = self.longitudinal_controller.altitude_loop(self.local_position[2], -2.5, dt) #self.local_position[2], self.waypoint_target[2], dt
+        pitch_cmd = self.longitudinal_controller.altitude_loop(self.local_position[2], -2.5, self.dt) #self.local_position[2], self.waypoint_target[2], dt
         q_cmd = self.longitudinal_controller.pitch_loop(self.attitude[1], self.body_rate[1], pitch_cmd)
         self.cmd_plane = [0, q_cmd, 0, 35]
 
+    # def plane_speed_controller(self):
+        # throttle_cmd = self.longitudinal_controller.airspeed_loop(airspeed, airspeed_cmd, self.dt)
+
     def plane_control_update(self):
+        # self.plane_speed_controller() 
         self.plane_altitude_controller()
 
 

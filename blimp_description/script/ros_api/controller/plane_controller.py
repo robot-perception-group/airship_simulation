@@ -5,7 +5,7 @@ PI = 3.14159
 class LongitudinalAutoPilot():
     def __init__(self):
         self.max_throttle_rpm = 70
-        self.max_elevator = 30.0*PI/180.0
+        self.max_elevator = 20.0*PI/180.0
         
         self.min_throttle = 0.0
         self.max_throttle = 1.0
@@ -15,13 +15,17 @@ class LongitudinalAutoPilot():
         self.speed_int = 0.0
         self.alt_int = 0.0
         self.climb_speed_int = 0.0
-        
-        self.pitch_k_p, self.pitch_k_d = 2, 0.3
+
+        self.integral_upper_bound = 1
+        self.integral_lower_bound = -1        
+
+        self.pitch_k_p, self.pitch_k_d = 1, 0.3
 
         self.altitude_k_p, self.altitude_k_i = 1, 0.5
         self.altitude_err_cur = 0
-        self.integral_upper_bound = 1
-        self.integral_lower_bound = -1
+
+        self.airspeed_k_p, self.airspeed_k_d = 1, 0.5
+        self.airspeed_err_cur = 0
         
         return
        
@@ -97,8 +101,23 @@ class LongitudinalAutoPilot():
     """
     def airspeed_loop(self, airspeed, airspeed_cmd, dt):        
         throttle_cmd = 0.0
-        # STUDENT CODE HERE
         
+        airspeed_err = airspeed_cmd - airspeed
+
+        self.airspeed_err_cur = self.airspeed_err_cur + airspeed_err * dt
+
+        if (self.airspeed_err_cur > self.integral_upper_bound):
+            self.airspeed_err_cur = self.integral_upper_bound
+        else:
+            if (airspeed_err_cur < self.integral_lower_bound):
+                self.airspeed_err_cur = -self.integral_lower_bound
+
+        throttle_cmd = self.airspeed_k_p * airspeed_err + self.airspeed_k_i *self.airspeed_err_cur
+        if (throttle_cmd > self.max_throttle):
+            throttle_cmd = self.max_throttle
+        else: 
+            if (throttle_cmd < -self.max_throttle):
+                throttle_cmd = -self.max_throttle        
         
         return throttle_cmd
     """Used to calculate the pitch command required to maintain the commanded
