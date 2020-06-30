@@ -3,6 +3,7 @@ import time
 import rospy
 import numpy as np
 import random
+import math
 from math import pi, sin, cos, asin, acos, atan, sqrt
 import tf
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
@@ -14,8 +15,54 @@ from geometry_msgs.msg import Twist, TwistStamped, Pose, Point, PointStamped
 from std_srvs.srv import Empty
 from visualization_msgs.msg import *
 
-
 from gazeboConnection import GazeboConnection
+
+class BlimpActionSpace():
+    def __init__(self):
+        '''
+        0: left motor 
+        1: right motor
+        2: back motor
+        3: servo
+        4: top fin
+        5: bottom fin 
+        6: left fin
+        7: right fin
+        '''
+        self.STICK_LIMIT = pi/2
+        self.FIN_LIMIT = pi/9
+        self.MOTOR_LIMIT = 70
+        self.MOTOR3_LIMIT = 30
+        self.action_space = np.array([0, 0, 0, 0, 0, 0, 0, 0])
+        self.high = np.array([self.MOTOR_LIMIT, self.MOTOR_LIMIT, self.MOTOR3_LIMIT, self.STICK_LIMIT, self.FIN_LIMIT, self.FIN_LIMIT, self.FIN_LIMIT, self.FIN_LIMIT])
+        self.low = -self.high
+        self.shape = self.action_space.shape
+        self.dU = self.shape[0]
+
+class BlimpObservationSpace():
+    def __init__(self):
+        '''
+        state
+        0:2 relative angle
+        3:5 angular velocity
+        6:8 relative position
+        9:11 velocity
+        12:14 acceleration
+        '''
+        DISTANCE_BND = 10 * 2
+        ORIENTATION_BND = pi * 2
+        ORIENTATION_VELOCITY_BND = pi/2
+        VELOCITY_BND = 5
+        ACCELERATION_BND = 2
+        self.observation_space = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.high = np.array([ORIENTATION_BND, ORIENTATION_BND, ORIENTATION_BND, 
+            ORIENTATION_VELOCITY_BND, ORIENTATION_VELOCITY_BND, ORIENTATION_VELOCITY_BND, 
+            DISTANCE_BND, DISTANCE_BND, DISTANCE_BND, 
+            VELOCITY_BND, VELOCITY_BND, VELOCITY_BND, 
+            ACCELERATION_BND ,ACCELERATION_BND ,ACCELERATION_BND])
+        self.low = -self.high
+        self.shape = self.observation_space.shape
+        self.dO = self.shape[0]
 
 class BlimpEnv:
 
@@ -39,11 +86,6 @@ class BlimpEnv:
         self.RATE = rospy.Rate(100)
         self.GRAVITY = 9.81
 
-        # observation bound
-        self.DISTANCE_BND = 10
-        self.ORIENTATION_BND = 1.924
-        self.ORIENTATION_VELOCITY_BND = 1
-
         # actuator 
         self.stick_angle = 0
         self.elv1_angle = 0
@@ -59,40 +101,30 @@ class BlimpEnv:
         self.fin_rec = []
         self.motor_rec = []
 
-        """
-        limit radians: stick_angle [-1.56, 1.56]
-                       elv_angle [-0.087, 0.087]
-                       rud_angle [-0.087, 0.087]
-        limit speed: motor1_speed [-100, 100]
-                     motor2_speed [-100, 100]
-                     motor3_speed [-50, 50]
-        """
-        self.STICK_LIMIT = pi/2
-        self.FIN_LIMIT = pi/6
-        self.MOTOR_LIMIT = 100
-        self.MOTOR3_LIMIT = 50
-
         # action space
-        # m1 m2 m3 s ftop fbot fleft fright
-        self.action_space = np.array([0, 0, 0, 0, 0, 0, 0, 0])
-        self.ac_ub = np.array([self.MOTOR_LIMIT, self.MOTOR_LIMIT, self.MOTOR3_LIMIT, self.STICK_LIMIT, self.FIN_LIMIT, self.FIN_LIMIT, self.FIN_LIMIT, self.FIN_LIMIT])
-        self.ac_lb = -self.ac_ub
-        self.dU = self.action_space.shape[0]
+        self.action_space = BlimpActionSpace()
+        self.ac_ub = self.action_space.high
+        self.ac_lb = self.action_space.low
+        self.dU = self.action_space.dU
+        self.MOTOR_LIMIT = self.action_space.MOTOR_LIMIT
+        self.MOTOR3_LIMIT = self.action_space.MOTOR3_LIMIT
+        self.STICK_LIMIT = self.action_space.STICK_LIMIT
+        self.FIN_LIMIT = self.action_space.FIN_LIMIT
 
         # observation space
-        # phi the psi phitarget thetarget psitarget p q r x y z xtarget ytarget ztarget vx vy vz ax ay az
-        self.observation_space = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        self.ob_ub = np.array([pi, pi, pi, pi, pi, pi, pi/2, pi/4, pi/4, 10, 10, 10, 10 ,10 ,10 , 5, 2.5, 2.5, 2, 1, 1])
-        self.ob_lb = -self.ob_ub
-        self.dO = self.observation_space.shape[0]
+        self.observation_space = BlimpObservationSpace()
+        self.ob_ub = self.observation_space.high
+        self.ob_lb = self.observation_space.low
+        self.dO = self.observation_space.dO
 
         # msgs initialize
-        self.angle = [0,0,0]
-        self.angular_velocity = [0,0,0]
-        self.linear_acceleration = [0,0,0]
-        self.velocity = TwistStamped()
-        self.location = PointStamped()
-        self.target_pose = Pose()
+        self.angle = np.array([0,0,0])
+        self.angular_velocity = np.array([0,0,0])
+        self.linear_acceleration = np.array([0,0,0])
+        self.velocity = np.array([0,0,0])
+        self.position = np.array([0,0,0])
+        self.target_position = np.array([0,0,0])
+        self.target_angle = np.array([0,0,0])
         self.reward = 0
 
         rospy.loginfo("[Blimp Environment Node] Load and Initialize Parameters Finished")
@@ -187,17 +219,17 @@ class BlimpEnv:
         :return:
         """
 
-        self.target_pose = msg.markers[0].pose
+        target_pose = msg.markers[0].pose
 
-        euler = self._euler_from_pose(self.target_pose)
+        euler = self._euler_from_pose(target_pose)
         target_phi, target_the, target_psi = 0, 0, -1*euler[2]
-        self.target_angle = [target_phi, target_the, target_psi]
+        self.target_angle = np.array((target_phi, target_the, target_psi))
 
         # NED Frame
-        self.target_pose.position.y = self.target_pose.position.y*-1
-        self.target_pose.position.z = self.target_pose.position.z*-1
+        target_pose.position.y = target_pose.position.y*-1
+        target_pose.position.z = target_pose.position.z*-1
+        self.target_position = np.array((target_pose.position.x, target_pose.position.y, target_pose.position.z))
 
-        print(self.target_pose)
 
     def _moving_target_callback(self, msg):
         """
@@ -216,14 +248,17 @@ class BlimpEnv:
         :return:
         """
 
-        self.target_pose = msg
+        target_pose = msg
+
         euler = self._euler_from_pose(target_pose)
         target_phi, target_the, target_psi = 0, 0, euler[2]
-        self.target_angle = [target_phi, target_the, target_psi]
+        self.target_angle = np.array((target_phi, target_the, target_psi))
 
         # NED Frame
-        self.target_pose.position.y = self.target_pose.position.y*-1
-        self.target_pose.position.z = self.target_pose.position.z*-1
+        target_pose.position.y = target_pose.position.y*-1
+        target_pose.position.z = target_pose.position.z*-1
+        self.target_position = np.array((target_pose.position.x, target_pose.position.y, target_pose.position.z))
+
 
     def _controllercmd_callback(self, msg):
         self.motor1_speed = msg.data[0]
@@ -266,27 +301,26 @@ class BlimpEnv:
         b = msg.orientation.y
         c = msg.orientation.z
         d = msg.orientation.w
-        quaternion = (a,b,c,d)
 
+        # NED Frame
         p = msg.angular_velocity.x
         q = -1*msg.angular_velocity.y
         r = -1*msg.angular_velocity.z
 
         ax = -1*msg.linear_acceleration.x
         ay = msg.linear_acceleration.y
-        az = -1*msg.linear_acceleration.z + self.GRAVITY
+        az = msg.linear_acceleration.z - self.GRAVITY
 
         # from Quaternion to Euler Angle
-        euler = tf.transformations.euler_from_quaternion(quaternion)
+        euler = self.euler_from_quaternion(a,b,c,d)
 
         phi = euler[0]
         the = -1*euler[1]
         psi = -1*euler[2]
 
-        # NED Frame
-        self.angle = [phi,the,psi]
-        self.angular_velocity = [p,q,r]
-        self.linear_acceleration = [ax,ay,az]
+        self.angle = np.array((phi,the,psi))
+        self.angular_velocity = np.array((p,q,r))
+        self.linear_acceleration = np.array((ax,ay,az))
 
     def _gps_callback(self, msg):
         """
@@ -303,12 +337,12 @@ class BlimpEnv:
         :param msg:
         :return:
         """
-        self.location = msg
+        location = msg
 
         # NED Frame
-        self.location.point.y = self.location.point.y * -1
-        self.location.point.z = self.location.point.z * -1
-
+        location.point.y = location.point.y * -1
+        location.point.z = location.point.z * -1
+        self.position = np.array((location.point.x, location.point.y, location.point.z))
 
     def _velocity_callback(self, msg):
         """
@@ -326,11 +360,12 @@ class BlimpEnv:
             float64 y
             float64 z
         """
-        self.velocity = msg
+        velocity = msg
 
         # NED Frame
-        self.velocity.twist.linear.y = self.velocity.twist.linear.y * -1
-        self.velocity.twist.linear.z = self.velocity.twist.linear.z * -1
+        velocity.twist.linear.y = velocity.twist.linear.y * -1
+        velocity.twist.linear.z = velocity.twist.linear.z * -1
+        self.velocity = np.array((velocity.twist.linear.x, velocity.twist.linear.y, velocity.twist.linear.z))
 
     def _teleokeyboardcmd_callback(self, msg):
         """
@@ -401,7 +436,7 @@ class BlimpEnv:
         self.pub_rightfin_joint_position_controller.publish(angle_elv2)
         self.pub_topfin_joint_position_controller.publish(angle_rud1)
         self.pub_botfin_joint_position_controller.publish(angle_rud2)
-        self.fin_rec = [rud1_limit, rud2_limit, elv1_limit, elv2_limit]
+        self.fin_rec = np.array([rud1_limit, rud2_limit, elv1_limit, elv2_limit])
 
     def _stick_attitude_publish(self):
         """
@@ -416,7 +451,7 @@ class BlimpEnv:
 
         #publish and record the data
         self.pub_stick_joint_position_controller.publish(angle_stick)
-        self.stick_rec = [stick_limit]
+        self.stick_rec = np.array([stick_limit])
 
     def _motor_speed_publish(self):
         """
@@ -445,7 +480,7 @@ class BlimpEnv:
 
         #publish and record the data
         self.pub_motor_speed.publish(all_motor_speed)
-        self.motor_rec = [motor1_limit, motor2_limit, motor3_limit]
+        self.motor_rec = np.array([motor1_limit, motor2_limit, motor3_limit])
 
     def _euler_from_pose(self, pose):
         a = pose.orientation.x
@@ -455,7 +490,7 @@ class BlimpEnv:
         euler = self.euler_from_quaternion(a,b,c,d)
         return euler  
 
-    def euler_from_quaternion(x, y, z, w):
+    def euler_from_quaternion(self, x, y, z, w):
         t0 = +2.0 * (w * x + y * z)
         t1 = +1.0 - 2.0 * (x * x + y * y)
         roll = math.atan2(t0, t1)
@@ -471,7 +506,7 @@ class BlimpEnv:
 
         return [roll, pitch, yaw]
 
-    def quaternion_from_euler(roll, pitch, yaw):
+    def quaternion_from_euler(self, roll, pitch, yaw):
         qx = np.sin(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) - np.cos(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
         qy = np.cos(roll/2) * np.sin(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.cos(pitch/2) * np.sin(yaw/2)
         qz = np.cos(roll/2) * np.cos(pitch/2) * np.sin(yaw/2) - np.sin(roll/2) * np.sin(pitch/2) * np.cos(yaw/2)
@@ -507,58 +542,41 @@ class BlimpEnv:
             self.RATE.sleep()
 
     def _reward(self):
-        # define reward distance
-        target_pose = self.target_pose
-        dist_x = target_pose.position.x - self.location.point.x
-        dist_y = target_pose.position.y - self.location.point.y
-        dist_z = target_pose.position.z - self.location.point.z
-        dist = [dist_x, dist_y, dist_z]
+        '''
+        state
+        0:2 relative angle
+        3:5 angular velocity
+        6:8 relative position
+        9:11 velocity
+        12:14 acceleration
+        '''
+        relative_angle = self.target_angle - self.angle
+        relative_distance = self.target_position - self.position
 
-        distance = abs(dist_z) # abs z distance
-        # distance = np.sqrt(np.sum(np.square(np.array(dist)))) # mse distance
+        state=[]
+        state.extend(relative_angle)
+        state.extend(self.angular_velocity)
+        state.extend(relative_distance)
+        state.extend(self.velocity)
+        state.extend(self.linear_acceleration)
+        state = np.array(state)
+        state = state / self.ob_ub
 
-        normalized_distance = self._normalize(distance, self.DISTANCE_BND)
-        reward_distance = normalized_distance
+        # define distance reward
+        reward_distance = state[6:9]
+        reward_distance = np.sqrt((reward_distance**2).mean()) 
 
-        # define orientation reward
-        a = target_pose.orientation.x
-        b = target_pose.orientation.y
-        c = target_pose.orientation.z
-        d = target_pose.orientation.w
-        quaternion = (a,b,c,d)
-        euler = tf.transformations.euler_from_quaternion(quaternion)
-        target_phi = 0
-        target_the = 0
-        target_psi = euler[2]
-        ori_phi = target_phi - self.angle[0]
-        ori_the = target_the - self.angle[1]
-        ori_psi = target_psi - self.angle[2]
-        ori = [ori_phi, ori_the, ori_psi]
-        orientation = np.sqrt(np.sum(np.square(np.array(ori))))
+        # define angle reward
+        reward_angle = state[0:3]
+        reward_angle = np.sqrt((reward_angle**2).mean()) 
 
-        normalized_orientation = self._normalize(orientation, self.ORIENTATION_BND)
-        reward_orientation = normalized_orientation
-
-        # define orientation speed reward
-        # negative reward for shaking too much
-        ori_v = self.angular_velocity
-        orientation_velocity = np.sqrt(np.sum(np.square(np.array(ori_v))))
-
-        normalized_orientation_velocity = self._normalize(orientation, self.ORIENTATION_VELOCITY_BND)
-        reward_orientation_velocity = normalized_orientation_velocity
-
-        # define action reward
-        normalized_action = []
-
-        action = np.concatenate([ self.motor_rec, self.stick_rec, self.fin_rec ])
-        action_limit = self.ac_ub
-        for a, h in zip(action, action_limit):
-            normalized_action.append(self._normalize(a,h))
-
-        reward_action = np.sqrt(np.sum(np.square(np.array(normalized_action))))
+        # define action cost
+        action = np.concatenate((self.motor_rec, self.stick_rec, self.fin_rec), axis=None)
+        reward_action = action / self.ac_ub
+        reward_action = np.sqrt((reward_action**2).mean()) 
 
         # sum up and publish
-        reward = -0.6*reward_distance - 0.3*reward_orientation - 0.05*reward_orientation_velocity - 0.05*reward_action
+        reward = -0.7*reward_distance - 0.2*reward_angle - 0.1*reward_action
 
         self.pub_reward.publish(reward)
 
