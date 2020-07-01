@@ -172,7 +172,7 @@ if __name__=="__main__":
     while not rospy.is_shutdown():
         x = np.random.uniform(-50,50)
         y = np.random.uniform(-50,50)
-        z = 8
+        z = np.random.uniform(1,10)
 
         phi = 0
         the = 0
@@ -191,6 +191,6 @@ if __name__=="__main__":
 
         rospy.Timer(rospy.Duration(0.01), frameCallback)
 
-        time.sleep(120)
+        time.sleep(60)
 
     rospy.spin()
