@@ -599,8 +599,8 @@ class BlimpEnv:
 
         # sum up and publish
         # reward = -0.9*reward_alt - 0.1*reward_action # alt task
-        reward = -0.9*reward_distance - 0.1*reward_action # takeoff task
-        # reward = -0.8*reward_distance - 0.1*reward_angle - 0.1*reward_action # hover task
+        # reward = -0.9*reward_distance - 0.1*reward_action # takeoff task
+        reward = -0.9*reward_distance - 0.0*reward_angle - 0.1*reward_action # hover task
         # reward = -0.8*reward_distance - 0.1*reward_angle - 0.1*reward_action # Cruising
 
         self.pub_reward.publish(reward)

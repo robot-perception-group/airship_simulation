@@ -25,7 +25,7 @@
 
 	<arg name="X" default="0.0"/>
 	<arg name="Y" default="0.0"/>
-	<arg name="Z" default="2"/>
+	<arg name="Z" default="10"/>
 
 	<!--********** spawn model **********-->
 	<group ns="$(arg uav_name)">

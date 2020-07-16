@@ -170,13 +170,20 @@ if __name__=="__main__":
     menu_handler.insert( "Second Entry", parent=sub_menu_handle, callback=processFeedback )
 
     while not rospy.is_shutdown():
-        x = 0
-        y = 3
-        z = 7
+    #ALT
+        # x = 0
+        # y = 0
+        # z = 7
+
 	#TAKEOFF
         # x = np.random.uniform(-5,5)
         # y = np.random.uniform(-5,5)
         # z = np.random.uniform(5, 9)
+
+    #HOVER
+        x = np.random.uniform(-5,5)
+        y = np.random.uniform(-5,5)
+        z = np.random.uniform(5, 15)
 
 	#Cruising
         # x = np.random.uniform(-30,30)
@@ -200,6 +207,6 @@ if __name__=="__main__":
 
         rospy.Timer(rospy.Duration(0.01), frameCallback)
 
-        time.sleep(480)
+        time.sleep(120)
 
     rospy.spin()
