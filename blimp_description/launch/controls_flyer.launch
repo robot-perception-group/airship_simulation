@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-
-<launch>
-	 <node name="control_node" pkg="blimp_description" type="controls_flyer.py" output="screen"/> 
-
-</launch>
