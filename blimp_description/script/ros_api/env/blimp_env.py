@@ -49,11 +49,11 @@ class BlimpObservationSpace():
         9:11 velocity
         12:14 acceleration
         '''
-        DISTANCE_BND = 10 * 2
-        ORIENTATION_BND = pi * 2
-        ORIENTATION_VELOCITY_BND = pi/2
-        VELOCITY_BND = 5
-        ACCELERATION_BND = 2
+        DISTANCE_BND = 50 
+        ORIENTATION_BND = pi 
+        ORIENTATION_VELOCITY_BND = pi
+        VELOCITY_BND = 10
+        ACCELERATION_BND = 4
         self.observation_space = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         self.high = np.array([ORIENTATION_BND, ORIENTATION_BND, ORIENTATION_BND, 
             ORIENTATION_VELOCITY_BND, ORIENTATION_VELOCITY_BND, ORIENTATION_VELOCITY_BND, 
@@ -551,6 +551,22 @@ class BlimpEnv:
         12:14 acceleration
         '''
         relative_angle = self.target_angle - self.angle
+
+        if relative_angle[0] > pi:
+            relative_angle[0] -= 2*pi
+        elif relative_angle[0] < -pi:
+            relative_angle[0] += 2*pi
+
+        if relative_angle[1] > pi:
+            relative_angle[1] -= 2*pi
+        elif relative_angle[1] < -pi:
+            relative_angle[1] += 2*pi            
+
+        if relative_angle[2] > pi:
+            relative_angle[2] -= 2*pi
+        elif relative_angle[2] < -pi:
+            relative_angle[2] += 2*pi
+
         relative_distance = self.target_position - self.position
 
         state=[]
@@ -560,23 +576,32 @@ class BlimpEnv:
         state.extend(self.velocity)
         state.extend(self.linear_acceleration)
         state = np.array(state)
-        state = state / self.ob_ub
+
+        # define altitude reward
+        reward_alt = np.abs(state[8])
+        reward_alt = np.tanh(0.1*reward_alt)
 
         # define distance reward
-        reward_distance = state[6:9]
-        reward_distance = np.sqrt((reward_distance**2).mean()) 
+        reward_distance = np.linalg.norm(state[6:9])
+        reward_distance = np.tanh(0.1*reward_distance)
+        # reward_distance = np.sqrt((reward_distance**2).mean())  #mse error, not used
 
         # define angle reward
-        reward_angle = state[0:3]
-        reward_angle = np.sqrt((reward_angle**2).mean()) 
+        reward_angle = np.mean(np.abs(state[0:3]))
+        reward_angle = np.tanh(reward_angle)
+        # reward_angle = np.sqrt((reward_angle**2).mean())  #mse error, not used
 
         # define action cost
         action = np.concatenate((self.motor_rec, self.stick_rec, self.fin_rec), axis=None)
-        reward_action = action / self.ac_ub
-        reward_action = np.sqrt((reward_action**2).mean()) 
+        reward_action =np.linalg.norm(action / (self.ac_ub-self.ac_lb))
+        reward_action = np.tanh(reward_action)
+        # reward_action = np.sqrt((reward_action**2).mean()) #mse error, not used
 
         # sum up and publish
-        reward = -0.7*reward_distance - 0.2*reward_angle - 0.1*reward_action
+        # reward = -0.9*reward_alt - 0.1*reward_action # alt task
+        reward = -0.9*reward_distance - 0.1*reward_action # takeoff task
+        # reward = -0.8*reward_distance - 0.1*reward_angle - 0.1*reward_action # hover task
+        # reward = -0.8*reward_distance - 0.1*reward_angle - 0.1*reward_action # Cruising
 
         self.pub_reward.publish(reward)
 

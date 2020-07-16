@@ -5,7 +5,7 @@
 	<arg name="roboID" default="0"/>
 
 	<arg name="is_input_joystick" default="false"/>
-	<arg name="enable_meshes" default="true"/>
+	<arg name="enable_meshes" default="false"/>
 	<arg name="enable_wind" default="false"/>
 	<arg name="enable_physics" default="true"/>
 	<arg name="enable_sensors" default="true"/>
