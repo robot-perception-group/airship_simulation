@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<launch>
+	<arg name="port" default="11311" />
+	<node name="multimaster_disco_$(arg port)" type="master_discovery" pkg="master_discovery_fkie">
+		<param name="mcast_group" value="224.0.0.1" />
+	</node>
+	<node name="mutlimaster_sync_$(arg port)" type="master_sync" pkg="master_sync_fkie" />
+</launch>
+

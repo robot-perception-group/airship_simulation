@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<launch>
+
+    <arg name="robotID" default="1"/>
+    <arg name="namespace" default="machine_$(arg robotID)"/>
+
+    <arg name="img_topic" default="video"/>
+    <arg name="detections_topic" default="object_detections"/>
+
+    <arg name="timeout_seconds" default="5"/>
+    <arg name="feedback_topic" default="object_detections/feedback"/>
+
+    <arg name="save_video" default="false"/>
+    <arg name="video_filename" default="video.avi"/>
+    <arg name="video_fps" default="40"/>
+
+    <group ns="$(arg namespace)">
+        <arg name="name" value="neural_network_detector_overlay"/>
+        <node name="$(arg name)" pkg="neural_network_detector" type="neural_network_detector_overlay_only" output="screen">
+            <rosparam command="load" file="$(find neural_network_detector)/config/ssd_300.yaml"/>
+            <param name="img_topic" value="$(arg img_topic)" type="string"/>
+            <param name="detections_topic" value="$(arg detections_topic)" type="string"/>
+            <param name="feedback_topic" value="$(arg feedback_topic)" type="string"/>
+            <param name="timeout_seconds" value="$(arg timeout_seconds)" type="double"/>
+
+	    <param name="save_video/flag" value="$(arg save_video)" type="bool"/>
+	    <param name="save_video/filename" value="$(arg video_filename)" type="string"/>
+	    <param name="save_video/fps" value="$(arg video_fps)" type="double"/>
+        </node>
+    </group>
+
+</launch>

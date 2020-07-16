@@ -1,0 +1,5 @@
+<launch>
+  <node name="camera" pkg="cv_camera" type="cv_camera_node">
+    <rosparam command="load" file="$(find camera_configs)/config/logitech_c920/info_logitech_c920.yaml"/>
+  </node>
+</launch>

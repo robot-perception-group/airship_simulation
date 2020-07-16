@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<launch>
+  <arg name="robotID" default="1" />
+  <arg name="namespace" value="machine_$(arg robotID)" />
+  <arg name="device" default="/dev/gps_serial" />
+
+  <group ns="$(arg namespace)">
+    <arg name="name" value="diff_gps"/>
+    <node pkg="diff_gps" name="$(arg name)" type="gps_serial">
+    	<param name = "device_name" value = "$(arg device)" type="string" />	
+	<param name = "gps_topic" value = "groundtruth/gpspose" type="string" />	
+    </node>	
+  </group>
+
+</launch>

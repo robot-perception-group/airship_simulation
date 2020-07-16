@@ -1,0 +1,14 @@
+desired_resolution:
+  x: 300
+  y: 300
+
+score_threshold: 0.3
+desired_class: 15
+
+variance:
+  x:
+    min: .00387
+    max: .00347
+  y:
+    min: .00144
+    max: .00452

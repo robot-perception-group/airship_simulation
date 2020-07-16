@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<launch>
+
+
+  <arg name="robotID" default="1"/>
+  <arg name="NUM_ROBOTS" default="2" />
+
+  <group ns="machine_$(arg robotID)">
+  <node name="nmpc_planner_$(arg robotID)" pkg="nmpc_planner" type="mpc_act" args="$(arg robotID) $(arg NUM_ROBOTS)" output="screen">
+    <param name="uavPoseTopic" value="/machine_" type="string" />
+    <param name="uavPoseTopicSuffix" value="/pose" type="string" />
+
+    <param name="uavPoseTrajTopic" value="/machine_" type="string" />
+    <param name="uavPoseTrajTopicSuffix" value="/mpc_calculated/pose_traj" type="string" />
+
+    <param name="outputPoseTopic" value="/machine_$(arg robotID)/command" type="string" />
+
+    <!-- <param name="objectGTTopic" value="/machine_$(arg robotID)/target_tracker/pose" type="string" /> -->
+    <param name="objectGTTopic" value="/virtual_target_square_motion" type="string" />
+    <param name="objectGTVelTopic" value="/machine_$(arg robotID)/target_tracker/twist" type="string" />
+    <param name="objectEstimatedTopic" value="/machine_$(arg robotID)/self_target_tracker/pose" type="string" />
+    <param name="objectEstimatedVelTopic" value="/machine_$(arg robotID)/self_target_tracker/twist" type="string" />
+    <param name="obstacleTopicBase" value="NewObstaclePoints_$(arg robotID)" type="string" />
+    <param name="NMPC_timesteps" value="3" type="int" />
+
+    <param name="useGTforTarget" value="true" type="bool" />
+    <param name="deltaT" value="0.1" type="double" />
+
+    <param name="INTERNAL_SUB_STEP" value="0.1" type="double" />
+
+    <param name="maxVelocityMagnitude" value="1.7" type="double" />
+
+    <param name="tFlyToDestinationRadius" value="0.25" type="double" />
+    <param name="tFormationRepulGain" value="35.0" type="double" />
+    <param name="tGoalAttractionGain" value="7.0" type="double" />
+    <param name="neighborDistThreshold" value="11.0" type="double" />
+    <param name="distanceThresholdToTarget" value="8.0" type="double" />
+    <param name="copterDesiredHeightinNED" value="-8.0" type="double" />
+
+    <param name="activeTrackingWeight" value="100.0" type="double" />
+    <param name="energyWeight" value="10" type="double" />
+
+    <param name="copterPositionLimitX" value="20.0" type="double" />
+    <param name="copterPositionLimitY" value="20.0" type="double" />
+    <param name="copterPositionLowerLimitZ" value="-20.0" type="double" />
+    <param name="copterPositionUpperLimitZ" value="-1.0" type="double" />
+
+    <param name="copterVelocityLimitHorizontal" value="0.7" type="double" />
+    <param name="copterVelocityLimitVertical" value="1.0" type="double" />
+
+    <param name="copterAccelarationLimitHorizontal" value="0.3" type="double" />
+    <param name="copterAccelarationLimitVertical" value="10.3" type="double" />
+
+    <param name="useZeroAsFixedTarget" value="false" type="bool" />
+
+   </node>
+   </group>
+
+</launch>

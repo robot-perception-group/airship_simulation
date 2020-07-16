@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<launch>
+    <arg name="tgtID" default="1"/>
+    <arg name="joyDevName" default="1"/>
+    <arg name="robot_name" value="target_$(arg tgtID)" />
+    <arg name="namespace" value="target_$(arg tgtID)" />
+    <!-- icreate robot model -->
+
+  <node pkg="turtlebot_teleop" type="turtlebot_teleop_joy" name="turtlebot_teleop_joystick">
+    <param name="scale_angular" value="1.5"/>
+    <param name="scale_linear" value="2.5"/>
+    <param name="axis_linear" value="1"/>
+    <param name="axis_angular" value="3"/>
+    <remap from="turtlebot_teleop_joystick/cmd_vel" to="/target_$(arg tgtID)/cmd_vel"/>
+  </node>
+
+  <node pkg="joy" type="joy_node" name="joystick">
+    <param name="dev" value="/dev/input/js$(arg joyDevName)"/>
+  </node>
+  
+  <param name="targetName" value="target_$(arg tgtID)" type="string"/>
+  <node pkg="random_moving_target" type="publish_target_robot_state" name="target_robot_state_publisher">
+  </node>
+  
+
+  
+</launch>

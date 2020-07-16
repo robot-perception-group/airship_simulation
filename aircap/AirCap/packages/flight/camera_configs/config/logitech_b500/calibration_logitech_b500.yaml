@@ -1,0 +1,20 @@
+image_width: 640
+image_height: 480
+camera_name: logitech_b500
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [567.250017, 0, 319.06103, 0, 568.046005, 211.211007, 0, 0, 1]
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [-0.004553, -0.015001, 0.002478, -0.004510999999999999, 0]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1, 0, 0, 0, 1, 0, 0, 0, 1]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [565.750183, 0, 316.476989, 0, 0, 568.704224, 211.978135, 0, 0, 0, 1, 0]

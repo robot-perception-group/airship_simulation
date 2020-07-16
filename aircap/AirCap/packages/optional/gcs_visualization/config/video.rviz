@@ -1,0 +1,438 @@
+Panels:
+  - Class: rviz/Displays
+    Help Height: 96
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /machine_11/PoseStd1/Covariance1/Position1
+        - /machine_1_target1/TargetDetection1/Covariance1
+        - /machine_1_target1/TargetDetection1/Covariance1/Position1
+        - /machine_21/PoseStd1/Covariance1/Position1
+      Splitter Ratio: 0.770950019
+    Tree Height: 262
+  - Class: rviz/Selection
+    Name: Selection
+  - Class: rviz/Tool Properties
+    Expanded:
+      - /2D Pose Estimate1
+      - /2D Nav Goal1
+      - /Publish Point1
+    Name: Tool Properties
+    Splitter Ratio: 0.588679016
+  - Class: rviz/Views
+    Expanded:
+      - /Current View1
+    Name: Views
+    Splitter Ratio: 0.5
+  - Class: rviz/Time
+    Experimental: false
+    Name: Time
+    SyncMode: 0
+    SyncSource: machine_1 overlay
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Alpha: 1
+      Cell Size: 1
+      Class: rviz/Grid
+      Color: 160; 160; 164
+      Enabled: true
+      Line Style:
+        Line Width: 0.0299999993
+        Value: Lines
+      Name: Grid
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 20
+      Reference Frame: <Fixed Frame>
+      Value: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 5
+      Frames:
+        All Enabled: false
+        machine_1_base_link:
+          Value: true
+        machine_1_camera_link:
+          Value: false
+        machine_1_camera_rgb_optical_link:
+          Value: false
+        machine_2_base_link:
+          Value: true
+        machine_2_camera_link:
+          Value: false
+        machine_2_camera_rgb_optical_link:
+          Value: false
+        world:
+          Value: true
+        world_ENU:
+          Value: false
+        world_NWU:
+          Value: false
+      Marker Scale: 4
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        world_ENU:
+          world:
+            machine_1_base_link:
+              machine_1_camera_link:
+                machine_1_camera_rgb_optical_link:
+                  {}
+            machine_2_base_link:
+              machine_2_camera_link:
+                machine_2_camera_rgb_optical_link:
+                  {}
+            world_NWU:
+              {}
+      Update Interval: 0
+      Value: true
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 0
+          Axes Length: 0
+          Axes Radius: 0.100000001
+          Class: rviz_plugin_covariance/PoseWithCovariance
+          Color: 255; 25; 0
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: false
+            Position:
+              Alpha: 0.600000024
+              Color: 170; 0; 170
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: true
+          Head Length: 0.300000012
+          Head Radius: 0.100000001
+          Name: PoseStd
+          Shaft Length: 1
+          Shaft Radius: 0.0500000007
+          Shape: Axes
+          Topic: /machine_1/pose/std
+          Unreliable: false
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /machine_1/command/vis
+          Name: MotionCommand
+          Namespaces:
+            commands: true
+          Queue Size: 100
+          Value: true
+        - Alpha: 1
+          Axes Length: 1
+          Axes Radius: 0.100000001
+          Class: rviz_plugin_covariance/PoseWithCovariance
+          Color: 255; 25; 0
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: false
+            Position:
+              Alpha: 0.699999988
+              Color: 255; 0; 255
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: true
+          Head Length: 0
+          Head Radius: 0.100000001
+          Name: CorrectedPose_Camera
+          Shaft Length: 0
+          Shaft Radius: 0.0500000007
+          Shape: Arrow
+          Topic: /machine_1/object_detections/camera_debug
+          Unreliable: false
+          Value: true
+      Enabled: true
+      Name: machine_1
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 0
+          Axes Length: 0
+          Axes Radius: 0.100000001
+          Class: rviz_plugin_covariance/PoseWithCovariance
+          Color: 255; 25; 0
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: false
+            Position:
+              Alpha: 0.5
+              Color: 255; 0; 0
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: true
+          Head Length: 0.300000012
+          Head Radius: 0.100000001
+          Name: TargetDetection
+          Shaft Length: 1
+          Shaft Radius: 0.0500000007
+          Shape: Axes
+          Topic: /machine_1/object_detections/projected_to_world
+          Unreliable: false
+          Value: true
+      Enabled: true
+      Name: machine_1_target
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 0
+          Axes Length: 0
+          Axes Radius: 0.100000001
+          Class: rviz_plugin_covariance/PoseWithCovariance
+          Color: 255; 25; 0
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: false
+            Position:
+              Alpha: 0.600000024
+              Color: 0; 170; 164
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: true
+          Head Length: 0.300000012
+          Head Radius: 0.100000001
+          Name: PoseStd
+          Shaft Length: 1
+          Shaft Radius: 0.0500000007
+          Shape: Axes
+          Topic: /machine_2/pose/std
+          Unreliable: false
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /machine_2/command/vis
+          Name: MotionCommand
+          Namespaces:
+            commands: true
+          Queue Size: 100
+          Value: true
+        - Alpha: 1
+          Axes Length: 1
+          Axes Radius: 0.100000001
+          Class: rviz_plugin_covariance/PoseWithCovariance
+          Color: 255; 25; 0
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: false
+            Position:
+              Alpha: 0.699999988
+              Color: 0; 255; 255
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: true
+          Head Length: 0
+          Head Radius: 0.100000001
+          Name: CorrectedPose_Camera
+          Shaft Length: 0
+          Shaft Radius: 0.0500000007
+          Shape: Arrow
+          Topic: /machine_2/object_detections/camera_debug
+          Unreliable: false
+          Value: true
+      Enabled: true
+      Name: machine_2
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 0
+          Axes Length: 0
+          Axes Radius: 0.100000001
+          Class: rviz_plugin_covariance/PoseWithCovariance
+          Color: 255; 25; 0
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: false
+            Position:
+              Alpha: 0.5
+              Color: 0; 255; 0
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: true
+          Head Length: 0.300000012
+          Head Radius: 0.100000001
+          Name: TargetDetection
+          Shaft Length: 1
+          Shaft Radius: 0.0500000007
+          Shape: Axes
+          Topic: /machine_2/object_detections/projected_to_world
+          Unreliable: false
+          Value: true
+      Enabled: true
+      Name: machine_2_target
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 0
+          Axes Length: 0
+          Axes Radius: 0.100000001
+          Class: rviz_plugin_covariance/PoseWithCovariance
+          Color: 255; 25; 0
+          Covariance:
+            Orientation:
+              Alpha: 0.5
+              Color: 255; 255; 127
+              Color Style: Unique
+              Frame: Local
+              Offset: 1
+              Scale: 1
+              Value: false
+            Position:
+              Alpha: 1
+              Color: 255; 243; 0
+              Scale: 1
+              Value: true
+            Value: true
+          Enabled: true
+          Head Length: 0.300000012
+          Head Radius: 0.100000001
+          Name: TargetKF
+          Shaft Length: 1
+          Shaft Radius: 0.0500000007
+          Shape: Axes
+          Topic: /machine_1/target_tracker/pose
+          Unreliable: false
+          Value: true
+        - Alpha: 1
+          Class: rviz/Polygon
+          Color: 255; 85; 0
+          Enabled: true
+          Name: TargetCircle
+          Topic: /machine_1/command/vis_target
+          Unreliable: false
+          Value: true
+      Enabled: true
+      Name: fused_target
+    - Class: rviz/Image
+      Enabled: true
+      Image Topic: /machine_1/neural_network_detector_overlay/overlay
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: machine_1 overlay
+      Normalize Range: true
+      Queue Size: 10
+      Transport Hint: raw
+      Unreliable: false
+      Value: true
+    - Class: rviz/Image
+      Enabled: true
+      Image Topic: /machine_2/neural_network_detector_overlay/overlay
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: machine_2 overlay
+      Normalize Range: true
+      Queue Size: 10
+      Transport Hint: raw
+      Unreliable: false
+      Value: true
+  Enabled: true
+  Global Options:
+    Background Color: 0; 0; 127
+    Fixed Frame: world_ENU
+    Frame Rate: 60
+  Name: root
+  Tools:
+    - Class: rviz/Interact
+      Hide Inactive Objects: true
+    - Class: rviz/MoveCamera
+    - Class: rviz/Select
+    - Class: rviz/FocusCamera
+    - Class: rviz/Measure
+    - Class: rviz/SetInitialPose
+      Topic: /initialpose
+    - Class: rviz/SetGoal
+      Topic: /move_base_simple/goal
+    - Class: rviz/PublishPoint
+      Single click: true
+      Topic: /clicked_point
+  Value: true
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 15.3542118
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.0599999987
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
+      Focal Point:
+        X: -0.208162606
+        Y: -0.259438694
+        Z: -0.225112468
+      Focal Shape Fixed Size: true
+      Focal Shape Size: 0.0500000007
+      Name: Current View
+      Near Clip Distance: 0.00999999978
+      Pitch: 0.604796767
+      Target Frame: <Fixed Frame>
+      Value: Orbit (rviz)
+      Yaw: 4.27816629
+    Saved: ~
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 1416
+  Hide Left Dock: false
+  Hide Right Dock: false
+  QMainWindow State: 000000ff00000000fd00000004000000000000027a000002b4fc020000000cfb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006400fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000001c004d0061006300680069006e00650031005f0064006500620075006701000002b6000000ff0000000000000000fb0000001c004d0061006300680069006e00650032005f0064006500620075006701000003bb000001af0000000000000000fb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000a0049006d006100670065020000056f0000006c0000012d000000bbfb0000000a0049006d00610067006502000000d1000002af0000016a000000cffb0000000a0049006d00610067006502000003e0000002c30000016a000000cf00000001000004c9000002b4fc0200000004fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a0056006900650077007301000002b600000107000000b000fffffffb000000100044006900730070006c00610079007301000003c3000001a7000000dd00fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b2000000000000000000000002000009bf000002b0fc0100000003fb00000022006d0061006300680069006e0065005f00310020006f007600650072006c006100790100000000000004dd000000b100fffffffb00000022006d0061006300680069006e0065005f00320020006f007600650072006c0061007901000004e3000004dc000000b100fffffffb0000000a00560069006500770073030000004e00000080000002e10000019700000003000009bf0000003efc0100000002fb0000000800540069006d00650000000000000009bf0000030000fffffffb0000000800540069006d00650100000000000004500000000000000000000004f0000002b400000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730000000000ffffffff0000000000000000
+  Selection:
+    collapsed: false
+  Time:
+    collapsed: false
+  Tool Properties:
+    collapsed: false
+  Views:
+    collapsed: false
+  Width: 2495
+  X: 65
+  Y: 24
+  machine_1 overlay:
+    collapsed: false
+  machine_2 overlay:
+    collapsed: false

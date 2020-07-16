@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<launch>
+
+   <arg name="file" default="video.avi"/>
+   <arg name="fps" default="60"/>
+   <arg name="visualize" default="false"/>
+
+   <!-- launch video stream -->
+   <include file="$(find video_stream_opencv)/launch/camera.launch" >
+        <!-- node name and ros graph name -->
+        <arg name="camera_name" value="ptgrey" />
+        <!-- throttling the querying of frames to -->
+        <arg name="fps" value="$(arg fps)" />
+        <!-- setting frame_id -->
+        <arg name="frame_id" value="machine_1_camera_rgb_optical_link" />
+        <!-- camera info loading, take care as it needs the "file:///" at the start , e.g.:
+        "file:///$(find your_camera_package)/config/your_camera.yaml" -->
+        <arg name="camera_info_url" value="file:///$(find camera_configs)/config/ptgrey/info_ptgrey.yaml" />
+        <!-- flip the image horizontally (mirror it) -->
+        <arg name="flip_horizontal" value="false" />
+        <!-- flip the image vertically -->
+        <arg name="flip_vertical" value="false" />
+        <!-- visualize on an image_view window the stream generated -->
+        <arg name="visualize" value="$(arg visualize)" />
+   </include>
+</launch>

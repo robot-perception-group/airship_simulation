@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<launch>
+    <arg name="tgtID" default="1"/>
+    <arg name="X" default="0"/>
+    <arg name="Y" default="0"/>
+    <arg name="Z" default="0"/>
+    <arg name="robot_name" value="target_$(arg tgtID)" />
+    <arg name="namespace" value="target_$(arg tgtID)" />
+    <!-- icreate robot model -->
+    <!--<node pkg="random_moving_target" type="waypoints_target.py" name="waypoints_target" output="screen"></node>-->
+    <!--<group ns="$(arg namespace)">	
+      <node name="create_model" args="$ -file $(find random_moving_target)/urdf/target_RAL.sdf -sdf -model $(arg robot_name)" pkg="gazebo_ros" type="spawn_model"/>
+    </group>-->
+    <!--node pkg="random_moving_target" type="random_walk.py" name="random_walk" output="screen"></node-->
+
+    
+</launch>

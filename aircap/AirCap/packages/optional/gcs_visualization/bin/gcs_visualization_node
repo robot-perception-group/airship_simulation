@@ -1,0 +1,97 @@
+#! /usr/bin/env python
+
+import rospy
+import sys
+from gcs_visualization.robot import RobotVisualization
+from gcs_visualization.world import WorldToRVIZ
+
+LOG_LEVEL = rospy.INFO
+
+str_help = """
+Usage: Usage: rosrun gcs_visualization gcs_visualization_node NUM_MACHINES(>0) UPDATE_RATE(>0) PUB_TF(1|0) TOP_DOWN(0|1) CMD_MARKER(arrow|sphere|debugarrow) TARGET_RADIUS(>0) [TIME_FACTOR]
+Options:
+* NUM_MACHINES  - will create subscribers/publishers for all machines from id=1 to id=NUM_MACHINES
+                - despite being registered, the topic won't be used if there is no data
+
+* UPDATE_RATE   - in Hz, accepts floating point
+                - data will still reach the subscribers at full rate, but with queue_size=1 it only uses the most recent one
+                - set to same rate or similar to Rviz fps
+                
+* PUB_TF        - if set to 1, this node will also publish TF from world_NED to world
+                - might want to disable if it is being published by something else
+                
+* TOP_DOWN      - if set to 1, all Z coordinates will be removed (set to 0.0)
+                - simulates a correct top-down view in Rviz, as that orthogonal view is still a perspective view
+                
+* CMD_MARKER    - must be either 'arrow' or 'sphere'
+                - change the type of marker for the command msg
+
+* TARGET_RADIUS - how much we want the radius of the circle around the target to be for each robot
+                - meters
+                
+* [TIME_FACTOR] - used together with CMD_MARKER = 'debugarrow' (optional)
+                #- default 0.2
+"""
+
+if __name__ == '__main__':
+
+    rospy.init_node('gcs_visualization', log_level=LOG_LEVEL)
+
+    nargs = len(sys.argv)
+
+    if (nargs != 7 and nargs != 8) or any(h in ['-h','--help'] for h in sys.argv):
+        print(str_help)
+        sys.exit(0)
+
+    # wait for a valid time
+    rospy.sleep(0.1)
+        
+    num_machines = int(sys.argv[1])
+    if num_machines <= 0:
+        rospy.logerr('Need NUM_MACHINES greater than 0')
+        rospy.shutdown()
+        sys.exit(0)
+    
+    rate = float(sys.argv[2])
+    if rate <= 0:
+        rospy.logerr('Need UPDATE_RATE greater than 0')
+        sys.exit(0)
+        
+    pub_tf = bool(int(sys.argv[3]))
+    if pub_tf:
+        rospy.loginfo('Will publish static TF from world_NED to world')
+        static_tf_pub = WorldToRVIZ()
+    else:
+        rospy.loginfo('Will not publish any static TF')
+        
+    top_down = bool(int(sys.argv[4]))
+    if top_down:
+        rospy.loginfo('Forcing all Z coordinates to 0 to simulate top-down view')
+        
+    cmd_marker = sys.argv[5]
+    if cmd_marker not in RobotVisualization.cmd_marker_opts.keys():
+        rospy.logerr('CMD_MARKER must be {}'.format(RobotVisualization.cmd_marker_opts.keys()))
+        sys.exit(0)
+    
+    target_radius = float(sys.argv[6])
+    if target_radius < 0:
+        rospy.logerr('Target radius must be a positive number')
+        sys.exit(0)
+    
+    try:
+        time_factor = float(sys.argv[7])
+    except:
+        time_factor = 0.2
+    
+    vis_objects = [RobotVisualization(mID, top_down, cmd_marker, target_radius, time_factor) for mID in range(1, num_machines+1)]
+    
+    r = rospy.Rate(rate)
+    rospy.loginfo('Using rate of {}hz'.format(rate))
+    while not rospy.is_shutdown():
+        for obj in vis_objects:
+            obj.publish_msgs()
+            
+        try:
+            r.sleep()
+        except:
+            pass

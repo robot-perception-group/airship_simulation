@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<launch>
+
+    <arg name="robotID" default="1"/>
+    <arg name="namespace" default="machine_$(arg robotID)"/>
+
+    <arg name="detections_topic" default="object_detections"/>
+    <arg name="height_model/mean" default="1.690"/>
+    <arg name="height_model/var" default="1.0"/>
+
+    <arg name="camera_info_topic" default="video/camera_info"/>
+
+    <arg name="tracker_topic" default="target_tracker/pose"/>
+    <arg name="offset_topic" default="target_tracker/offset"/>
+    <arg name="feedback_topic" default="object_detections/feedback"/>
+
+    <arg name="uncertainty_scale/head" default="2.0"/>
+    <arg name="uncertainty_scale/feet" default="2.0"/>
+
+    <group ns="$(arg namespace)">
+        <arg name="name" value="model_distance_from_height"/>
+        <node name="$(arg name)" pkg="model_distance_from_height" type="model_distance_from_height_node" output="screen">
+
+            <param name="detections_topic" value="$(arg detections_topic)" type="string"/>
+
+            <param name="height_model_mean" value="$(arg height_model/mean)" type="double"/>
+            <param name="height_model_var" value="$(arg height_model/var)" type="double"/>
+
+            <param name="topics/robot" value="pose/raww/std" type="string"/>
+            <param name="topics/camera" value="camera/pose" type="string"/>
+            <param name="topics/optical" value="camera/pose_optical" type="string"/>
+
+            <param name="camera/info_topic" value="$(arg camera_info_topic)" type="string"/>
+
+            <param name="projected_object_topic" value="object_detections/projected_to_world" type="string"/>
+            <param name="camera_debug_topic" value="object_detections/camera_debug" type="string"/>
+
+            <param name="tracker_topic" value="$(arg tracker_topic)" type="string"/>
+            <param name="offset_topic" value="$(arg offset_topic)" type="string"/>
+            <param name="feedback_topic" value="$(arg feedback_topic)" type="string"/>
+
+            <param name="uncertainty_scale_head" value="$(arg uncertainty_scale/head)" type="double"/>
+            <param name="uncertainty_scale_feet" value="$(arg uncertainty_scale/feet)" type="double"/>
+        </node>
+    </group>
+
+</launch>

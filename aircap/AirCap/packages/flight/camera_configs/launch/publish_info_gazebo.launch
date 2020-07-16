@@ -1,0 +1,13 @@
+<launch>
+    <arg name="robotID" default="1"/>
+    <arg name="namespace" default="machine_$(arg robotID)/video"/>
+    <arg name="url" default="package://camera_configs/config/gazebo.yml"/>
+    <arg name="topic" default="camera_info"/>
+
+    <group ns="$(arg namespace)">
+        <node name="camera_info_publisher" pkg="camera_configs" type="camera_info_publisher_node">
+            <param name="camera_info_url" value="$(arg url)"/>
+            <param name="camera_info_topic" value="$(arg topic)"/>
+        </node>
+    </group>
+</launch>

@@ -1,0 +1,4 @@
+rate: 60
+image_width: 2448
+image_height: 2048
+camera_info_url: ./calibration_ptgrey.yaml

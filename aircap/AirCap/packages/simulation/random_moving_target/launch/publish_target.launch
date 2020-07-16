@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<launch>
+    <arg name="tgtID" default="1"/>
+    <arg name="directUseForFormation" default="false" />
+    
+  
+    <param name="targetName" value="target_$(arg tgtID)" type="string"/>
+    <param name="publishToFlyToTopic" value="$(arg directUseForFormation)" type="bool"/>
+    <param name="fly_to_point_topic_1" value="/filtFlyTo_1" type="string"/>
+    <param name="fly_to_point_topic_2" value="/filtFlyTo_2" type="string"/>
+    <param name="fly_to_point_topic_3" value="/filtFlyTo_3" type="string"/>
+    <param name="gazebo_model_states_topic" value="/gazebo/model_states" type="string"/>
+    <param name="trackedTargetPoseTopic" value="/trackedTargetPose" type="string"/>  
+  <node pkg="random_moving_target" type="publish_target_robot_state" name="trackedTarget_state_publisher" output="screen">
+  </node>    
+    
+    
+</launch>

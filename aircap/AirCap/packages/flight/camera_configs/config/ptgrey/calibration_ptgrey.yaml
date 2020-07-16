@@ -1,0 +1,20 @@
+image_width: 2448
+image_height: 2048
+camera_name: ptgrey
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [2406.442617, 0, 1202.854654, 0, 2412.285633, 1021.264401, 0, 0, 1]
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [-0.107492, 0.199451, -0.000891, 0.000976, 0]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1, 0, 0, 0, 1, 0, 0, 0, 1]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [2388.249756, 0, 1205.755648, 0, 0, 2396.078125, 1019.648151, 0, 0, 0, 1, 0]

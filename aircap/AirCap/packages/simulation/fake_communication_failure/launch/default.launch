@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<launch>
+
+    <arg name="robotID" default="1"/>
+    <arg name="source" default="/machine_$(arg robotID)/object_detections/projected_to_world"/>
+    <arg name="dest" default="/machine_$(arg robotID)/object_detections/projected_to_world_network"/>
+    <arg name="comSuccessRate" default="100"/>
+    <arg name="instance" default="1"/>
+
+
+
+    <group ns="machine_$(arg robotID)">
+        <arg name="name" value="fake_communication_failure_$(arg instance)"/>
+        <node name="$(arg name)" pkg="fake_communication_failure" type="fake_communication_failure_node" output="screen"
+              args="$(arg source) $(arg dest) $(arg comSuccessRate)">
+        </node>
+    </group>
+
+</launch>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<launch>
+    
+    <arg name="robotID" default="1" />
+    <arg name="save_video" default="false" />
+
+    <include file="$(find tf_from_uav_pose)/launch/for_one_robot.launch">
+        <arg name="robotID" value="$(arg robotID)" />
+    </include>
+    
+    <include file="$(find model_distance_from_height)/launch/one_robot.launch">
+        <arg name="robotID" value="$(arg robotID)" />
+        <arg name="feedback_topic" default="null"/>
+    </include>
+    
+    <include file="$(find neural_network_detector)/launch/overlay.launch">
+        <arg name="robotID" value="$(arg robotID)" />
+        <arg name="save_video" value="$(arg save_video)" />
+    </include>    
+
+    <include file="$(find camera_configs)/launch/publish_info_robot.launch">
+        <arg name="robotID" value="$(arg robotID)" />
+    </include>
+    
+</launch>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<launch>
+
+
+  <arg name="robotID" default="1"/>
+  <arg name="NUM_ROBOTS" default="2" />
+  <arg name="NEIGHBOR_TOPIC" default="/throttledPoseComFail"/>
+  <arg name="usingSimulation" default="1" />
+  <arg name="usingDRLTracking" default="false" />
+  <arg name="useGTforTarget" default="false" />
+  <arg name="obstacles_file" default="obstacles_simulation.yaml"/>
+
+  <group ns="machine_$(arg robotID)">
+  <node name="nmpc_planner_$(arg robotID)" pkg="nmpc_planner" type="mpc_act" args="$(arg robotID) $(arg NUM_ROBOTS)" output="screen">
+    <param name="uavPoseTopic" value="/machine_" type="string" />
+    <param name="uavPoseTopicSuffix" value="/ground_truth/pose" type="string" />
+    <param name="uavNeighborTopicSuffix" value="$(arg NEIGHBOR_TOPIC)" type="string" />
+
+    <param name="uavPoseTrajTopic" value="/machine_" type="string" />
+    <param name="uavPoseTrajTopicSuffix" value="/mpc_calculated/pose_traj" type="string" />
+    <param name="uavOffsetTopic" value="/machine_$(arg robotID)/target_tracker/offset" type="string" />
+
+    <param name="outputPoseTopic" value="/machine_$(arg robotID)/command" type="string" />
+    <param name="timeTopic" value="/machine_$(arg robotID)/time" type="string" />
+    <param name="drlTargetTopic" value="/destination" type="string"/>
+    <param name="objectGTTopic" value="/actorpose" type="string" />
+    <!-- <param name="objectGTTopic" value="/blimp/MPC_target" type="string" /> -->
+
+    <param name="objectEstimatedTopic" value="/machine_$(arg robotID)/target_tracker/pose" type="string" />
+    <param name="objectEstimatedVelTopic" value="/machine_$(arg robotID)/target_tracker/twist" type="string" />
+
+    <param name="obstacleTopicBase" value="NewObstaclePoints_$(arg robotID)" type="string" />
+    <param name="NMPC_timesteps" value="3" type="int" />
+
+    <param name="useGTforTarget" value="$(arg useGTforTarget)" type="bool" />
+    <param name="deltaT" value="0.1" type="double" />
+
+    <param name="usingSimulation" value="$(arg usingSimulation)" type="bool" />
+    <param name="usingDRLTracking" value="$(arg usingDRLTracking)" type="bool" />
+    <param name="POINT_OBSTACLES" value="false" type="bool" />
+
+    <param name="INTERNAL_SUB_STEP" value="0.1" type="double" />
+
+    <param name="targetRepulsionGain" value="50" type="double" />
+    <param name="tFormationRepulGain" value="35.0" type="double" />
+    <param name="tGoalAttractionGain" value="7.0" type="double" />
+
+    <param name="approachAngleThreshold" value="0.5" type="double" />
+    <param name="neighborDistThreshold" value="7.0" type="double" />
+    <param name="neighborGuaranteeThreshold" value="2.0" type="double" />
+    <param name="obstacleGuaranteeThreshold" value="2.0" type="double" />
+    <param name="activeGuaranteeThreshold" value="1.0" type="double" />
+    <!-- <param name="targetGuaranteeThreshold" value="7.0" type="double" /> -->
+    <param name="targetGuaranteeThreshold" value="1.0" type="double" />
+    <param name="maxOffsetUncertaintyRadius" value="0.0" type="double"/>
+    <!-- <param name="distanceThresholdToTarget" value="8.0" type="double" /> -->
+    <!-- <param name="copterDesiredHeightinNED" value="-8.0" type="double" /> -->
+    <param name="distanceThresholdToTarget" value="1.0" type="double" />
+    <param name="copterDesiredHeightinNED" value="0.0" type="double" />
+
+    <param name="activeTrackingWeight" value="100.0" type="double" />
+    <param name="energyWeight" value="10.0" type="double" />
+
+    <param name="copterPositionLimitX" value="20.0" type="double" />
+    <param name="copterPositionLimitY" value="20.0" type="double" />
+    <param name="copterPositionLowerLimitZ" value="-20.0" type="double" />
+<!--     <param name="copterPositionUpperLimitZ" value="-1.0" type="double" />-->  
+   <param name="copterPositionUpperLimitZ" value="0.0" type="double" />
+
+    <param name="copterVelocityLimitHorizontal" value="5" type="double" />
+    <param name="copterVelocityLimitVertical" value="1" type="double" />
+
+    <param name="copterAccelarationLimitHorizontal" value="5.0" type="double" />
+    <param name="copterAccelarationLimitVertical" value="11.0" type="double" />
+
+    <param name="useZeroAsFixedTarget" value="false" type="bool" />
+
+    <!--rosparam command="load" file="$(find nmpc_planner)/cfg/$(arg obstacles_file)" /-->
+
+   </node>
+   </group>
+
+</launch>

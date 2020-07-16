@@ -1,0 +1,60 @@
+#!/usr/bin/python
+
+import random
+import math
+import rospy
+import message_filters
+import os
+#import cv2
+import tf
+import sys
+#from cv_bridge import CvBridge, CvBridgeError
+#from sensor_msgs.msg import Image, CameraInfo
+from roslib.message import get_message_class
+from rostopic import get_topic_class
+
+source=sys.argv[1]
+dest=sys.argv[2]
+percentage=(float)(sys.argv[3])
+
+rospy.init_node("fake_communication_failure", log_level=rospy.INFO)
+
+
+rospy.loginfo("startup")
+messageClass=get_topic_class(source)
+rospy.loginfo("subscribing to class")
+rospy.loginfo(messageClass);
+
+if (messageClass[0]!=None):
+   genericPublisher =rospy.Publisher(dest,messageClass[0],queue_size=10);
+else:
+   rospy.loginfo("Deferring publisher until message type is known")
+   gnericPublisher=0;
+
+
+def genericCallback(message):
+   global percentage
+   global messageClass
+   global genericPublisher
+   global dest
+   if (messageClass[0]==None):
+      messageClass=get_topic_class(source)
+      rospy.loginfo("Late initialization of publisher, class")
+      rospy.loginfo(messageClass);
+      genericPublisher = rospy.Publisher(dest,messageClass[0],queue_size=10);
+   #print("received a message")
+   a=random.uniform(0.0,100.0)
+   #print(a)
+   #print(percentage)
+   if (a<=percentage):
+      #print("sending again")
+      genericPublisher.publish(message)
+   #else:
+   #   print("message discarded")
+
+genericSubscriber= rospy.Subscriber(source,rospy.msg.AnyMsg,genericCallback)
+
+rospy.loginfo("registered subscribers and publishers")
+rospy.loginfo("fake_communication_failure_node initialized")
+rospy.spin()
+

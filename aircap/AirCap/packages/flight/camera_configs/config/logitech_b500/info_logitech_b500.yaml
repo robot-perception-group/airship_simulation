@@ -1,0 +1,4 @@
+rate: 30
+image_width: 640
+image_height: 480
+camera_info_url: ./calibration_logitech_b500.yaml

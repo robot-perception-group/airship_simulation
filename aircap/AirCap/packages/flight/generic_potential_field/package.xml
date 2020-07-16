@@ -1,0 +1,32 @@
+<package>
+  <name>generic_potential_field</name>
+  <version>1.0.0</version>
+  <description>generic_potential_field is ported from telekyb_calculus contains calculus elements like artifical potential functions...</description>
+  <maintainer email="aamir.ahmad@tuebingen.mpg.de">Aamir Ahmad</maintainer>
+
+    <license>GPLv3</license>
+  
+
+  <author>Martin Riedel (original author), Aamir Ahmad (current).</author>
+
+  
+  <buildtool_depend>catkin</buildtool_depend>
+
+  
+  <build_depend>roscpp</build_depend>
+  <build_depend>cmake_modules</build_depend>
+  <build_depend>dynamic_reconfigure</build_depend>
+  <build_depend>uav_msgs</build_depend>
+
+  <run_depend>roscpp</run_depend> 
+  <run_depend>dynamic_reconfigure</run_depend>
+  <run_depend>uav_msgs</run_depend>
+  
+  
+  
+
+<export>
+    <cpp cflags="-I${prefix}/include" lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -lgeneric_potential_field" />
+</export>
+
+</package>

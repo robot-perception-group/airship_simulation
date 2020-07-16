@@ -1,0 +1,45 @@
+<launch>
+    <arg name="robotID" default="1" />
+    <arg name="namespace" value="machine_$(arg robotID)" />
+
+    <arg name="cameraStaticPublish" default="true"/>
+    <arg name="dontPublishTFs" default="false"/>
+
+    <arg name="offsetX" default="0.0"/>
+    <arg name="offsetY" default="0.0"/>
+    <arg name="offsetZ" default="0.0"/>
+    <arg name="covarianceX" default="0.0"/>
+    <arg name="covarianceY" default="0.0"/>
+    <arg name="covarianceZ" default="0.0"/>
+
+    <group ns="$(arg namespace)">
+        <node pkg="tf_from_uav_pose" type="tf_from_uav_pose_node" name="tf_from_uav_pose" output="screen">
+            <param name="poseTopicName" value="pose" />
+            <param name="rawPoseTopicName" value="pose/raw" />
+            <param name="worldFrameID" value="world" />
+            <param name="machineFrameID" value="machine_$(arg robotID)" />
+            <param name="worldENUFrameID" value="world_ENU" />
+            <param name="worldNWUFrameID" value="world_NWU" />
+            <param name="stdPoseTopicName" value="pose/corr/std" />
+            <param name="stdRawPoseTopicName" value="pose/raww/std" />
+            <param name="throttledPoseTopicName" value="throttledPose" />
+            <param name="throttleRate" value="10" type="double"/>
+            <param name="cameraFrameID" value="machine_$(arg robotID)_camera_link" />
+            <param name="cameraRGBOpticalFrameID" value="machine_$(arg robotID)_camera_rgb_optical_link" />
+
+            <param if="$(arg cameraStaticPublish)" name="cameraStaticPublish/pose_optical_topic" value="camera/pose_optical"/>
+            <param if="$(arg cameraStaticPublish)" name="cameraStaticPublish/topic" value="camera/pose"/>
+            <param if="$(arg cameraStaticPublish)" name="cameraStaticPublish/publish" value="true" type="bool"/>
+            <!-- tx, ty, tz, qx, qy, qz, qw-->
+            <rosparam if="$(arg cameraStaticPublish)" param="cameraStaticPublish/TFParameters">[0.18, 0.0, -0.07, 0.0, -0.38, 0.0, 0.924]</rosparam>
+            <param name="dontPublishTFs" value="$(arg dontPublishTFs)" type="bool"/>
+
+            <param name="offsetX" value="$(arg offsetX)" type="double"/>
+            <param name="offsetY" value="$(arg offsetY)" type="double"/>
+            <param name="offsetZ" value="$(arg offsetZ)" type="double"/>
+            <param name="covarianceX" value="$(arg covarianceX)" type="double"/>
+            <param name="covarianceY" value="$(arg covarianceY)" type="double"/>
+            <param name="covarianceZ" value="$(arg covarianceZ)" type="double"/>
+        </node>
+    </group>
+</launch>

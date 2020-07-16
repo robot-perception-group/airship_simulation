@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<launch>
+
+ 
+  <arg name="robotID" default="1"/>
+  <arg name="NUM_ROBOTS" default="2" />
+ 
+     
+  <node name="nmpc_planner_$(arg robotID)" pkg="nmpc_planner" type="nmpc_planner" args="$(arg robotID) $(arg NUM_ROBOTS)" output="screen">
+    <param name="uavPoseTopic" value="/machine_" type="string" />
+    <param name="uavPoseTopicSuffix" value="/pose" type="string" /> 
+    <param name="outputPoseTopic" value="/machine_$(arg robotID)/command" type="string" />    
+    <param name="virtualDestinationTopic" value="/filtFlyTo_" type="string" />
+    <param name="uavSelfIMUTopic" value="/firefly_$(arg robotID)/ground_truth/imu" type="string" />
+    <param name="HexaMotorCommandsTopic" value="/firefly_$(arg robotID)/command/motors" type="string" />
+    <param name="selfNMPCStatusTopic" value="/firefly_$(arg robotID)/NMPCActive" type="string" />
+<!--    <param name="objectGTTopic" value="/trackedTargetPose" type="string" />  -->
+     <param name="objectGTTopic" value="/virtual_target_square_motion" type="string" />
+    <param name="objectEstimatedStateTopic" value="/trackedObjectState_byRobot_$(arg robotID)" type="string" /> 
+    <param name="obstacleTopicBase" value="/TeleKyb/Obstacle_$(arg robotID)/NewObstaclePoints" type="string" /> 
+    <param name="NMPC_timesteps" value="3" type="int" /> 
+    
+    <param name="useGTforTarget" value="true" type="bool" /> 
+    <param name="usingSimulation" value="false" type="bool" /> 
+    
+    <!-- This delta T is for the planner timesteps and should be roughly equal to inverse of self pose frequency -->
+    <!--     Old value = 1.0 -->
+    <param name="deltaT" value="0.1" type="double" />
+    <!-- This INTERNAL_SUB_STEP is for the potential field timesteps and should be roughly equal to inverse of self pose frequency -->
+    
+    <!--     Old value = 5.0 -->
+    <param name="INTERNAL_SUB_STEP" value="0.2" type="double" />
+    
+    <param name="maxVelocityMagnitude" value="1.0" type="double" />
+    
+    <param name="tFlyToDestinationRadius" value="0.25" type="double" />
+    <param name="tFormationRepulGain" value="26.0" type="double" />
+    <param name="tGoalAttractionGain" value="5.0" type="double" />
+    <param name="neighborDistThreshold" value="8.0" type="double" />
+    <param name="distanceThresholdToTarget" value="5.0" type="double" />
+    <param name="copterDesiredHeightinNED" value="-5.0" type="double" />
+    
+    
+    <param name="copterPositionLimitX" value="25.0" type="double" />
+    <param name="copterPositionLimitY" value="25.0" type="double" />
+    <param name="copterPositionLimitZ" value="20.0" type="double" />
+    
+    <param name="copterVelocityLimitX" value="0.70" type="double" />
+    <param name="copterVelocityLimitY" value="0.70" type="double" />
+    <param name="copterVelocityLimitZ" value="1.0" type="double" />
+    
+    <param name="targetPositionLimitX" value="25.0" type="double" />
+    <param name="targetPositionLimitY" value="25.0" type="double" />
+    <param name="targetPositionLimitZ" value="2.0" type="double" />    
+    
+    <param name="targetVelocityLimitX" value="5.0" type="double" />
+    <param name="targetVelocityLimitY" value="5.0" type="double" />
+    <param name="targetVelocityLimitZ" value="0.005" type="double" />
+
+    <param name="targetAccelarationLimitX" value="3.0" type="double" />
+    <param name="targetAccelarationLimitY" value="3.0" type="double" />
+    <param name="targetAccelarationLimitZ" value="0.001" type="double" />
+    
+    <param name="useZeroAsFixedTarget" value="false" type="bool" />
+    
+   </node>
+
+</launch>
+
+
+
+
+<!--/machine_1/pose 
+/machine_1/command-->
+
+<!-- neighborDistThreshold = 3.5 for real -->

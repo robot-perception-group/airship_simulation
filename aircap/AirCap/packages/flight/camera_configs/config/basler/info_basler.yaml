@@ -1,0 +1,4 @@
+rate: 60
+image_width: 2040
+image_height: 1086
+camera_info_url: ./calibration_basler.yaml
