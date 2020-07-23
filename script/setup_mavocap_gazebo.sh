@@ -57,10 +57,10 @@ screen -dm -S TARGET screen sh -c "conda activate py2; roslaunch blimp_descripti
 
 sleep 1
 
-echo "Starting AIRCAP for robot $id"
-screen -d -m -S AIRCAP1 screen sh -c "roslaunch aircap simulation.launch robotID:=1 numRobots:=$ROBOS comSuccessRate:=$COMSUCCESSRATE --screen"
+# echo "Starting AIRCAP for robot $id"
+# screen -d -m -S AIRCAP1 screen sh -c "roslaunch aircap simulation.launch robotID:=1 numRobots:=$ROBOS comSuccessRate:=$COMSUCCESSRATE --screen"
 
-sleep 1
+# sleep 1
 
 
 
