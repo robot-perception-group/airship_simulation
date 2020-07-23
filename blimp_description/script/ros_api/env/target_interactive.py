@@ -181,9 +181,14 @@ if __name__=="__main__":
         # z = np.random.uniform(5, 9)
 
     #HOVER
-        x = np.random.uniform(-5,5)
-        y = np.random.uniform(-5,5)
-        z = np.random.uniform(5, 15)
+        # x = np.random.uniform(-5,5)
+        # y = np.random.uniform(-5,5)
+        # z = np.random.uniform(5, 15)
+
+    #BACKWARD
+        x = np.random.uniform(-20,-30)
+        y = np.random.uniform(-20,20)
+        z = np.random.uniform(5,15)
 
 	#Cruising
         # x = np.random.uniform(-30,30)
