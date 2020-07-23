@@ -6,7 +6,6 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /RobotModel1/Links1
         - /TF1/Tree1
         - /Odometry1/Shape1
       Splitter Ratio: 0.6470588445663452
@@ -251,7 +250,7 @@ Visualization Manager:
       Axes Radius: 0.009999999776482582
       Class: rviz/PoseArray
       Color: 255; 25; 0
-      Enabled: true
+      Enabled: false
       Head Length: 0.07000000029802322
       Head Radius: 0.029999999329447746
       Name: PoseArray
@@ -260,7 +259,7 @@ Visualization Manager:
       Shape: Arrow (Flat)
       Topic: /blimp/MPC_rviz_trajectory
       Unreliable: false
-      Value: true
+      Value: false
     - Angle Tolerance: 0.10000000149011612
       Class: rviz/Odometry
       Covariance:
@@ -323,25 +322,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 57.717079162597656
+      Distance: 29.162166595458984
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 1.7079100608825684
-        Y: 1.2005441188812256
-        Z: 3.7740142345428467
+        X: -2.375009536743164
+        Y: 0.34366607666015625
+        Z: 5.773622989654541
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.5347944498062134
+      Pitch: 0.5247973203659058
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.710785388946533
+      Yaw: 5.530789852142334
     Saved: ~
 Window Geometry:
   Displays:
