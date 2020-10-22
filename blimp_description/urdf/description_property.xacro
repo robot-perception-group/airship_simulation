@@ -76,7 +76,9 @@
 	<xacro:property name="effort_fin" value="500"/> <!-- [J] -->
 	<xacro:property name="velocity_fin" value="10"/> <!-- [rad/s] -->
 	<xacro:property name="max_angle_fin" value="${pi/6}"/> <!-- [rad] 0.087-->
-	<xacro:property name="area_fin" value="0.25"/> <!-- [m^2] -->
+	<xacro:property name="area_fin" value="0.15"/> <!-- [m^2] -->
+	<xacro:property name="area_rudder" value="0.1"/> <!-- [m^2] -->
+	<xacro:property name="area_body_lift" value="0.8"/> <!-- [m^2] -->
 
 	<!-- inertia [kg m^2] [kg m^2] [kg m^2] [kg m^2] [kg m^2] [kg m^2] -->
 	<xacro:include filename="$(find blimp_description)/urdf/inertia_calculator.xacro"/>
@@ -144,6 +146,13 @@
 	</xacro:property>
 
 	<!-- joint origin [m] [m] [m] [rad] [rad] [rad] -->
+
+	<xacro:property name="origin_blimp_body_forward_lift_joint">
+		<origin xyz="0 0 1.25" rpy="0 0 0"/>
+	</xacro:property>
+	<xacro:property name="origin_blimp_body_aft_lift_joint">
+		<origin xyz="0 0 -1.25" rpy="0 0 0"/>
+	</xacro:property>
 	<xacro:property name="origin_base_gondola_body_joint">
 		<origin xyz="0 0 0.10" rpy="0 0 0"/>
 	</xacro:property>

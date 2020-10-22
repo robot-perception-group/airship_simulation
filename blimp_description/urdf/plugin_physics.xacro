@@ -52,7 +52,7 @@
 				<air_density>${air_density}</air_density>
 				<cla>1.2535816618911175</cla>
 				<cla_stall>-1.4326647564469914</cla_stall>
-				<cda>0</cda>
+				<cda>0.05</cda>
 				<cda_stall>1.4326647564469914</cda_stall>
 				<alpha_stall>1.396</alpha_stall>
 				<a0>0</a0>
@@ -80,6 +80,7 @@
 				<alpha_stall>1.396</alpha_stall>
 				<a0>0</a0>
 				<area>${area}</area>
+				<radial_symmetry>${body_lift}</radial_symetry>
 				<xacro:insert_block name="upward" />
 				<xacro:insert_block name="forward" />
 				<xacro:insert_block name="cp" />
