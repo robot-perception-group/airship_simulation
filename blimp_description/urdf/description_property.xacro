@@ -71,12 +71,12 @@
 	<xacro:property name="rolling_moment_coefficient" value="0.000001" />
 	<xacro:property name="area_blade" value="0.0078"/> <!-- [m^2] -->
 	<xacro:property name="effort_stick" value="1000"/> <!-- [J] -->
-	<xacro:property name="velocity_stick" value="1"/> <!-- [rad/s] -->
+	<xacro:property name="velocity_stick" value="5"/> <!-- [rad/s] -->
 	<xacro:property name="max_angle_stick" value="1.56"/> <!-- [rad] -->
 	<xacro:property name="effort_fin" value="500"/> <!-- [J] -->
-	<xacro:property name="velocity_fin" value="0.5"/> <!-- [rad/s] -->
+	<xacro:property name="velocity_fin" value="10"/> <!-- [rad/s] -->
 	<xacro:property name="max_angle_fin" value="${pi/6}"/> <!-- [rad] 0.087-->
-	<xacro:property name="area_fin" value="0.09"/> <!-- [m^2] -->
+	<xacro:property name="area_fin" value="0.25"/> <!-- [m^2] -->
 
 	<!-- inertia [kg m^2] [kg m^2] [kg m^2] [kg m^2] [kg m^2] [kg m^2] -->
 	<xacro:include filename="$(find blimp_description)/urdf/inertia_calculator.xacro"/>
