@@ -76,8 +76,8 @@
 	<xacro:property name="effort_fin" value="500"/> <!-- [J] -->
 	<xacro:property name="velocity_fin" value="10"/> <!-- [rad/s] -->
 	<xacro:property name="max_angle_fin" value="${pi/6}"/> <!-- [rad] 0.087-->
-	<xacro:property name="area_fin" value="0.25"/> <!-- [m^2] -->
-	<xacro:property name="area_rudder" value="0.2"/> <!-- [m^2] -->
+	<xacro:property name="area_fin" value="0.16"/> <!-- [m^2] -->
+	<xacro:property name="area_rudder" value="0.16"/> <!-- [m^2] -->
 	<xacro:property name="area_body_lift" value="1.6"/> <!-- [m^2] -->
 
 	<!-- inertia [kg m^2] [kg m^2] [kg m^2] [kg m^2] [kg m^2] [kg m^2] -->

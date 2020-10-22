@@ -51,10 +51,10 @@
 				<robotNamespace>${namespace}</robotNamespace> 
 				<link_name>${link_name}</link_name>
 				<air_density>${air_density}</air_density>
-				<cla>1.2535816618911175</cla>
-				<cla_stall>-1.4326647564469914</cla_stall>
-				<cda>0.05</cda>
-				<cda_stall>1.4326647564469914</cda_stall>
+				<cla>3</cla>
+				<cla_stall>-3</cla_stall>
+				<cda>${0.5 + 1.5* body_lift}</cda>
+				<cda_stall>-${0.5 + 1.5* body_lift}</cda_stall>
 				<alpha_stall>${stall_angle * M_PI/180.0}</alpha_stall>
 				<a0>0</a0>
 				<area>${area}</area>
@@ -75,10 +75,10 @@
 				<robotNamespace>${namespace}</robotNamespace> 
 				<link_name>${link_name}</link_name>
 				<air_density>${air_density}</air_density>
-				<cla>1.2535816618911175</cla>
-				<cla_stall>-1.4326647564469914</cla_stall>
-				<cda>0.05</cda>
-				<cda_stall>1.4326647564469914</cda_stall>
+				<cla>3</cla>
+				<cla_stall>-3</cla_stall>
+				<cda>${0.5 + 1.5* body_lift}</cda>
+				<cda_stall>-${0.5 + 1.5* body_lift}</cda_stall>
 				<alpha_stall>${stall_angle * M_PI/180.0}</alpha_stall>
 				<a0>0</a0>
 				<area>${area}</area>
