@@ -148,10 +148,10 @@
 	<!-- joint origin [m] [m] [m] [rad] [rad] [rad] -->
 
 	<xacro:property name="origin_blimp_body_forward_lift_joint">
-		<origin xyz="0 0 1.25" rpy="0 0 0"/>
+		<origin xyz="0 0 1.25" rpy="0.0 ${-pi/2} ${pi/2}"/>
 	</xacro:property>
 	<xacro:property name="origin_blimp_body_aft_lift_joint">
-		<origin xyz="0 0 -1.25" rpy="0 0 0"/>
+		<origin xyz="0 0 -1.25" rpy="0.0 ${-pi/2} ${pi/2}"/>
 	</xacro:property>
 	<xacro:property name="origin_base_gondola_body_joint">
 		<origin xyz="0 0 0.10" rpy="0 0 0"/>

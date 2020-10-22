@@ -14,7 +14,7 @@
 	<arg name="enable_mavlink_interface" default="false"/>
 
 	<arg name="world_name" default="basic"/>
-	<arg name="debug" default="true"/>
+	<arg name="debug" default="false"/>
 	<arg name="gui" default="true"/>
 	<arg name="paused" default="false"/>
 	<arg name="log_file" default="$(arg uav_name)"/>

@@ -380,8 +380,8 @@ void FinLiftDragPlugin::OnUpdate()
     // gzdbg << "upward (inertial): " << upwardI << "\n";
     // gzdbg << "lift dir (inertial): " << liftI << "\n";
     // gzdbg << "Span direction (normal to LD plane): " << spanwiseI << "\n";
-    gzdbg << "sweep: " << this->sweep << "\n";
-    gzdbg << "alpha: " << this->alpha << "\n";
+    gzdbg << "sweep: " << (this->sweep*180.0/M_PI) << "\n";
+    gzdbg << "alpha: " << (this->alpha*180.0/M_PI) << "\n";
     gzdbg << "lift: " << lift << "\n";
     gzdbg << "drag: " << drag << " cd: "   << cd << " cda: " << this->cda << "\n";
     // gzdbg << "moment: " << moment << "\n";
@@ -390,6 +390,7 @@ void FinLiftDragPlugin::OnUpdate()
     // gzdbg << "wind_speed: " << wind_speed << "\n";
     gzdbg << "force: " << force << "\n";
     // gzdbg << "torque: " << torque << "\n";
+    gzdbg << "=============================\n";
   }
 
   // Correct for nan or inf

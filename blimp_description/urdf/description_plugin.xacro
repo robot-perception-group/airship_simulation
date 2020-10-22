@@ -107,7 +107,7 @@
 		</xacro:property>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/forward_lift_link"
+			link_name="${namespace}/forward_lift_joint_link"
 			air_density="${air_density}"
 			body_lift="true"
 			stall_angle="12"
@@ -118,7 +118,7 @@
 		</xacro:finliftdrag>
 		<xacro:liftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/aft_lift_link"
+			link_name="${namespace}/aft_lift_joint_link"
 			air_density="${air_density}"
 			body_lift="true"
 			stall_angle="12"
