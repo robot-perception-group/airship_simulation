@@ -31,6 +31,7 @@
 	<xacro:property name="mass_rud_part2" value="0.113" /> 
 	<xacro:property name="mass_bot_rud_part1" value="0.410" /> <!--part1: 0.120kg + wire: 0.290kg = 0.410 -->
 	<xacro:property name="mass_bot_rud_motor" value="0.127" />
+	<xacro:property name="mass_ballast" value="0.3" />
 
 	<!-- geometry [m] -->
 	<xacro:property name="radius_blimp_body" value="1.00"/>
@@ -58,6 +59,8 @@
 	<xacro:property name="height_rud_part2" value="0.48"/>
 	<xacro:property name="radius_bot_rud_motor" value="0.005"/>
 	<xacro:property name="length_bot_rud_motor" value="0.250"/>
+	<xacro:property name="radius_ballast" value="0.01"/>
+	<xacro:property name="length_ballast" value="0.05"/>
 
 	<!-- joint parameters -->
 	<xacro:property name="rotor_velocity_slowdown_sim" value="1" />
@@ -95,6 +98,9 @@
 	<xacro:property name="inertia_gondola_support">
     		<xacro:cuboid_inertia x="${length_gondola_support}" y="${width_gondola_support}" z="${height_gondola_support}" mass="${mass_gondola_support}"/>
 	</xacro:property>
+	<xacro:property name="inertia_ballast">
+		<xacro:cylinder_inertia r="${radius_ballast}" h="${length_ballast}" mass="${mass_ballast}"/>
+	</xacro:property>
 	<xacro:property name="inertia_stick">
 		<xacro:cylinder_inertia r="${radius_stick}" h="${length_stick}" mass="${mass_stick}"/>
 	</xacro:property>
@@ -119,6 +125,9 @@
 
 	<!-- origin [m] [m] [m] [rad] [rad] [rad] -->
 	<xacro:property name="origin_blimp_body">
+		<origin xyz="0  0  0" rpy="0  0  0"/>
+	</xacro:property>
+	<xacro:property name="origin_ballast">
 		<origin xyz="0  0  0" rpy="0  0  0"/>
 	</xacro:property>
 	<xacro:property name="origin_gondola_body">
@@ -167,7 +176,11 @@
 		<origin xyz="0.0 -0.1 -0.085" rpy="0.4 0.0 ${pi}"/>
 	</xacro:property>
 	<xacro:property name="origin_gondola_body_blimp_body_joint">
-		<origin xyz="-1.10 0.0 1.05" rpy="0.0 ${pi/2} 0.0"/> 
+		<!--<origin xyz="-1.10 0.0 1.05" rpy="0.0 ${pi/2} 0.0"/> -->
+		<origin xyz="-1.00 0.0 1.05" rpy="0.0 ${pi/2} 0.0"/>
+	</xacro:property>
+	<xacro:property name="origin_blimp_body_front_ballast_joint">
+		<origin xyz="0.0 0.0 2.5" rpy="0.0 0.0 0.0"/>
 	</xacro:property>
 	<xacro:property name="origin_base_stick_joint">
 		<origin xyz="-0.08 0 0.03" rpy="${pi/2} 0.0 0.0"/>

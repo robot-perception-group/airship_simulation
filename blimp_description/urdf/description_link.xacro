@@ -155,6 +155,23 @@
       		<child link="${namespace}/right_blade_link" />
 		<axis xyz="0 0 1" />
     	</joint>
+	<xacro:cylinder_model
+		robot_namespace="${namespace}"
+		link_name="front_ballast_joint"
+		mass="${mass_ballast}"
+		body_radius="${radius_ballast}"
+		body_length="${length_ballast}"
+    		use_mesh_file="false"
+    		mesh_file="">
+		<xacro:insert_block name="origin_ballast" />
+		<xacro:insert_block name="inertia_ballast" />
+	</xacro:cylinder_model>
+	<joint name="${namespace}/blimp_body_front_ballast_joint" type="revolute">
+		<xacro:insert_block name="origin_blimp_body_front_ballast_joint" />
+      		<parent link="${namespace}/blimp_body_link" />
+      		<child link="${namespace}/front_ballast_joint_link" />
+		<limit effort="1000" velocity="1000" lower="0" upper="0" /> 
+	</joint>
 	<link name="${namespace}/forward_lift_joint_link">
 		<inertial>
 			<mass value="1e-3"/> <!-- MUST be non zero or the link will be pruned by gazebo and can not accept any forces -->
