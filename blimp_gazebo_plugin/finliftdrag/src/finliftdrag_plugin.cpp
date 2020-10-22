@@ -365,12 +365,12 @@ void FinLiftDragPlugin::OnUpdate()
   //      this->link->GetName() == "wing_2") &&
   //     (vel.GetLength() > 50.0 &&
   //      vel.GetLength() < 50.0))
-  if (0)
+  if (1)
   {
     gzdbg << "=============================\n";
-    // gzdbg << "sensor: [" << this->GetHandle() << "]\n";
-    // gzdbg << "Link: [" << this->link->GetName()
-    //       << "] pose: [" << pose
+    gzdbg << "sensor: [" << this->GetHandle() << "]\n";
+    //gzdbg << "Link: [" << this->link->GetName()
+    //      << "] pose: [" << pose
     //       << "] dynamic pressure: [" << q << "]\n";
     // gzdbg << "spd: [" << vel.Length()
     //       << "] vel: [" << vel << "]\n";
@@ -380,11 +380,10 @@ void FinLiftDragPlugin::OnUpdate()
     // gzdbg << "upward (inertial): " << upwardI << "\n";
     // gzdbg << "lift dir (inertial): " << liftI << "\n";
     // gzdbg << "Span direction (normal to LD plane): " << spanwiseI << "\n";
-    // gzdbg << "sweep: " << this->sweep << "\n";
-    // gzdbg << "alpha: " << this->alpha << "\n";
-    // gzdbg << "lift: " << lift << "\n";
-    // gzdbg << "drag: " << drag << " cd: "
-    //       << cd << " cda: " << this->cda << "\n";
+    gzdbg << "sweep: " << this->sweep << "\n";
+    gzdbg << "alpha: " << this->alpha << "\n";
+    gzdbg << "lift: " << lift << "\n";
+    gzdbg << "drag: " << drag << " cd: "   << cd << " cda: " << this->cda << "\n";
     // gzdbg << "moment: " << moment << "\n";
     // gzdbg << "cp momentArm: " << momentArm << "\n";
     // gzdbg << "vel: " << vel << "\n";

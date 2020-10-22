@@ -110,101 +110,111 @@
 			link_name="${namespace}/forward_lift_link"
 			air_density="${air_density}"
 			body_lift="true"
+			stall_angle="12"
 			area="${area_body_lift}">
 			<xacro:insert_block name="body_lift_liftdrag_upward" />
 			<xacro:insert_block name="body_lift_liftdrag_forward" />
 			<xacro:insert_block name="body_lift_liftdrag_cp" />
 		</xacro:finliftdrag>
-		<xacro:finliftdrag
+		<xacro:liftdrag
 			namespace="${namespace}"
 			link_name="${namespace}/aft_lift_link"
 			air_density="${air_density}"
 			body_lift="true"
+			stall_angle="12"
 			area="${area_body_lift}">
 			<xacro:insert_block name="body_lift_liftdrag_upward" />
 			<xacro:insert_block name="body_lift_liftdrag_forward" />
 			<xacro:insert_block name="body_lift_liftdrag_cp" />
-		</xacro:finliftdrag>
-		<xacro:finliftdrag
+		</xacro:liftdrag>
+		<xacro:liftdrag
 			namespace="${namespace}"
 			link_name="${namespace}/bot_rud_part1_link"
 			air_density="${air_density}"
 			body_lift="false"
+			stall_angle="12"
 			area="${area_fin}">
 			<xacro:insert_block name="bot_fin_liftdrag_upward" />
 			<xacro:insert_block name="bot_fin_liftdrag_forward" />
 			<xacro:insert_block name="bot_fin_liftdrag_cp" />
-		</xacro:finliftdrag>
-		<xacro:finliftdrag
+		</xacro:liftdrag>
+		<xacro:liftdrag
 			namespace="${namespace}"
 			link_name="${namespace}/top_rud_part1_link"
 			air_density="${air_density}"
 			body_lift="false"
+			stall_angle="12"
 			area="${area_fin}">
 			<xacro:insert_block name="top_fin_liftdrag_upward" />
 			<xacro:insert_block name="top_fin_liftdrag_forward" />
 			<xacro:insert_block name="top_fin_liftdrag_cp" />
-		</xacro:finliftdrag>
-		<xacro:finliftdrag
+		</xacro:liftdrag>
+		<xacro:liftdrag
 			namespace="${namespace}"
 			link_name="${namespace}/left_elv_part1_link"
 			air_density="${air_density}"
 			body_lift="false"
+			stall_angle="12"
 			area="${area_fin}">
 			<xacro:insert_block name="left_fin_liftdrag_upward" />
 			<xacro:insert_block name="left_fin_liftdrag_forward" />
 			<xacro:insert_block name="left_fin_liftdrag_cp" />
-		</xacro:finliftdrag>
-		<xacro:finliftdrag
+		</xacro:liftdrag>
+		<xacro:liftdrag
 			namespace="${namespace}"
 			link_name="${namespace}/right_elv_part1_link"
 			air_density="${air_density}"
 			body_lift="false"
+			stall_angle="12"
 			area="${area_fin}">
 			<xacro:insert_block name="right_fin_liftdrag_upward" />
 			<xacro:insert_block name="right_fin_liftdrag_forward" />
 			<xacro:insert_block name="right_fin_liftdrag_cp" />
-		</xacro:finliftdrag> 
-		<xacro:finliftdrag
+		</xacro:liftdrag> 
+		<xacro:liftdrag
 			namespace="${namespace}"
 			link_name="${namespace}/bot_rud_joint_link"
 			air_density="${air_density}"
 			body_lift="false"
+			stall_angle="12"
 			area="${area_rudder}">
 			<xacro:insert_block name="bot_rud_liftdrag_upward" />
 			<xacro:insert_block name="bot_rud_liftdrag_forward" />
 			<xacro:insert_block name="bot_rud_liftdrag_cp" />
-		</xacro:finliftdrag>
-		<xacro:finliftdrag
+		</xacro:liftdrag>
+		<xacro:liftdrag
 			namespace="${namespace}"
 			link_name="${namespace}/top_rud_joint_link"
 			air_density="${air_density}"
 			body_lift="false"
+			stall_angle="12"
 			area="${area_rudder}">
 			<xacro:insert_block name="top_rud_liftdrag_upward" />
 			<xacro:insert_block name="top_rud_liftdrag_forward" />
 			<xacro:insert_block name="top_rud_liftdrag_cp" />
-		</xacro:finliftdrag>
-		<xacro:finliftdrag
+		</xacro:liftdrag>
+		<xacro:liftdrag
 			namespace="${namespace}"
 			link_name="${namespace}/left_elv_joint_link"
 			air_density="${air_density}"
 			body_lift="false"
+			stall_angle="12"
 			area="${area_rudder}">
 			<xacro:insert_block name="left_elv_liftdrag_upward" />
 			<xacro:insert_block name="left_elv_liftdrag_forward" />
 			<xacro:insert_block name="left_elv_liftdrag_cp" />
-		</xacro:finliftdrag>
-		<xacro:finliftdrag
+		</xacro:liftdrag>
+		<xacro:liftdrag
 			namespace="${namespace}"
 			link_name="${namespace}/right_elv_joint_link"
 			air_density="${air_density}"
 			body_lift="false"
+			stall_angle="12"
 			area="${area_rudder}">
 			<xacro:insert_block name="right_elv_liftdrag_upward" />
 			<xacro:insert_block name="right_elv_liftdrag_forward" />
 			<xacro:insert_block name="right_elv_liftdrag_cp" />
-		</xacro:finliftdrag> 
+		</xacro:liftdrag> 
 	</xacro:if>
 
 	<!-- buoyancy -->

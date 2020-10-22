@@ -155,15 +155,31 @@
       		<child link="${namespace}/right_blade_link" />
 		<axis xyz="0 0 1" />
     	</joint>
-	<joint name="${namespace}/blimp_body_forward_lift_joint" type="fixed">
+	<link name="${namespace}/forward_lift_link">
+		<visual>
+			<geometry>
+				<cylinder radius="0.01" length="0.3"/>
+			</geometry>
+		</visual>
+	</link>
+	<joint name="${namespace}/blimp_body_forward_lift_joint" type="revolute">
 		<xacro:insert_block name="origin_blimp_body_forward_lift_joint" />
       		<parent link="${namespace}/blimp_body_link" />
       		<child link="${namespace}/forward_lift_link" />
-    	</joint>
-	<joint name="${namespace}/blimp_body_aft_lift_joint" type="fixed">
+		<limit effort="1000" velocity="1000" lower="0" upper="0" /> 
+	</joint>
+	<link name="${namespace}/aft_lift_link">
+		<visual>
+			<geometry>
+				<cylinder radius="0.01" length="0.3"/>
+			</geometry>
+		</visual>
+	</link>
+	<joint name="${namespace}/blimp_body_aft_lift_joint" type="revolute">
 		<xacro:insert_block name="origin_blimp_body_aft_lift_joint" />
       		<parent link="${namespace}/blimp_body_link" />
       		<child link="${namespace}/aft_lift_link" />
+		<limit effort="1000" velocity="1000" lower="0" upper="0" /> 
     	</joint>
 	<xacro:box_model
 		robot_namespace="${namespace}"
@@ -177,10 +193,11 @@
 		<xacro:insert_block name="origin_rud_part1" />
 		<xacro:insert_block name="inertia_rud_part1" />
 	</xacro:box_model>
-	<joint name="${namespace}/blimp_body_top_rud_part1_joint" type="fixed">
+	<joint name="${namespace}/blimp_body_top_rud_part1_joint" type="revolute">
 		<xacro:insert_block name="origin_blimp_body_top_rud_part1_joint" />
       		<parent link="${namespace}/blimp_body_link" />
       		<child link="${namespace}/top_rud_part1_link" />
+		<limit effort="1000" velocity="1000" lower="0" upper="0" /> 
     	</joint>
 	<link name="${namespace}/top_rud_joint_link">
 		<visual>
@@ -225,10 +242,11 @@
 		<xacro:insert_block name="origin_rud_part1" />
 		<xacro:insert_block name="inertia_rud_part1" />
 	</xacro:box_model>
-	<joint name="${namespace}/blimp_body_bot_rud_part1_joint" type="fixed">
+	<joint name="${namespace}/blimp_body_bot_rud_part1_joint" type="revolute">
 		<xacro:insert_block name="origin_blimp_body_bot_rud_part1_joint" />
       		<parent link="${namespace}/blimp_body_link" />
       		<child link="${namespace}/bot_rud_part1_link" />
+		<limit effort="1000" velocity="1000" lower="0" upper="0" /> 
     	</joint>
 	<link name="${namespace}/bot_rud_joint_link">
 		<visual>
@@ -272,11 +290,12 @@
 		<xacro:insert_block name="origin_bot_rud_motor" />
 		<xacro:insert_block name="inertia_bot_rud_motor" />
 	</xacro:cylinder_model>
-	<joint name="${namespace}/bot_rud_part1_bot_rud_motor_joint" type="continuous">
+	<joint name="${namespace}/bot_rud_part1_bot_rud_motor_joint" type="revolute">
 		<xacro:insert_block name="origin_bot_rud_part1_bot_rud_motor_joint" />
       		<parent link="${namespace}/bot_rud_part1_link" />
       		<child link="${namespace}/bot_rud_motor_link" />
 		<axis xyz="0 0 -1" />
+		<limit effort="1000" velocity="1000" lower="0" upper="0" /> 
     	</joint>
 	<xacro:box_model
 		robot_namespace="${namespace}"
@@ -290,10 +309,11 @@
 		<xacro:insert_block name="origin_rud_part1" />
 		<xacro:insert_block name="inertia_rud_part1" />
 	</xacro:box_model>
-	<joint name="${namespace}/blimp_body_left_elv_part1_joint" type="fixed">
+	<joint name="${namespace}/blimp_body_left_elv_part1_joint" type="revolute">
 		<xacro:insert_block name="origin_blimp_body_left_elv_part1_joint" />
       		<parent link="${namespace}/blimp_body_link" />
       		<child link="${namespace}/left_elv_part1_link" />
+		<limit effort="1000" velocity="1000" lower="0" upper="0" /> 
     	</joint>
 	<link name="${namespace}/left_elv_joint_link">
 		<visual>
@@ -338,10 +358,11 @@
 		<xacro:insert_block name="origin_rud_part1" />
 		<xacro:insert_block name="inertia_rud_part1" />
 	</xacro:box_model>
-	<joint name="${namespace}/blimp_body_right_elv_part1_joint" type="fixed">
+	<joint name="${namespace}/blimp_body_right_elv_part1_joint" type="revolute">
 		<xacro:insert_block name="origin_blimp_body_right_elv_part1_joint" />
       		<parent link="${namespace}/blimp_body_link" />
       		<child link="${namespace}/right_elv_part1_link" />
+		<limit effort="1000" velocity="1000" lower="0" upper="0" /> 
     	</joint>
 	<link name="${namespace}/right_elv_joint_link">
 		<visual>
