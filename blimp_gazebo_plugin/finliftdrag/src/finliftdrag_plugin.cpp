@@ -13,6 +13,15 @@ FinLiftDragPlugin::FinLiftDragPlugin()
     cda(0.01),
     cma(0.01),
     rho(1.2041),
+    cl0(0),
+    cl1(-1),
+    cl2(0),
+    cw0(0),
+    cw1(-1),
+    cw2(-1),
+    cm0(0),
+    cm1(-1),
+    cm2(-1),
     pubs_and_subs_created_(false)
 {
   this->cp = ignition::math::Vector3d (0, 0, 0);
@@ -98,6 +107,64 @@ void FinLiftDragPlugin::Load(physics::ModelPtr _model,
 
   if (_sdf->HasElement("cma_stall"))
     this->cmaStall = _sdf->Get<double>("cma_stall");
+  
+  if (_sdf->HasElement("cl0"))
+    this->cl0 = _sdf->Get<double>("cl0");
+  if (_sdf->HasElement("cl1"))
+    this->cl1 = _sdf->Get<double>("cl1");
+  if (_sdf->HasElement("cl2"))
+    this->cl2 = _sdf->Get<double>("cl2");
+  if (_sdf->HasElement("cw0"))
+    this->cw0 = _sdf->Get<double>("cw0");
+  if (_sdf->HasElement("cw1"))
+    this->cw1 = _sdf->Get<double>("cw1");
+  if (_sdf->HasElement("cw2"))
+    this->cw2 = _sdf->Get<double>("cw2");
+  if (_sdf->HasElement("cm0"))
+    this->cm0 = _sdf->Get<double>("cm0");
+  if (_sdf->HasElement("cm1"))
+    this->cm1 = _sdf->Get<double>("cm1");
+  if (_sdf->HasElement("cm2"))
+    this->cm2 = _sdf->Get<double>("cm2");
+
+  if ((this->cl1 > -1) and (this->cl2  >-1)) {
+    this->cla = (this->cl1 - this->cl0) / this->alphaStall;
+    if (this->alphaStall<M_PI/2) {
+       this->claStall = (this->cl2 - this->cl1) / ((M_PI/2)-this->alphaStall);
+    } else {
+       this->claStall = 0.0;
+    }
+    gzdbg << "=============================\n";
+    gzdbg << "Auto Calculated cla = " << this->cla;
+    gzdbg << "and claStall = " << this->claStall << "\n";
+    gzdbg << "=============================\n";
+  }
+
+  if ((this->cw1 > -1) and (this->cw2  >-1)) {
+    this->cda = (this->cw1 - this->cw0) / this->alphaStall;
+    if (this->alphaStall<M_PI/2) {
+       this->cdaStall = (this->cw2 - this->cw1) / ((M_PI/2)-this->alphaStall);
+    } else {
+       this->cdaStall = 0.0;
+    }
+    gzdbg << "=============================\n";
+    gzdbg << "Auto Calculated cda = " << this->cda;
+    gzdbg << "and cdaStall = " << this->cdaStall << "\n";
+    gzdbg << "=============================\n";
+  }
+
+  if ((this->cm1 > -1) and (this->cm2  >-1)) {
+    this->cma = (this->cm1 - this->cm0) / this->alphaStall;
+    if (this->alphaStall<M_PI/2) {
+       this->cmaStall = (this->cm2 - this->cm1) / ((M_PI/2)-this->alphaStall);
+    } else {
+       this->cmaStall = 0.0;
+    }
+    gzdbg << "=============================\n";
+    gzdbg << "Auto Calculated cma = " << this->cma;
+    gzdbg << "and cmaStall = " << this->cmaStall << "\n";
+    gzdbg << "=============================\n";
+  }
 
   if (_sdf->HasElement("cp"))
     this->cp = _sdf->Get<ignition::math::Vector3d >("cp");
@@ -268,7 +335,7 @@ void FinLiftDragPlugin::OnUpdate()
   double cl;
   if (this->alpha > this->alphaStall)
   {
-    cl = (this->cla * this->alphaStall +
+    cl = (this->cl0 + this->cla * this->alphaStall +
           this->claStall * (this->alpha - this->alphaStall))
          * cosSweepAngle;
     // make sure cl is still great than 0
@@ -276,14 +343,14 @@ void FinLiftDragPlugin::OnUpdate()
   }
   else if (this->alpha < -this->alphaStall)
   {
-    cl = (-this->cla * this->alphaStall +
+    cl = (-(this->cl0 + this->cla * this->alphaStall) +
           this->claStall * (this->alpha + this->alphaStall))
          * cosSweepAngle;
     // make sure cl is still less than 0
     cl = std::min(0.0, cl);
   }
   else
-    cl = this->cla * this->alpha * cosSweepAngle;
+    cl = (this->cl0 + this->cla * this->alpha) * cosSweepAngle;
 
   // modify cl per control joint value
   if (this->controlJoint)
@@ -300,18 +367,18 @@ void FinLiftDragPlugin::OnUpdate()
   double cd;
   if (this->alpha > this->alphaStall)
   {
-    cd = (this->cda * this->alphaStall +
+    cd = (this->cw0 + this->cda * this->alphaStall +
           this->cdaStall * (this->alpha - this->alphaStall))
          * cosSweepAngle;
   }
   else if (this->alpha < -this->alphaStall)
   {
-    cd = (-this->cda * this->alphaStall +
+    cd = (-(this->cw0 + this->cda * this->alphaStall) +
           this->cdaStall * (this->alpha + this->alphaStall))
          * cosSweepAngle;
   }
   else
-    cd = (this->cda * this->alpha) * cosSweepAngle;
+    cd = (this->cw0 + this->cda * this->alpha) * cosSweepAngle;
 
   // make sure drag is positive
   cd = fabs(cd);
@@ -323,7 +390,7 @@ void FinLiftDragPlugin::OnUpdate()
   double cm;
   if (this->alpha > this->alphaStall)
   {
-    cm = (this->cma * this->alphaStall +
+    cm = (this->cm0 + this->cma * this->alphaStall +
           this->cmaStall * (this->alpha - this->alphaStall))
          * cosSweepAngle;
     // make sure cm is still great than 0
@@ -331,14 +398,14 @@ void FinLiftDragPlugin::OnUpdate()
   }
   else if (this->alpha < -this->alphaStall)
   {
-    cm = (-this->cma * this->alphaStall +
+    cm = (-(this->cm0 + this->cma * this->alphaStall) +
           this->cmaStall * (this->alpha + this->alphaStall))
          * cosSweepAngle;
     // make sure cm is still less than 0
     cm = std::min(0.0, cm);
   }
   else
-    cm = this->cma * this->alpha * cosSweepAngle;
+    cm = (this->cm0 + this->cma * this->alpha) * cosSweepAngle;
 
   /// \TODO: implement cm
   /// for now, reset cm to zero, as cm needs testing
@@ -365,7 +432,7 @@ void FinLiftDragPlugin::OnUpdate()
   //      this->link->GetName() == "wing_2") &&
   //     (vel.GetLength() > 50.0 &&
   //      vel.GetLength() < 50.0))
-  if (1)
+  if (0)
   {
     gzdbg << "=============================\n";
     gzdbg << "sensor: [" << this->GetHandle() << "]\n";

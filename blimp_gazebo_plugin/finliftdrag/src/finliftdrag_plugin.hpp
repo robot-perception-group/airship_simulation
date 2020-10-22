@@ -112,6 +112,10 @@ namespace gazebo
     /// \brief Cm-alpha rate after stall
     protected: double cmaStall;
 
+
+    /// \brief Alternate ways to calculate forces - supply data at 3 alpha points:  0= 0 , 1=stall,  2=90degrees
+    protected: double cl0,cl1,cl2,cw0,cw1,cw2,cm0,cm1,cm2;
+
     /// \brief: \TODO: make a stall velocity curve
     protected: double velocityStall;
 

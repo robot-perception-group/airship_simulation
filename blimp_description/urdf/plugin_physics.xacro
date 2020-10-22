@@ -51,10 +51,10 @@
 				<robotNamespace>${namespace}</robotNamespace> 
 				<link_name>${link_name}</link_name>
 				<air_density>${air_density}</air_density>
-				<cla>3</cla>
-				<cla_stall>-3</cla_stall>
-				<cda>${0.5 + 1.5* body_lift}</cda>
-				<cda_stall>-${0.5 + 1.5* body_lift}</cda_stall>
+				<cla>${3 - 2*body_lift}</cla>
+				<cla_stall>-${3 - 2*body_lift}</cla_stall>
+				<cda>0.5</cda>
+				<cda_stall>0.5</cda_stall>
 				<alpha_stall>${stall_angle * M_PI/180.0}</alpha_stall>
 				<a0>0</a0>
 				<area>${area}</area>
@@ -69,16 +69,18 @@
 	<!-- Macro to add aerodynamics -->
 	<!-- finliftdrag_plugin takes windspeed into consideration whereas LiftDragPlugin only consider vehicle speed -->
 	<xacro:macro name="finliftdrag"
-		params="namespace link_name air_density area body_lift stall_angle *upward *forward *cp">
+		params="namespace link_name air_density area body_lift stall_angle cw0 cw1 cw2 cl0 cl1 cl2 *upward *forward *cp">
 		<gazebo>
 			<plugin name="${link_name}_finliftdrag" filename="libfinliftdrag_plugin.so">
 				<robotNamespace>${namespace}</robotNamespace> 
 				<link_name>${link_name}</link_name>
 				<air_density>${air_density}</air_density>
-				<cla>3</cla>
-				<cla_stall>-3</cla_stall>
-				<cda>${0.5 + 1.5* body_lift}</cda>
-				<cda_stall>-${0.5 + 1.5* body_lift}</cda_stall>
+				<cw0>${cw0}</cw0>
+				<cw1>${cw1}</cw1>
+				<cw2>${cw2}</cw2>
+				<cl0>${cl0}</cl0>
+				<cl1>${cl1}</cl1>
+				<cl2>${cl2}</cl2>
 				<alpha_stall>${stall_angle * M_PI/180.0}</alpha_stall>
 				<a0>0</a0>
 				<area>${area}</area>
