@@ -363,6 +363,8 @@ void GazeboWindPlugin::OnUpdate(const common::UpdateInfo& _info) {
 
     
     wind_velocity = (wind_speed_mean_ * wind_direction_mean_) + turbulence;
+  } else {
+    wind_velocity = (wind_speed_mean_ * wind_direction_mean_);
   }
 
   wind_speed_msg_.mutable_header()->set_frame_id(frame_id_);
