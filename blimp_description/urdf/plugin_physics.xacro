@@ -3,25 +3,15 @@
 	
 	<!-- Macro to add the wind plugin. -->
 	<xacro:macro name="wind_plugin_macro"
-		params="namespace linkname xyz_offset wind_direction_mean wind_direction_variance wind_force_mean
-		wind_force_variance wind_gust_direction_mean wind_gust_direction_variance wind_gust_duration wind_gust_start wind_gust_force_mean wind_speed_mean wind_speed_variance use_custom_static_wind_field custom_wind_field_path">
+		params="namespace linkname wind_direction_mean wind_speed_mean wind_turbulence_level use_custom_static_wind_field custom_wind_field_path">
 		<gazebo>
 			<plugin filename="libnormwind_plugin.so" name="wind_plugin">
 				<frameId>world</frameId>
 				<linkName>${linkname}</linkName>
 				<robotNamespace>${namespace}</robotNamespace>
-				<xyzOffset>${xyz_offset}</xyzOffset> <!-- [m] [m] [m] -->
 				<windDirectionMean>${wind_direction_mean}</windDirectionMean>
-				<windDirectionVariance>${wind_direction_variance}</windDirectionVariance>
-				<windForceMean>${wind_force_mean}</windForceMean> <!-- [N] -->
-				<windForceVariance>${wind_force_variance}</windForceVariance>
-				<windGustDirectionMean>${wind_gust_direction_mean}</windGustDirectionMean>
-				<windGustDirectionVariance>${wind_gust_direction_variance}</windGustDirectionVariance>
-				<windGustDuration>${wind_gust_duration}</windGustDuration> <!-- [s] -->
-				<windGustStart>${wind_gust_start}</windGustStart> <!-- [s] -->
-				<windGustForceMean>${wind_gust_force_mean}</windGustForceMean> <!-- [N] -->
 				<windSpeedMean>${wind_speed_mean}</windSpeedMean> <!-- [m/s] -->
-				<windSpeedVariance>${wind_speed_variance}</windSpeedVariance>
+				<windTurbulenceLevel>${wind_turbulence_level}</windTurbulenceLevel>
 				<useCustomStaticWindField>${use_custom_static_wind_field}</useCustomStaticWindField>
 				<customWindFieldPath>${custom_wind_field_path}</customWindFieldPath> <!-- from ~/.ros -->
 			</plugin>

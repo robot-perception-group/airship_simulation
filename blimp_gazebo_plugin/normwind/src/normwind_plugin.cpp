@@ -41,8 +41,8 @@ void GazeboWindPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
   model_ = _model;
   world_ = model_->GetWorld();
 
-  double wind_gust_start = kDefaultWindGustStart;
-  double wind_gust_duration = kDefaultWindGustDuration;
+  //double wind_gust_start = kDefaultWindGustStart;
+  //double wind_gust_duration = kDefaultWindGustDuration;
 
   //==============================================//
   //========== READ IN PARAMS FROM SDF ===========//
@@ -59,10 +59,10 @@ void GazeboWindPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
   // Initialise with default namespace (typically /gazebo/default/).
   node_handle_->Init();
 
-  if (_sdf->HasElement("xyzOffset"))
-    xyz_offset_ = _sdf->GetElement("xyzOffset")->Get<ignition::math::Vector3d >();
-  else
-    gzerr << "[gazebo_wind_plugin] Please specify a xyzOffset.\n";
+  //if (_sdf->HasElement("xyzOffset"))
+  //  xyz_offset_ = _sdf->GetElement("xyzOffset")->Get<ignition::math::Vector3d >();
+  //else
+  //  gzerr << "[gazebo_wind_plugin] Please specify a xyzOffset.\n";
 
   getSdfParam<std::string>(_sdf, "windForcePubTopic", wind_force_pub_topic_,
                            wind_force_pub_topic_);
@@ -73,10 +73,10 @@ void GazeboWindPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
   // Get the wind speed params from SDF.
   getSdfParam<double>(_sdf, "windSpeedMean", wind_speed_mean_,
                       wind_speed_mean_);
-  getSdfParam<double>(_sdf, "windSpeedVariance", wind_speed_variance_,
-                      wind_speed_variance_);
+  getSdfParam<int>(_sdf, "windTurbulenceLevel", wind_turbulence_level,
+                      wind_turbulence_level);
   getSdfParam<ignition::math::Vector3d>(_sdf, "windDirectionMean", wind_direction_mean_, wind_direction_mean_);
-  getSdfParam<double>(_sdf, "windDirectionVariance", wind_direction_variance_, wind_direction_variance_);
+  //getSdfParam<double>(_sdf, "windDirectionVariance", wind_direction_variance_, wind_direction_variance_);
 
   // Check if a custom static wind field should be used.
   getSdfParam<bool>(_sdf, "useCustomStaticWindField", use_custom_static_wind_field_,
@@ -84,36 +84,36 @@ void GazeboWindPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
   if (!use_custom_static_wind_field_) {
     gzdbg << "[gazebo_wind_plugin] Using user-defined random wind field and gusts.\n";
     // Get the wind params from SDF.
-    getSdfParam<double>(_sdf, "windForceMean", wind_force_mean_,
-                        wind_force_mean_);
-    getSdfParam<double>(_sdf, "windForceVariance", wind_force_variance_,
-                        wind_force_variance_);
+    //getSdfParam<double>(_sdf, "windForceMean", wind_force_mean_,
+    //                    wind_force_mean_);
+    //getSdfParam<double>(_sdf, "windForceVariance", wind_force_variance_,
+    //                    wind_force_variance_);
     // Get the wind gust params from SDF.
-    getSdfParam<double>(_sdf, "windGustStart", wind_gust_start, wind_gust_start);
-    getSdfParam<double>(_sdf, "windGustDuration", wind_gust_duration,
-                        wind_gust_duration);
-    getSdfParam<double>(_sdf, "windGustForceMean", wind_gust_force_mean_,
-                        wind_gust_force_mean_);
-    getSdfParam<double>(_sdf, "windGustForceVariance", wind_gust_force_variance_,
-                        wind_gust_force_variance_);
-    getSdfParam<ignition::math::Vector3d>(_sdf, "windGustDirectionMean", wind_gust_direction_mean_, wind_gust_direction_mean_);
-    getSdfParam<double>(_sdf, "windGustDirectionVariance", wind_gust_direction_variance_, wind_gust_direction_variance_);
+    //getSdfParam<double>(_sdf, "windGustStart", wind_gust_start, wind_gust_start);
+    //getSdfParam<double>(_sdf, "windGustDuration", wind_gust_duration,
+    //                    wind_gust_duration);
+    //getSdfParam<double>(_sdf, "windGustForceMean", wind_gust_force_mean_,
+    //                    wind_gust_force_mean_);
+    //getSdfParam<double>(_sdf, "windGustForceVariance", wind_gust_force_variance_,
+    //                    wind_gust_force_variance_);
+    //getSdfParam<ignition::math::Vector3d>(_sdf, "windGustDirectionMean", wind_gust_direction_mean_, wind_gust_direction_mean_);
+    //getSdfParam<double>(_sdf, "windGustDirectionVariance", wind_gust_direction_variance_, wind_gust_direction_variance_);
 
 
     wind_direction_mean_.Normalize();
-    wind_gust_direction_mean_.Normalize();
-    wind_gust_start_ = common::Time(wind_gust_start);
-    wind_gust_end_ = common::Time(wind_gust_start + wind_gust_duration);
+    //wind_gust_direction_mean_.Normalize();
+    //wind_gust_start_ = common::Time(wind_gust_start);
+    //wind_gust_end_ = common::Time(wind_gust_start + wind_gust_duration);
 
     // Set random wind direction mean and standard deviation
-    wind_direction_distribution_X_.param(std::normal_distribution<double>::param_type(wind_direction_mean_.X(), sqrt(wind_direction_variance_)));
-    wind_direction_distribution_Y_.param(std::normal_distribution<double>::param_type(wind_direction_mean_.Y(), sqrt(wind_direction_variance_)));
-    wind_direction_distribution_Z_.param(std::normal_distribution<double>::param_type(wind_direction_mean_.Z(), sqrt(wind_direction_variance_)));
+    //wind_direction_distribution_X_.param(std::normal_distribution<double>::param_type(wind_direction_mean_.X(), sqrt(wind_direction_variance_)));
+    //wind_direction_distribution_Y_.param(std::normal_distribution<double>::param_type(wind_direction_mean_.Y(), sqrt(wind_direction_variance_)));
+    //wind_direction_distribution_Z_.param(std::normal_distribution<double>::param_type(wind_direction_mean_.Z(), sqrt(wind_direction_variance_)));
 
     // Set random wind gust direction mean and standard deviation
-    wind_gust_direction_distribution_X_.param(std::normal_distribution<double>::param_type(wind_gust_direction_mean_.X(), sqrt(wind_gust_direction_variance_)));
-    wind_gust_direction_distribution_Y_.param(std::normal_distribution<double>::param_type(wind_gust_direction_mean_.Y(), sqrt(wind_gust_direction_variance_)));
-    wind_gust_direction_distribution_Z_.param(std::normal_distribution<double>::param_type(wind_gust_direction_mean_.Z(), sqrt(wind_gust_direction_variance_)));
+    //wind_gust_direction_distribution_X_.param(std::normal_distribution<double>::param_type(wind_gust_direction_mean_.X(), sqrt(wind_gust_direction_variance_)));
+    //wind_gust_direction_distribution_Y_.param(std::normal_distribution<double>::param_type(wind_gust_direction_mean_.Y(), sqrt(wind_gust_direction_variance_)));
+    //wind_gust_direction_distribution_Z_.param(std::normal_distribution<double>::param_type(wind_gust_direction_mean_.Z(), sqrt(wind_gust_direction_variance_)));
 
   } else {
     gzdbg << "[gazebo_wind_plugin] Using custom wind field from text file.\n";
@@ -128,11 +128,20 @@ void GazeboWindPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
   if (link_ == NULL)
     gzthrow("[gazebo_wind_plugin] Couldn't find specified link \"" << link_name_
                                                                    << "\".");
-
+  previousRun = world_->SimTime();
   // Listen to the update event. This event is broadcast every
   // simulation iteration.
   update_connection_ = event::Events::ConnectWorldUpdateBegin(
       boost::bind(&GazeboWindPlugin::OnUpdate, this, _1));
+}
+
+double GazeboWindPlugin::POEValue(int s, double h) {
+	for (int i=12;i>0;i--) {
+		if (h>POE[0][i]) {
+			return POE[s][i];
+		}
+	}
+	return POE[s][0];
 }
 
 // This gets called by the world update start event.
@@ -148,59 +157,16 @@ void GazeboWindPlugin::OnUpdate(const common::UpdateInfo& _info) {
 
   // Get the current simulation time.
   common::Time now = world_->SimTime();
+  double deltaT = now.Double() - previousRun.Double();
+  previousRun = now;
   
   ignition::math::Vector3d wind_velocity(0.0, 0.0, 0.0);
 
+  // Get the current position of the aircraft in world coordinates.
+  ignition::math::Vector3d link_position = link_->WorldPose().Pos();
+
   // Choose user-specified method for calculating wind velocity.
-  if (!use_custom_static_wind_field_) {
-    // Calculate the wind force.
-    double wind_strength = wind_force_mean_;
-    // Get normal distribution wind direction
-    ignition::math::Vector3d wind_direction;
-    wind_direction.X() = wind_direction_distribution_X_(wind_direction_generator_);
-    wind_direction.Y() = wind_direction_distribution_Y_(wind_direction_generator_);
-    wind_direction.Z() = wind_direction_distribution_Z_(wind_direction_generator_);
-    ignition::math::Vector3d wind = wind_strength * wind_direction;
-    // Apply a force from the constant wind to the link.
-    link_->AddForceAtRelativePosition(wind, xyz_offset_);
-
-    ignition::math::Vector3d wind_gust(0.0, 0.0, 0.0);
-    // Calculate the wind gust force.
-    if (now >= wind_gust_start_ && now < wind_gust_end_) {
-      double wind_gust_strength = wind_gust_force_mean_;
-      // Get normal distribution wind gust direction
-      ignition::math::Vector3d wind_gust_direction;
-      wind_gust_direction.X() = wind_gust_direction_distribution_X_(wind_gust_direction_generator_);
-      wind_gust_direction.Y() = wind_gust_direction_distribution_Y_(wind_gust_direction_generator_);
-      wind_gust_direction.Z() = wind_gust_direction_distribution_Z_(wind_gust_direction_generator_);
-      wind_gust = wind_gust_strength * wind_gust_direction;
-      // Apply a force from the wind gust to the link.
-      link_->AddForceAtRelativePosition(wind_gust, xyz_offset_);
-    }
-
-    wrench_stamped_msg_.mutable_header()->set_frame_id(frame_id_);
-    wrench_stamped_msg_.mutable_header()->mutable_stamp()->set_sec(now.sec);
-    wrench_stamped_msg_.mutable_header()->mutable_stamp()->set_nsec(now.nsec);
-
-    wrench_stamped_msg_.mutable_wrench()->mutable_force()->set_x(wind.X() +
-                                                                 wind_gust.X());
-    wrench_stamped_msg_.mutable_wrench()->mutable_force()->set_y(wind.Y() +
-                                                                 wind_gust.Y());
-    wrench_stamped_msg_.mutable_wrench()->mutable_force()->set_z(wind.Z() +
-                                                                 wind_gust.Z());
-
-    // No torque due to wind, set x,y and z to 0.
-    wrench_stamped_msg_.mutable_wrench()->mutable_torque()->set_x(0);
-    wrench_stamped_msg_.mutable_wrench()->mutable_torque()->set_y(0);
-    wrench_stamped_msg_.mutable_wrench()->mutable_torque()->set_z(0);
-
-    wind_force_pub_->Publish(wrench_stamped_msg_);
-
-    // Calculate the wind speed.
-    wind_velocity = wind_speed_mean_ * wind_direction;
-  } else {
-    // Get the current position of the aircraft in world coordinates.
-    ignition::math::Vector3d link_position = link_->WorldPose().Pos();
+  if (use_custom_static_wind_field_) {
 
     // Calculate the x, y index of the grid points with x, y-coordinate 
     // just smaller than or equal to aircraft x, y position.
@@ -304,8 +270,99 @@ void GazeboWindPlugin::OnUpdate(const common::UpdateInfo& _info) {
       wind_velocity = TrilinearInterpolation(
         link_position, wind_at_vertices, interpolation_points);
     } 
+  } else if (wind_speed_mean_>0.0 and wind_turbulence_level>0) {
+    /* Code based on Flightgear implementation "https://github.com/FlightGear/flightgear/blob/22de9d30b518646894ac190cc6b04371daa6d5c2/src/FDM/JSBSim/models/atmosphere/FGWinds.cpp"
+       MILSPEC Dryden spectrum
+       @see Yeager, Jessie C.: "Implementation and Testing of Turbulence Models for
+         the F18-HARV" (<a href="http://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19980028448_1998081596.pdf">pdf</a>), NASA CR-1998-206937, 1998
+        @see MIL-F-8785C: Military Specification: Flying Qualities of Piloted Aircraft
+    */
+
+    ignition::math::Vector3d turbulence(0.0, 0.0, 0.0);
+    double psiw = atan2(wind_direction_mean_.Y(),wind_direction_mean_.X());
+    double b_w = 30., L_u, L_w, sig_u, sig_w;
+
+    double h = link_position.Z() * 3.28; // convert hight into feet - because this stupid model is imperial
+    double windspeed_at_20ft = wind_speed_mean_ * 3.28;
+    int probability_of_exceedence_index = (wind_turbulence_level<=7)?wind_turbulence_level:7;
+
+    // clip height functions at 10 ft
+    if (h <= 10.) h = 10;
+
+    // Scale lengths L and amplitudes sigma as function of height
+    if (h <= 1000) {
+      L_u = h/pow(0.177 + 0.000823*h, 1.2); // MIL-F-8785c, Fig. 10, p. 55
+      L_w = h;
+      sig_w = 0.1*windspeed_at_20ft;
+      sig_u = sig_w/pow(0.177 + 0.000823*h, 0.4); // MIL-F-8785c, Fig. 11, p. 56
+    } else if (h <= 2000) {
+      // linear interpolation between low altitude and high altitude models
+      L_u = L_w = 1000 + (h-1000.)/1000.*750.;
+      sig_u = sig_w = 0.1*windspeed_at_20ft
+                    + (h-1000.)/1000.*(POEValue(probability_of_exceedence_index, h) - 0.1*windspeed_at_20ft);
+    } else {
+      L_u = L_w = 1750.; //  MIL-F-8785c, Sec. 3.7.2.1, p. 48
+      sig_u = sig_w = POEValue(probability_of_exceedence_index, h);
+    }
+
+    // keep values from last timesteps
+    // TODO maybe use deque?
+    static double
+      xi_u_km1 = 0, nu_u_km1 = 0,
+      xi_v_km1 = 0, xi_v_km2 = 0, nu_v_km1 = 0, nu_v_km2 = 0,
+      xi_w_km1 = 0, xi_w_km2 = 0, nu_w_km1 = 0, nu_w_km2 = 0,
+      xi_p_km1 = 0, nu_p_km1 = 0,
+      xi_q_km1 = 0, xi_r_km1 = 0;
+
+
+    double
+      T_V = deltaT, // for compatibility of nomenclature
+      sig_p = 1.9/sqrt(L_w*b_w)*sig_w, // Yeager1998, eq. (8)
+      //sig_q = sqrt(M_PI/2/L_w/b_w), // eq. (14)
+      //sig_r = sqrt(2*M_PI/3/L_w/b_w), // eq. (17)
+      L_p = sqrt(L_w*b_w)/2.6, // eq. (10)
+      tau_u = L_u/windspeed_at_20ft, // eq. (6)
+      tau_w = L_w/windspeed_at_20ft, // eq. (3)
+      tau_p = L_p/windspeed_at_20ft, // eq. (9)
+      tau_q = 4*b_w/M_PI/windspeed_at_20ft, // eq. (13)
+      tau_r =3*b_w/M_PI/windspeed_at_20ft, // eq. (17)
+      nu_u = GaussianRandomNumber(randomGen),
+      nu_v = GaussianRandomNumber(randomGen),
+      nu_w = GaussianRandomNumber(randomGen),
+      nu_p = GaussianRandomNumber(randomGen),
+      xi_u=0, xi_v=0, xi_w=0, xi_p=0, xi_q=0, xi_r=0;
+
+
+      // the following is the MIL-STD-1797A formulation
+      // as cited in Yeager's report
+      xi_u = (1 - T_V/tau_u)  *xi_u_km1 + sig_u*sqrt(2*T_V/tau_u)*nu_u;  // eq. (30)
+      xi_v = (1 - 2*T_V/tau_u)*xi_v_km1 + sig_u*sqrt(4*T_V/tau_u)*nu_v;  // eq. (31)
+      xi_w = (1 - 2*T_V/tau_w)*xi_w_km1 + sig_w*sqrt(4*T_V/tau_w)*nu_w;  // eq. (32)
+      xi_p = (1 - T_V/tau_p)  *xi_p_km1 + sig_p*sqrt(2*T_V/tau_p)*nu_p;  // eq. (33)
+      xi_q = (1 - T_V/tau_q)  *xi_q_km1 + M_PI/4/b_w*(xi_w - xi_w_km1);  // eq. (34)
+      xi_r = (1 - T_V/tau_r)  *xi_r_km1 + M_PI/3/b_w*(xi_v - xi_v_km1);  // eq. (35)
+
+    // rotate by wind azimuth and assign the velocities
+    double cospsi = cos(psiw), sinpsi = sin(psiw);
+
+    turbulence.X() =  cospsi*xi_u + sinpsi*xi_v;
+    turbulence.Y() = -sinpsi*xi_u + cospsi*xi_v;
+    turbulence.Z() = xi_w;
+
+    // hand on the values for the next timestep
+    xi_u_km1 = xi_u; nu_u_km1 = nu_u;
+    xi_v_km2 = xi_v_km1; xi_v_km1 = xi_v; nu_v_km2 = nu_v_km1; nu_v_km1 = nu_v;
+    xi_w_km2 = xi_w_km1; xi_w_km1 = xi_w; nu_w_km2 = nu_w_km1; nu_w_km1 = nu_w;
+    xi_p_km1 = xi_p; nu_p_km1 = nu_p;
+    xi_q_km1 = xi_q;
+    xi_r_km1 = xi_r;
+    
+    
+
+    
+    wind_velocity = (wind_speed_mean_ * wind_direction_mean_) + turbulence;
   }
-  
+
   wind_speed_msg_.mutable_header()->set_frame_id(frame_id_);
   wind_speed_msg_.mutable_header()->mutable_stamp()->set_sec(now.sec);
   wind_speed_msg_.mutable_header()->mutable_stamp()->set_nsec(now.nsec);

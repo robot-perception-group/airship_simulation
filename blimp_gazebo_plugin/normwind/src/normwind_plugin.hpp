@@ -43,16 +43,8 @@ static const std::string kDefaultFrameId = "world";
 static const std::string kDefaultLinkName = "base_link";
 static const std::string kDefaultWindSpeedPubTopic = "wind_speed";
 
-static constexpr double kDefaultWindForceMean = 0.0;
-static constexpr double kDefaultWindForceVariance = 0.0;
-static constexpr double kDefaultWindGustForceMean = 0.0;
-static constexpr double kDefaultWindGustForceVariance = 0.0;
-
-static constexpr double kDefaultWindGustStart = 10.0;
-static constexpr double kDefaultWindGustDuration = 0.0;
-
 static constexpr double kDefaultWindSpeedMean = 0.0;
-static constexpr double kDefaultWindSpeedVariance = 0.0;
+static constexpr int kDefaultTurbulenceLevel = 0;
 
 static const ignition::math::Vector3d kDefaultWindDirectionMean = ignition::math::Vector3d(1, 0, 0);
 static const ignition::math::Vector3d kDefaultWindGustDirectionMean = ignition::math::Vector3d(0, 1, 0);
@@ -73,16 +65,9 @@ class GazeboWindPlugin : public ModelPlugin {
         namespace_(kDefaultNamespace),
         wind_force_pub_topic_(mav_msgs::default_topics::EXTERNAL_FORCE),
         wind_speed_pub_topic_(mav_msgs::default_topics::WIND_SPEED),
-        wind_force_mean_(kDefaultWindForceMean),
-        wind_force_variance_(kDefaultWindForceVariance),
-        wind_gust_force_mean_(kDefaultWindGustForceMean),
-        wind_gust_force_variance_(kDefaultWindGustForceVariance),
         wind_speed_mean_(kDefaultWindSpeedMean),
-        wind_speed_variance_(kDefaultWindSpeedVariance),
+        wind_turbulence_level(kDefaultTurbulenceLevel),
         wind_direction_mean_(kDefaultWindDirectionMean),
-        wind_direction_variance_(kDefaultWindDirectionVariance),
-        wind_gust_direction_mean_(kDefaultWindGustDirectionMean),
-        wind_gust_direction_variance_(kDefaultWindGustDirectionVariance),
         use_custom_static_wind_field_(kDefaultUseCustomStaticWindField),
         frame_id_(kDefaultFrameId),
         link_name_(kDefaultLinkName),
@@ -103,6 +88,10 @@ class GazeboWindPlugin : public ModelPlugin {
   void OnUpdate(const common::UpdateInfo& /*_info*/);
 
  private:
+
+  // a function for the turbulence value at altitude
+  double POEValue(int s, double h);
+
 
   /// \brief    Flag that is set to true once CreatePubsAndSubs() is called, used
   ///           to prevent CreatePubsAndSubs() from be called on every OnUpdate().
@@ -128,29 +117,30 @@ class GazeboWindPlugin : public ModelPlugin {
   std::string wind_force_pub_topic_;
   std::string wind_speed_pub_topic_;
 
-  double wind_force_mean_;
-  double wind_force_variance_;
-  double wind_gust_force_mean_;
-  double wind_gust_force_variance_;
+  common::Time previousRun;
+
   double wind_speed_mean_;
-  double wind_speed_variance_;
+  int wind_turbulence_level;
 
-  ignition::math::Vector3d xyz_offset_;
+  //ignition::math::Vector3d xyz_offset_;
   ignition::math::Vector3d wind_direction_mean_;
-  ignition::math::Vector3d wind_gust_direction_mean_;
-  double wind_direction_variance_;
-  double wind_gust_direction_variance_;
-  std::default_random_engine wind_direction_generator_;
-  std::normal_distribution<double> wind_direction_distribution_X_;
-  std::normal_distribution<double> wind_direction_distribution_Y_;
-  std::normal_distribution<double> wind_direction_distribution_Z_;
-  std::default_random_engine wind_gust_direction_generator_;
-  std::normal_distribution<double> wind_gust_direction_distribution_X_;
-  std::normal_distribution<double> wind_gust_direction_distribution_Y_;
-  std::normal_distribution<double> wind_gust_direction_distribution_Z_;
+  //ignition::math::Vector3d wind_gust_direction_mean_;
+  //double wind_direction_variance_;
+  //double wind_gust_direction_variance_;
+  std::normal_distribution<double> GaussianRandomNumber;
+  std::default_random_engine randomGen;
 
-  common::Time wind_gust_end_;
-  common::Time wind_gust_start_;
+  //std::default_random_engine wind_direction_generator_;
+  //std::normal_distribution<double> wind_direction_distribution_X_;
+  //std::normal_distribution<double> wind_direction_distribution_Y_;
+  //std::normal_distribution<double> wind_direction_distribution_Z_;
+  //std::default_random_engine wind_gust_direction_generator_;
+  //std::normal_distribution<double> wind_gust_direction_distribution_X_;
+  //std::normal_distribution<double> wind_gust_direction_distribution_Y_;
+  //std::normal_distribution<double> wind_gust_direction_distribution_Z_;
+
+  //common::Time wind_gust_end_;
+  //common::Time wind_gust_start_;
 
   /// \brief    Variables for custom wind field generation.
   bool use_custom_static_wind_field_;
@@ -217,6 +207,16 @@ class GazeboWindPlugin : public ModelPlugin {
   /// \details  This is defined at the class scope so that it is re-created
   ///           everytime a wind speed message needs to be sent, increasing performance.
   gz_mav_msgs::WindSpeed wind_speed_msg_;
+
+  const double POE[8][12]={
+        {  500.0, 1750.0, 3750.0, 7500.0, 15000.0, 25000.0, 35000.0, 45000.0, 55000.0, 65000.0, 75000.0, 80000.0},
+        {    3.2, 2.2, 1.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+        {    4.2, 3.6, 3.3, 1.6, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+        {    6.6, 6.9, 7.4, 6.7, 4.6, 2.7, 0.4, 0.0, 0.0, 0.0, 0.0, 0.0},
+        {    8.6, 9.6, 10.6, 10.1, 8.0, 6.6, 5.0, 4.2, 2.7, 0.0, 0.0, 0.0},
+        {   11.8, 13.0, 16.0, 15.1, 11.6, 9.7, 8.1, 8.2, 7.9, 4.9, 3.2, 2.1},
+        {   15.6, 17.6, 23.0, 23.6, 22.1, 20.0, 16.0, 15.1, 12.1, 7.9, 6.2, 5.1},
+        {   18.7, 21.5, 28.4, 30.2, 30.7, 31.0, 25.2, 23.1, 17.5, 10.7, 8.4, 7.2}};
 };
 }
 
