@@ -349,6 +349,8 @@ void GazeboWindPlugin::OnUpdate(const common::UpdateInfo& _info) {
     turbulence.Y() = -sinpsi*xi_u + cospsi*xi_v;
     turbulence.Z() = xi_w;
 
+    turbulence = turbulence * (1.0/3.28); //convert ft/s back into m/s
+
     // hand on the values for the next timestep
     xi_u_km1 = xi_u; nu_u_km1 = nu_u;
     xi_v_km2 = xi_v_km1; xi_v_km1 = xi_v; nu_v_km2 = nu_v_km1; nu_v_km1 = nu_v;
