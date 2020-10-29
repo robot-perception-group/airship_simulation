@@ -32,7 +32,7 @@ class BlimpActionSpace():
         self.STICK_LIMIT = 100 * pi/180.0
         self.FIN_LIMIT = 45 * pi/180.0
         self.MOTOR_LIMIT = 50
-        self.MOTOR3_LIMIT = 25
+        self.MOTOR3_LIMIT = 15
         self.action_space = np.array([0, 0, 0, 0, 0, 0, 0, 0])
         self.high = np.array([self.MOTOR_LIMIT, self.MOTOR_LIMIT, self.MOTOR3_LIMIT, self.STICK_LIMIT, self.FIN_LIMIT, self.FIN_LIMIT, self.FIN_LIMIT, self.FIN_LIMIT])
         self.low = -self.high
@@ -122,14 +122,14 @@ class BlimpCtrl:
 
     def _controllercmd_callback(self, msg):
 
-        self.motor3_speed = self.MOTOR3_LIMIT * self.pwm_channel(msg.data[0])
-        self.elv1_angle = self.FIN_LIMIT * self.pwm_channel(msg.data[1])
-        self.elv2_angle = self.FIN_LIMIT * self.pwm_channel(msg.data[2])
-        self.rud1_angle = self.FIN_LIMIT * self.pwm_channel(msg.data[3])
-        self.rud2_angle = self.FIN_LIMIT * self.pwm_channel(msg.data[4])
-        self.stick_angle = self.STICK_LIMIT * self.pwm_channel(msg.data[5])
-        self.motor1_speed = self.MOTOR_LIMIT * -self.pwm_channel(msg.data[6])
-        self.motor2_speed = self.MOTOR_LIMIT * -self.pwm_channel(msg.data[7])
+        self.motor3_speed = self.MOTOR3_LIMIT * -self.pwm_channel(msg.data[0])
+        self.elv1_angle = self.FIN_LIMIT * -self.pwm_channel(msg.data[1])
+        self.elv2_angle = self.FIN_LIMIT * -self.pwm_channel(msg.data[2])
+        self.rud1_angle = self.FIN_LIMIT * -self.pwm_channel(msg.data[3])
+        self.rud2_angle = self.FIN_LIMIT * -self.pwm_channel(msg.data[4])
+        self.stick_angle = self.STICK_LIMIT * -self.pwm_channel(msg.data[5])
+        self.motor1_speed = self.MOTOR_LIMIT * self.pwm_channel(msg.data[6])
+        self.motor2_speed = self.MOTOR_LIMIT * self.pwm_channel(msg.data[7])
         self._update_action()
 
 
