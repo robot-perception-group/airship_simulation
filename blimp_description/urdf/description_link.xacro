@@ -315,12 +315,11 @@
 		<xacro:insert_block name="origin_bot_rud_motor" />
 		<xacro:insert_block name="inertia_bot_rud_motor" />
 	</xacro:cylinder_model>
-	<joint name="${namespace}/bot_rud_part1_bot_rud_motor_joint" type="revolute">
+	<joint name="${namespace}/bot_rud_part1_bot_rud_motor_joint" type="continuous">
 		<xacro:insert_block name="origin_bot_rud_part1_bot_rud_motor_joint" />
       		<parent link="${namespace}/bot_rud_part1_link" />
       		<child link="${namespace}/bot_rud_motor_link" />
 		<axis xyz="0 0 -1" />
-		<limit effort="1000" velocity="1000" lower="0" upper="0" /> 
     	</joint>
 	<xacro:box_model
 		robot_namespace="${namespace}"
