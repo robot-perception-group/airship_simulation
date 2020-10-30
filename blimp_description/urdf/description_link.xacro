@@ -54,6 +54,77 @@
       		<parent link="${namespace}/base_link" />
       		<child link="${namespace}/gondola_right_support_link" />
     	</joint>
+	<link name="${namespace}/gondola_body_joint_link">
+		<inertial>
+			<mass value="1e-3"/> <!-- MUST be non zero or the link will be pruned by gazebo and can not accept any forces -->
+			<inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+		</inertial>
+		<visual>
+			<geometry>
+				<cylinder radius="0.01" length="0.3"/>
+			</geometry>
+		</visual>
+	</link>
+	<joint name="${namespace}/gondola_body_joint_link_joint" type="revolute">
+		<xacro:insert_block name="origin_gondola_joint_link_joint" />
+      		<parent link="${namespace}/gondola_body_link" />
+		<child link="${namespace}/gondola_body_joint_link" />
+		<!--<axis>
+			<xyz>1 0 0</xyz>
+			<dynamics>
+                            <damping>${joint_spring_damp}</damping>
+		            <spring_stiffness>${joint_spring_stiff}</spring_stiffness>
+		            <spring_reference>${joint_spring_ref}</spring_reference>
+		        </dynamics>
+		</axis>-->
+		 <physics>
+		          <ode>
+				  <implicit_spring_damper>1</implicit_spring_damper>
+				  <cfm>{$joint_spring_damp}</cfm>
+				  <limit>
+					  <cfm>{$joint_spring_damp}</cfm>
+				  </limit>
+		          </ode>
+	        </physics>
+		<!--<limit effort="${joint_flexibility_effort}" velocity="${joint_flexibility_vel}" lower="${-joint_flexibility_maxangle}" upper="${joint_flexibility_maxangle}" stiffness="{$joint_spring_stiff}" cfm="${joint_spring_damp}" />-->
+		<limit effort="${joint_flexibility_effort}"  velocity="${joint_flexibility_vel}" cfm="${joint_spring_damp}" lower="${-joint_flexibility_maxangle}" upper="${joint_flexibility_maxangle}"/> 
+
+    	</joint>	
+	<link name="${namespace}/gondola_body_joint_link2">
+		<inertial>
+			<mass value="1e-3"/> <!-- MUST be non zero or the link will be pruned by gazebo and can not accept any forces -->
+			<inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+		</inertial>
+		<visual>
+			<geometry>
+				<cylinder radius="0.01" length="0.3"/>
+			</geometry>
+		</visual>
+	</link>
+	<joint name="${namespace}/gondola_body_joint_link2_joint" type="revolute">
+		<xacro:insert_block name="origin_gondola_joint_link2_joint" />
+      		<parent link="${namespace}/gondola_body_joint_link" />
+      		<child link="${namespace}/gondola_body_joint_link2" />
+		<!--<axis>
+			<xyz>1 0 0</xyz>
+			<dynamics>
+                            <damping>${joint_spring_damp}</damping>
+		            <spring_stiffness>${joint_spring_stiff}</spring_stiffness>
+		            <spring_reference>${joint_spring_ref}</spring_reference>
+		        </dynamics>
+		</axis>-->
+		 <physics>
+		          <ode>
+				  <implicit_spring_damper>1</implicit_spring_damper>
+				  <cfm>{$joint_spring_damp}</cfm>
+				  <limit>
+					  <cfm>{$joint_spring_damp}</cfm>
+				  </limit>
+		          </ode>
+	        </physics>
+		<!--<limit effort="${joint_flexibility_effort}" velocity="${joint_flexibility_vel}" lower="${-joint_flexibility_maxangle}" upper="${joint_flexibility_maxangle}" stiffness="{$joint_spring_stiff}" cfm="${joint_spring_damp}" />-->
+		<limit effort="${joint_flexibility_effort}"  velocity="${joint_flexibility_vel}" cfm="${joint_spring_damp}" lower="${-joint_flexibility_maxangle}" upper="${joint_flexibility_maxangle}"/> 
+    	</joint>	
 	<xacro:cylinder_model
 		robot_namespace="${namespace}"
 		link_name="blimp_body"
@@ -65,11 +136,11 @@
 		<xacro:insert_block name="origin_blimp_body" />
 		<xacro:insert_block name="inertia_blimp_body" />
 	</xacro:cylinder_model>
-	<joint name="${namespace}/gondola_body_blimp_body_joint" type="revolute">
-		<xacro:insert_block name="origin_gondola_body_blimp_body_joint" />
-      		<parent link="${namespace}/gondola_body_link" />
+	<joint name="${namespace}/gondola_joint_blimb_body_joint" type="revolute">
+		<xacro:insert_block name="origin_gondola_joint_blimp_body_joint" />
+      		<parent link="${namespace}/gondola_body_joint_link2" />
       		<child link="${namespace}/blimp_body_link" />
-		<limit effort="0" velocity="0" lower="0" upper="0" /> 
+		<limit effort="1000" velocity="1000" lower="0" upper="0" /> 
     	</joint>	
 	<xacro:cylinder_model
 		robot_namespace="${namespace}"
@@ -206,6 +277,41 @@
       		<child link="${namespace}/aft_lift_joint_link" />
 		<limit effort="1000" velocity="1000" lower="0" upper="0" /> 
     	</joint>
+	<link name="${namespace}/top_rud_base_joint_link">
+		<inertial>
+			<mass value="1e-3"/> <!-- MUST be non zero or the link will be pruned by gazebo and can not accept any forces -->
+			<inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+		</inertial>
+		<visual>
+			<geometry>
+				<cylinder radius="0.01" length="0.3"/>
+			</geometry>
+		</visual>
+	</link>
+	<joint name="${namespace}/top_rud_base_link_joint" type="revolute">
+		<xacro:insert_block name="origin_top_rud_base_link_joint" />
+      		<parent link="${namespace}/blimp_body_link" />
+      		<child link="${namespace}/top_rud_base_joint_link" />
+		<!--<axis>
+			<xyz>1 0 0</xyz>
+			<dynamics>
+                            <damping>${joint_spring_damp}</damping>
+		            <spring_stiffness>${joint_spring_stiff}</spring_stiffness>
+		            <spring_reference>${joint_spring_ref}</spring_reference>
+		        </dynamics>
+		</axis>-->
+		 <physics>
+		          <ode>
+				  <implicit_spring_damper>1</implicit_spring_damper>
+				  <cfm>{$joint_spring_damp}</cfm>
+				  <limit>
+					  <cfm>{$joint_spring_damp}</cfm>
+				  </limit>
+		          </ode>
+	        </physics>
+		<!--<limit effort="${joint_flexibility_effort}" velocity="${joint_flexibility_vel}" lower="${-joint_flexibility_maxangle}" upper="${joint_flexibility_maxangle}" stiffness="{$joint_spring_stiff}" cfm="${joint_spring_damp}" />-->
+		<limit effort="${joint_flexibility_effort}"  velocity="${joint_flexibility_vel}" cfm="${joint_spring_damp}" lower="${-joint_flexibility_maxangle}" upper="${joint_flexibility_maxangle}"/> 
+    	</joint>	
 	<xacro:box_model
 		robot_namespace="${namespace}"
 		link_name="top_rud_part1"
@@ -220,7 +326,7 @@
 	</xacro:box_model>
 	<joint name="${namespace}/blimp_body_top_rud_part1_joint" type="revolute">
 		<xacro:insert_block name="origin_blimp_body_top_rud_part1_joint" />
-      		<parent link="${namespace}/blimp_body_link" />
+      		<parent link="${namespace}/top_rud_base_joint_link" />
       		<child link="${namespace}/top_rud_part1_link" />
 		<limit effort="1000" velocity="1000" lower="0" upper="0" /> 
     	</joint>
@@ -255,6 +361,41 @@
       		<parent link="${namespace}/top_rud_joint_link" />
       		<child link="${namespace}/top_rud_part2_link" />
     	</joint>
+	<link name="${namespace}/bot_rud_base_joint_link">
+		<inertial>
+			<mass value="1e-3"/> <!-- MUST be non zero or the link will be pruned by gazebo and can not accept any forces -->
+			<inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+		</inertial>
+		<visual>
+			<geometry>
+				<cylinder radius="0.01" length="0.3"/>
+			</geometry>
+		</visual>
+	</link>
+	<joint name="${namespace}/bot_rud_base_link_joint" type="revolute">
+		<xacro:insert_block name="origin_bot_rud_base_link_joint" />
+      		<parent link="${namespace}/blimp_body_link" />
+      		<child link="${namespace}/bot_rud_base_joint_link" />
+		<!--<axis>
+			<xyz>1 0 0</xyz>
+			<dynamics>
+                            <damping>${joint_spring_damp}</damping>
+		            <spring_stiffness>${joint_spring_stiff}</spring_stiffness>
+		            <spring_reference>${joint_spring_ref}</spring_reference>
+		        </dynamics>
+		</axis>-->
+		 <physics>
+		          <ode>
+				  <implicit_spring_damper>1</implicit_spring_damper>
+				  <cfm>{$joint_spring_damp}</cfm>
+				  <limit>
+					  <cfm>{$joint_spring_damp}</cfm>
+				  </limit>
+		          </ode>
+	        </physics>
+		<!--<limit effort="${joint_flexibility_effort}" velocity="${joint_flexibility_vel}" lower="${-joint_flexibility_maxangle}" upper="${joint_flexibility_maxangle}" stiffness="{$joint_spring_stiff}" cfm="${joint_spring_damp}" />-->
+		<limit effort="${joint_flexibility_effort}"  velocity="${joint_flexibility_vel}" cfm="${joint_spring_damp}" lower="${-joint_flexibility_maxangle}" upper="${joint_flexibility_maxangle}"/> 
+    	</joint>	
 	<xacro:box_model
 		robot_namespace="${namespace}"
 		link_name="bot_rud_part1"
@@ -269,7 +410,7 @@
 	</xacro:box_model>
 	<joint name="${namespace}/blimp_body_bot_rud_part1_joint" type="revolute">
 		<xacro:insert_block name="origin_blimp_body_bot_rud_part1_joint" />
-      		<parent link="${namespace}/blimp_body_link" />
+      		<parent link="${namespace}/bot_rud_base_joint_link" />
       		<child link="${namespace}/bot_rud_part1_link" />
 		<limit effort="1000" velocity="1000" lower="0" upper="0" /> 
     	</joint>
@@ -321,6 +462,41 @@
       		<child link="${namespace}/bot_rud_motor_link" />
 		<axis xyz="0 0 -1" />
     	</joint>
+	<link name="${namespace}/left_elv_base_joint_link">
+		<inertial>
+			<mass value="1e-3"/> <!-- MUST be non zero or the link will be pruned by gazebo and can not accept any forces -->
+			<inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+		</inertial>
+		<visual>
+			<geometry>
+				<cylinder radius="0.01" length="0.3"/>
+			</geometry>
+		</visual>
+	</link>
+	<joint name="${namespace}/left_elv_base_link_joint" type="revolute">
+		<xacro:insert_block name="origin_left_elv_base_link_joint" />
+      		<parent link="${namespace}/blimp_body_link" />
+      		<child link="${namespace}/left_elv_base_joint_link" />
+		<!--<axis>
+			<xyz>1 0 0</xyz>
+			<dynamics>
+                            <damping>${joint_spring_damp}</damping>
+		            <spring_stiffness>${joint_spring_stiff}</spring_stiffness>
+		            <spring_reference>${joint_spring_ref}</spring_reference>
+		        </dynamics>
+		</axis>-->
+		 <physics>
+		          <ode>
+				  <implicit_spring_damper>1</implicit_spring_damper>
+				  <cfm>{$joint_spring_damp}</cfm>
+				  <limit>
+					  <cfm>{$joint_spring_damp}</cfm>
+				  </limit>
+		          </ode>
+	        </physics>
+		<!--<limit effort="${joint_flexibility_effort}" velocity="${joint_flexibility_vel}" lower="${-joint_flexibility_maxangle}" upper="${joint_flexibility_maxangle}" stiffness="{$joint_spring_stiff}" cfm="${joint_spring_damp}" />-->
+		<limit effort="${joint_flexibility_effort}"  velocity="${joint_flexibility_vel}" cfm="${joint_spring_damp}" lower="${-joint_flexibility_maxangle}" upper="${joint_flexibility_maxangle}"/> 
+    	</joint>	
 	<xacro:box_model
 		robot_namespace="${namespace}"
 		link_name="left_elv_part1"
@@ -335,7 +511,7 @@
 	</xacro:box_model>
 	<joint name="${namespace}/blimp_body_left_elv_part1_joint" type="revolute">
 		<xacro:insert_block name="origin_blimp_body_left_elv_part1_joint" />
-      		<parent link="${namespace}/blimp_body_link" />
+      		<parent link="${namespace}/left_elv_base_joint_link" />
       		<child link="${namespace}/left_elv_part1_link" />
 		<limit effort="1000" velocity="1000" lower="0" upper="0" /> 
     	</joint>
@@ -370,6 +546,41 @@
       		<parent link="${namespace}/left_elv_joint_link" />
       		<child link="${namespace}/left_elv_part2_link" />
     	</joint>
+	<link name="${namespace}/right_elv_base_joint_link">
+		<inertial>
+			<mass value="1e-3"/> <!-- MUST be non zero or the link will be pruned by gazebo and can not accept any forces -->
+			<inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+		</inertial>
+		<visual>
+			<geometry>
+				<cylinder radius="0.01" length="0.3"/>
+			</geometry>
+		</visual>
+	</link>
+	<joint name="${namespace}/right_elv_base_link_joint" type="revolute">
+		<xacro:insert_block name="origin_right_elv_base_link_joint" />
+      		<parent link="${namespace}/blimp_body_link" />
+      		<child link="${namespace}/right_elv_base_joint_link" />
+		<!--<axis>
+			<xyz>1 0 0</xyz>
+			<dynamics>
+                            <damping>${joint_spring_damp}</damping>
+		            <spring_stiffness>${joint_spring_stiff}</spring_stiffness>
+		            <spring_reference>${joint_spring_ref}</spring_reference>
+		        </dynamics>
+		</axis>-->
+		 <physics>
+		          <ode>
+				  <implicit_spring_damper>1</implicit_spring_damper>
+				  <cfm>{$joint_spring_damp}</cfm>
+				  <limit>
+					  <cfm>{$joint_spring_damp}</cfm>
+				  </limit>
+		          </ode>
+	        </physics>
+		<!--<limit effort="${joint_flexibility_effort}" velocity="${joint_flexibility_vel}" lower="${-joint_flexibility_maxangle}" upper="${joint_flexibility_maxangle}" stiffness="{$joint_spring_stiff}" cfm="${joint_spring_damp}" />-->
+		<limit effort="${joint_flexibility_effort}"  velocity="${joint_flexibility_vel}" cfm="${joint_spring_damp}" lower="${-joint_flexibility_maxangle}" upper="${joint_flexibility_maxangle}"/> 
+    	</joint>	
 	<xacro:box_model
 		robot_namespace="${namespace}"
 		link_name="right_elv_part1"
@@ -384,7 +595,7 @@
 	</xacro:box_model>
 	<joint name="${namespace}/blimp_body_right_elv_part1_joint" type="revolute">
 		<xacro:insert_block name="origin_blimp_body_right_elv_part1_joint" />
-      		<parent link="${namespace}/blimp_body_link" />
+      		<parent link="${namespace}/right_elv_base_joint_link" />
       		<child link="${namespace}/right_elv_part1_link" />
 		<limit effort="1000" velocity="1000" lower="0" upper="0" /> 
     	</joint>

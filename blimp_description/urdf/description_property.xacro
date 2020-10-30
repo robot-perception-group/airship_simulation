@@ -64,6 +64,12 @@
 	<xacro:property name="length_ballast" value="0.05"/>
 
 	<!-- joint parameters -->
+	<xacro:property name="joint_flexibility_effort" value="-1" />
+	<xacro:property name="joint_flexibility_vel" value="-1" />
+	<xacro:property name="joint_flexibility_maxangle" value="${1*pi/180.0}" />
+	<xacro:property name="joint_spring_damp" value="0.1" />
+	<xacro:property name="joint_spring_stiff" value="-1" />
+	<xacro:property name="joint_spring_ref" value="-1" />
 	<xacro:property name="rotor_velocity_slowdown_sim" value="1" />
 	<xacro:property name="rotor_offset_top" value="0.05" /> <!-- [m] -->
 	<xacro:property name="motor_constant" value="3.71178707e-03" /> <!-- [kg m/s^2] -->
@@ -177,7 +183,13 @@
 	<xacro:property name="origin_base_gondola_right_support_joint">
 		<origin xyz="0.0 -0.1 -0.085" rpy="0.4 0.0 ${pi}"/>
 	</xacro:property>
-	<xacro:property name="origin_gondola_body_blimp_body_joint">
+	<xacro:property name="origin_gondola_joint_link_joint">
+		<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 ${pi/2}"/>
+	</xacro:property>
+	<xacro:property name="origin_gondola_joint_link2_joint">
+		<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 -${pi/2}"/>
+	</xacro:property>
+	<xacro:property name="origin_gondola_joint_blimp_body_joint">
 		<origin xyz="-1.10 0.0 1.05" rpy="0.0 ${pi/2} 0.0"/>
 	</xacro:property>
 	<xacro:property name="origin_blimp_body_front_ballast_joint">
@@ -198,8 +210,11 @@
 	<xacro:property name="origin_stick_right_blade_joint">
 		<origin xyz="0.0 0.025 0.375" rpy="${-pi/2} 0.0 ${pi}"/>
 	</xacro:property>
+	<xacro:property name="origin_top_rud_base_link_joint">
+		<origin xyz="-0.59 0.0 -1.5" rpy="${pi} ${-pi/2} 0.0"/> 
+	</xacro:property>
 	<xacro:property name="origin_blimp_body_top_rud_part1_joint">
-		<origin xyz="-0.83 0.0 -1.5" rpy="${pi} ${-pi/2} 0.0"/> 
+		<origin xyz="0.0 0.0 -0.24" rpy="0.0 0.0 0.0"/> 
 	</xacro:property>
 	<xacro:property name="origin_top_rud_part1_top_rud_joint_link_joint">
 		<origin xyz="-0.28 0.0 0.0" rpy="0.0 0.0 0.0"/>
@@ -207,8 +222,11 @@
 	<xacro:property name="origin_top_rud_joint_link_top_rud_part2_joint">
 		<origin xyz="-0.125 0.0 0.0" rpy="0.0 0.0 0.0"/>
 	</xacro:property>
+	<xacro:property name="origin_bot_rud_base_link_joint">
+		<origin xyz="0.59 0.0 -1.5" rpy="0.0 ${-pi/2} 0.0"/>
+	</xacro:property>
 	<xacro:property name="origin_blimp_body_bot_rud_part1_joint">
-		<origin xyz="0.83 0.0 -1.5" rpy="0.0 ${-pi/2} 0.0"/>
+		<origin xyz="0.0 0.0 -0.24" rpy="0.0 0.0 0.0"/> 
 	</xacro:property>
 	<xacro:property name="origin_bot_rud_part1_bot_rud_joint_link_joint">
 		<origin xyz="-0.28 0.0 0.0" rpy="0.0 0.0 0.0"/>
@@ -219,8 +237,11 @@
 	<xacro:property name="origin_bot_rud_part1_bot_rud_motor_joint">
 		<origin xyz="-0.065 0.01 -0.025" rpy="${-pi/2} 0.0 0.0"/>
 	</xacro:property>
+	<xacro:property name="origin_left_elv_base_link_joint">
+		<origin xyz="0.0 0.59 -1.5" rpy="0.0 ${-pi/2} ${pi/2}"/> 
+	</xacro:property>
 	<xacro:property name="origin_blimp_body_left_elv_part1_joint">
-		<origin xyz="0.0 0.83 -1.5" rpy="0.0 ${-pi/2} ${pi/2}"/> 
+		<origin xyz="0.0 0.0 -0.24" rpy="0.0 0.0 0.0"/> 
 	</xacro:property>
 	<xacro:property name="origin_left_elv_part1_left_elv_joint_link_joint">
 		<origin xyz="-0.28 0.0 0.0" rpy="0.0 0.0 0.0"/>
@@ -228,8 +249,11 @@
 	<xacro:property name="origin_left_elv_joint_link_left_elv_part2_joint">
 		<origin xyz="-0.125 0.0 0.0" rpy="0.0 0.0 0.0"/>
 	</xacro:property>
+	<xacro:property name="origin_right_elv_base_link_joint">
+		<origin xyz="0.0 -0.59 -1.5" rpy="0.0 ${-pi/2} ${-pi/2}"/> 
+	</xacro:property>
 	<xacro:property name="origin_blimp_body_right_elv_part1_joint">
-		<origin xyz="0.0 -0.83 -1.5" rpy="0.0 ${-pi/2} ${-pi/2}"/> 
+		<origin xyz="0.0 0.0 -0.24" rpy="0.0 0.0 0.0"/> 
 	</xacro:property>
 	<xacro:property name="origin_right_elv_part1_right_elv_joint_link_joint">
 		<origin xyz="-0.28 0.0 0.0" rpy="0.0 0.0 0.0"/>
