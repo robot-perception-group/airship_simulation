@@ -10,12 +10,11 @@
 
 	<xacro:if value="$(arg enable_sensors)">
 		<!-- Mount an ADIS16448 IMU. -->
-	  	<xacro:default_imu namespace="${namespace}" parent_link="${namespace}/top_rud_part1_link" />  
-	</xacro:if>
-
-	<xacro:if value="$(arg enable_sensors)">
+		<!--<xacro:default_imu namespace="${namespace}" parent_link="${namespace}/top_rud_part1_link" />-->
 		<!-- Mount a GPS. -->
-		 <xacro:default_gps namespace="${namespace}" parent_link="${namespace}/top_rud_part1_link" /> 
+		<xacro:default_gps namespace="${namespace}" parent_link="${namespace}/top_rud_part1_link" /> 
+		<!-- more odometry -->
+		 <xacro:tail_imu_and_odometry namespace="${namespace}" parent_link="${namespace}/top_rud_part1_link" /> 
 	</xacro:if>
 
 	<xacro:if value="$(arg enable_sensors)">
