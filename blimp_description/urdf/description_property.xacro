@@ -66,8 +66,8 @@
 	<!-- joint parameters -->
 	<xacro:property name="joint_flexibility_effort" value="-1" />
 	<xacro:property name="joint_flexibility_vel" value="-1" />
-	<xacro:property name="joint_flexibility_maxangle" value="${1*pi/180.0}" />
-	<xacro:property name="joint_spring_damp" value="0.1" />
+	<xacro:property name="joint_flexibility_maxangle" value="${2*pi/180.0}" />
+	<xacro:property name="joint_spring_damp" value="1" />
 	<xacro:property name="joint_spring_stiff" value="-1" />
 	<xacro:property name="joint_spring_ref" value="-1" />
 	<xacro:property name="rotor_velocity_slowdown_sim" value="1" />
@@ -186,7 +186,7 @@
 	<xacro:property name="origin_gondola_joint_link_joint">
 		<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 ${pi/2}"/>
 	</xacro:property>
-	<xacro:property name="origin_gondola_joint_link2_joint">
+	<xacro:property name="origin_gondola_joint2_link_joint">
 		<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 -${pi/2}"/>
 	</xacro:property>
 	<xacro:property name="origin_gondola_joint_blimp_body_joint">
@@ -262,5 +262,47 @@
 		<origin xyz="-0.125 0.0 0.0" rpy="0.0 0.0 0.0"/>
 	</xacro:property>
 
+
+	<xacro:property name="springphysics">
+		<axis xyz="1.0 0.0 0.0">
+			<!--<xyz>1 0 0</xyz>-->
+			<dynamics damping="1.0" friction="0.0" />
+			<limit effort="0.1"  velocity="0.1" lower="${-5*pi/180.0}" upper="${5*pi/180.0}" /> 
+		</axis>
+		 <physics>
+		          <ode>
+				 <cfm>10</cfm>
+				 <bounce>0.0</bounce>
+				 <max_force>10</max_force>
+				 <velocity>0.0</velocity>
+				 <fudge_factor>0.0</fudge_factor>
+				 <limit cfm="10" erp="0.2" />
+		          </ode>
+	        </physics>
+		<limit effort="0.1"  velocity="0.1" lower="${-5*pi/180.0}" upper="${5*pi/180.0}" /> 
+		<!--<limit effort="${joint_flexibility_effort}" velocity="${joint_flexibility_vel}" lower="${-joint_flexibility_maxangle}" upper="${joint_flexibility_maxangle}" stiffness="{$joint_spring_stiff}" cfm="${joint_spring_damp}" />-->
+	</xacro:property>
+	<xacro:property name="springphysics2">
+		<!--<axis>
+			<xyz>1 0 0</xyz>
+			<dynamics>
+                            <damping>${joint_spring_damp}</damping>
+		            <spring_stiffness>${joint_spring_stiff}</spring_stiffness>
+		            <spring_reference>${joint_spring_ref}</spring_reference>
+		        </dynamics>
+		</axis>-->
+		 <physics>
+			 <ode>
+				 <cfm>0.2</cfm>
+				 <bounce>0.0</bounce>
+				 <max_force>10</max_force>
+				 <velocity>0.0</velocity>
+				 <fudge_factor>0.0</fudge_factor>
+				 <limit cfm="0.2" erp="0.2" />
+		          </ode>
+	        </physics>
+		<!--<limit effort="${joint_flexibility_effort}" velocity="${joint_flexibility_vel}" lower="${-joint_flexibility_maxangle}" upper="${joint_flexibility_maxangle}" stiffness="{$joint_spring_stiff}" cfm="${joint_spring_damp}" />-->
+		<limit effort="${joint_flexibility_effort}"  velocity="${joint_flexibility_vel}" cfm="${joint_spring_damp}" lower="${-joint_flexibility_maxangle}" upper="${joint_flexibility_maxangle}" /> 
+	</xacro:property>
 
 </robot>
