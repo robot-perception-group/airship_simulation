@@ -24,7 +24,7 @@
 	<xacro:property name="mass_blimp_body_without_gas" value="2.90" />
 	<!--<xacro:property name="mass_gondola_body" value="1.105" />--> <!--battery: 0.51kg + body:0.595kg = 1.105-->
 	<xacro:property name="mass_gondola_body" value="0.845" /> <!--battery: 0.25kg + body:0.595kg = 0.845-->
-	<xacro:property name="mass_gondola_support" value="0.4" /> <!--guessed 0.4kg-->
+	<xacro:property name="mass_gondola_support" value="0.2" /> <!--guessed 0.2kg-->
 	<xacro:property name="mass_stick" value="0.705" />
 	<xacro:property name="mass_wing" value="0.500" /> <!--guessed 0.5kg-->
 	<xacro:property name="mass_blade" value="0.050" />
@@ -32,7 +32,7 @@
 	<xacro:property name="mass_rud_part2" value="0.113" /> 
 	<xacro:property name="mass_bot_rud_part1" value="0.410" /> <!--part1: 0.120kg + wire: 0.290kg = 0.410 -->
 	<xacro:property name="mass_bot_rud_motor" value="0.127" />
-	<xacro:property name="mass_ballast" value="0.2" />
+	<xacro:property name="mass_ballast" value="0.4" />
 
 	<!-- geometry [m] -->
 	<xacro:property name="radius_blimp_body" value="1.00"/>
@@ -172,7 +172,7 @@
 		<origin xyz="0 0 2.0" rpy="0.0 ${-pi/2} ${pi/2}"/>
 	</xacro:property>
 	<xacro:property name="origin_blimp_body_aft_lift_joint">
-		<origin xyz="0 0 0" rpy="0.0 ${-pi/2} ${pi/2}"/>
+		<origin xyz="0 0 -0.3" rpy="0.0 ${-pi/2} ${pi/2}"/>
 	</xacro:property>
 	<xacro:property name="origin_base_gondola_body_joint">
 		<origin xyz="0 0 0.10" rpy="0 0 0"/>
