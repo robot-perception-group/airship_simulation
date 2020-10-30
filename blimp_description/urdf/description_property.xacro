@@ -22,8 +22,8 @@
 	<!-- Modified mass for convenience -->
 	<xacro:property name="mass_blimp_body" value="4.622" />
 	<xacro:property name="mass_blimp_body_without_gas" value="2.90" />
-	<!--<xacro:property name="mass_gondola_body" value="1.105" />--> <!--battery: 0.51kg + body:0.595kg = 1.105-->
-	<xacro:property name="mass_gondola_body" value="0.845" /> <!--battery: 0.25kg + body:0.595kg = 0.845-->
+	<xacro:property name="mass_gondola_body" value="1.105" /> <!--battery: 0.51kg + body:0.595kg = 1.105-->
+	<!--<xacro:property name="mass_gondola_body" value="0.845" />--> <!--battery: 0.25kg + body:0.595kg = 0.845-->
 	<xacro:property name="mass_gondola_support" value="0.2" /> <!--guessed 0.2kg-->
 	<xacro:property name="mass_stick" value="0.705" />
 	<xacro:property name="mass_wing" value="0.500" /> <!--guessed 0.5kg-->
@@ -190,7 +190,7 @@
 		<origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 -${pi/2}"/>
 	</xacro:property>
 	<xacro:property name="origin_gondola_joint_blimp_body_joint">
-		<origin xyz="-1.10 0.0 1.05" rpy="0.0 ${pi/2} 0.0"/>
+		<origin xyz="-1.00 0.0 1.05" rpy="0.0 ${pi/2} 0.0"/>
 	</xacro:property>
 	<xacro:property name="origin_blimp_body_front_ballast_joint">
 		<origin xyz="0.0 0.0 2.5" rpy="0.0 0.0 0.0"/>
