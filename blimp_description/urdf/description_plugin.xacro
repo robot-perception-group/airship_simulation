@@ -106,7 +106,7 @@
 			cw1="0.6"
 			cw2="1.2"
 			cl0="0"
-			cl1="1.5"
+			cl1="1.0"
 			cl2="0"
 			area="${area_body_lift/2}">
 			<xacro:insert_block name="body_lift_liftdrag_upward" />
@@ -123,7 +123,7 @@
 			cw1="0.6"
 			cw2="1.2"
 			cl0="0"
-			cl1="1.5"
+			cl1="1.0"
 			cl2="0"
 			area="${area_body_lift/2}">
 			<xacro:insert_block name="body_lift_liftdrag_upward" />
@@ -208,7 +208,7 @@
 			cw1="0.6"
 			cw2="1.2"
 			cl0="0"
-			cl1="1.2"
+			cl1="2.0"
 			cl2="0"
 			area="${area_rudder}">
 			<xacro:insert_block name="bot_rud_liftdrag_upward" />
@@ -225,7 +225,7 @@
 			cw1="0.6"
 			cw2="1.2"
 			cl0="0"
-			cl1="1.2"
+			cl1="2.0"
 			cl2="0"
 			area="${area_rudder}">
 			<xacro:insert_block name="top_rud_liftdrag_upward" />
@@ -242,7 +242,7 @@
 			cw1="0.6"
 			cw2="1.2"
 			cl0="0"
-			cl1="1.2"
+			cl1="2.0"
 			cl2="0"
 			area="${area_rudder}">
 			<xacro:insert_block name="left_elv_liftdrag_upward" />
@@ -259,7 +259,7 @@
 			cw1="0.6"
 			cw2="1.2"
 			cl0="0"
-			cl1="1.2"
+			cl1="2.0"
 			cl2="0"
 			area="${area_rudder}">
 			<xacro:insert_block name="right_elv_liftdrag_upward" />
