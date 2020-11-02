@@ -36,6 +36,7 @@
 
 #include "common.h"
 #include "WindSpeed.pb.h"
+#include "Float32.pb.h"
 
 namespace gazebo
 {
@@ -166,12 +167,16 @@ namespace gazebo
     protected: bool pubs_and_subs_created_;
 
     protected: std::string wind_speed_sub_topic_;
+    protected: std::string air_speed_pub_topic_;
+    protected: bool publishAirspeed_;
+    protected: gz_std_msgs::Float32 airspeedMsg_;  
 
     /// \brief    Handle for the Gazebo node.
     protected: transport::NodePtr node_handle_;
 
     /// \brief    Subscriber ror receiving wind speed readings.
     protected: gazebo::transport::SubscriberPtr wind_speed_sub_;
+    protected: gazebo::transport::PublisherPtr  air_speed_pub_;
 
     /// \brief Pointer to link currently targeted by mud joint.
     protected: physics::LinkPtr link;

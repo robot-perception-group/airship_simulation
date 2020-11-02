@@ -1,5 +1,6 @@
 #include "finliftdrag_plugin.hpp"
 #include "ConnectRosToGazeboTopic.pb.h"
+#include "ConnectGazeboToRosTopic.pb.h"
 
 using namespace gazebo;
 
@@ -197,6 +198,14 @@ void FinLiftDragPlugin::Load(physics::ModelPtr _model,
                              wind_speed_sub_topic_,
                              mav_msgs::default_topics::WIND_SPEED);
 
+    publishAirspeed_ = false;
+    if (_sdf->HasElement("airspeedPubTopic")) {
+        getSdfParam<std::string>(_sdf, "airspeedPubTopic",
+                             air_speed_pub_topic_,
+                             "indicatedAirspeed");
+        publishAirspeed_ = true;
+    }
+
     if (!this->link)
     {
       gzerr << "Link with name[" << linkName << "] not found. "
@@ -328,8 +337,16 @@ void FinLiftDragPlugin::OnUpdate()
                                   : this->alpha + M_PI;
 
   // compute dynamic pressure
+  double altitude = pose.Pos().Z();
+  double thinningFactor = ( 1.0 + ( 0.02 * altitude / 304.8 ));
+
   double speedInLDPlane = velInLDPlane.Length();
-  double q = 0.5 * this->rho * speedInLDPlane * speedInLDPlane;
+  double rhoAlt = this->rho / thinningFactor; // at high altitude air gets thinner
+  double q = 0.5 * rhoAlt * speedInLDPlane * speedInLDPlane; // which reduces dynamic pressure
+
+  // compute airspeed in forward direction
+  double trueAirspeed = vel.Dot(forwardI);
+  double indicatedAirspeed = trueAirspeed / thinningFactor; // and as such also indicated airspeed
 
   // compute cl at cp, check for stall, correct for sweep
   double cl;
@@ -468,6 +485,11 @@ void FinLiftDragPlugin::OnUpdate()
   // apply forces at cg (with torques for position shift)
   this->link->AddForceAtRelativePosition(force, this->cp);
   this->link->AddTorque(torque);
+  
+  if (publishAirspeed_) {
+      airspeedMsg_.set_data(indicatedAirspeed);
+      air_speed_pub_->Publish(airspeedMsg_);
+  }
 }
 
 /////////////////////////////////////////////////
@@ -510,5 +532,27 @@ void FinLiftDragPlugin::CreatePubsAndSubs() {
       gz_std_msgs::ConnectRosToGazeboTopic::WIND_SPEED);
   gz_connect_ros_to_gazebo_topic_pub->Publish(connect_ros_to_gazebo_topic_msg,
                                               true);
+
+
+  if (publishAirspeed_) {
+      gazebo::transport::PublisherPtr connect_gazebo_to_ros_topic_pub =
+      node_handle_->Advertise<gz_std_msgs::ConnectGazeboToRosTopic>(
+          "~/" + kConnectGazeboToRosSubtopic, 1);
+
+  gz_std_msgs::ConnectGazeboToRosTopic connect_gazebo_to_ros_topic_msg;
+
+
+     air_speed_pub_ = node_handle_->Advertise<gz_std_msgs::Float32>(
+         "~/" + namespace_ + "/" + air_speed_pub_topic_, 1);
+
+      connect_gazebo_to_ros_topic_msg.set_gazebo_topic("~/" + namespace_ + "/" +
+                                                       air_speed_pub_topic_);
+      connect_gazebo_to_ros_topic_msg.set_ros_topic(namespace_ + "/" +
+                                                    air_speed_pub_topic_);
+      connect_gazebo_to_ros_topic_msg.set_msgtype(
+          gz_std_msgs::ConnectGazeboToRosTopic::FLOAT_32);
+      connect_gazebo_to_ros_topic_pub->Publish(connect_gazebo_to_ros_topic_msg,
+                                               true);
+  }
 
 }
