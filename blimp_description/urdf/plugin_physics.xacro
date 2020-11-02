@@ -59,7 +59,7 @@
 	<!-- Macro to add aerodynamics -->
 	<!-- finliftdrag_plugin takes windspeed into consideration whereas LiftDragPlugin only consider vehicle speed -->
 	<xacro:macro name="finliftdrag"
-		params="namespace link_name air_density area body_lift stall_angle cw0 cw1 cw2 cl0 cl1 cl2 *upward *forward *cp">
+		params="namespace link_name air_density area body_lift stall_angle cw0 cw1 cw2 cl0 cl1 cl2 enable_airspeed_topic:=false airspeed_topic:=false *upward *forward *cp">
 		<gazebo>
 			<plugin name="${link_name}_finliftdrag" filename="libfinliftdrag_plugin.so">
 				<robotNamespace>${namespace}</robotNamespace> 
@@ -73,7 +73,10 @@
 				<cl2>${cl2}</cl2>
 				<alpha_stall>${stall_angle * M_PI/180.0}</alpha_stall>
 				<a0>0</a0>
-				<area>${area}</area>
+                                <area>${area}</area>
+                                <xacro:if value="${enable_airspeed_topic}">
+                                    <airspeedPubTopic>${airspeed_topic}</airspeedPubTopic>
+                                </xacro:if>
 				<radial_symmetry>${body_lift}</radial_symmetry>
 				<xacro:insert_block name="upward" />
 				<xacro:insert_block name="forward" />

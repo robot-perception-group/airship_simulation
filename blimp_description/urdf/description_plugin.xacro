@@ -158,7 +158,9 @@
 			cw2="1.2"
 			cl0="0"
 			cl1="0.6"
-			cl2="0"
+                        cl2="0"
+                        enable_airspeed_topic="1"
+                        airspeed_topic="tail/indicatedAirspeed"
 			area="${area_fin}">
 			<xacro:insert_block name="top_fin_liftdrag_upward" />
 			<xacro:insert_block name="top_fin_liftdrag_forward" />
