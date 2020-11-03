@@ -56,24 +56,12 @@
     	</joint>
 	<xacro:spring
 		robot_namespace="${namespace}"
-		link_name="gondola_body_joint">
+                link_name="gondola_body_joint"
+                parent="${namespace}/gondola_body_link"
+                strength_factor="2"
+                >
+		<xacro:insert_block name="origin_gondola_body_joint_link_joint" />
 	</xacro:spring>
-	<joint name="${namespace}/gondola_body_joint_link_joint" type="revolute">
-		<xacro:insert_block name="origin_gondola_joint_link_joint" />
-      		<parent link="${namespace}/gondola_body_link" />
-		<child link="${namespace}/gondola_body_joint_link" />
-		<xacro:insert_block name="springphysics" />
-    	</joint>	
-	<xacro:spring
-		robot_namespace="${namespace}"
-		link_name="gondola_body_joint2">
-	</xacro:spring>
-	<joint name="${namespace}/gondola_body_joint2_link_joint" type="revolute">
-		<xacro:insert_block name="origin_gondola_joint2_link_joint" />
-      		<parent link="${namespace}/gondola_body_joint_link" />
-      		<child link="${namespace}/gondola_body_joint2_link" />
-		<xacro:insert_block name="springphysics" />
-    	</joint>	
 	<xacro:cylinder_model
 		robot_namespace="${namespace}"
 		link_name="blimp_body"
@@ -87,7 +75,7 @@
 	</xacro:cylinder_model>
 	<joint name="${namespace}/gondola_joint_blimb_body_joint" type="revolute">
 		<xacro:insert_block name="origin_gondola_joint_blimp_body_joint" />
-      		<parent link="${namespace}/gondola_body_joint2_link" />
+      		<parent link="${namespace}/gondola_body_joint_link" />
       		<child link="${namespace}/blimp_body_link" />
 		<limit effort="1000" velocity="1000" lower="0" upper="0" /> 
     	</joint>	
@@ -228,14 +216,11 @@
     	</joint>
 	<xacro:spring
 		robot_namespace="${namespace}"
-		link_name="top_rud_base_joint">
-	</xacro:spring>
-	<joint name="${namespace}/top_rud_base_link_joint" type="revolute">
+                link_name="top_rud_base_joint"
+                parent="${namespace}/blimp_body_link"
+                >
 		<xacro:insert_block name="origin_top_rud_base_link_joint" />
-      		<parent link="${namespace}/blimp_body_link" />
-		<child link="${namespace}/top_rud_base_joint_link" />
-		<xacro:insert_block name="springphysics" />
-    	</joint>	
+	</xacro:spring>
 	<xacro:box_model
 		robot_namespace="${namespace}"
 		link_name="top_rud_part1"
@@ -287,14 +272,11 @@
     	</joint>
 	<xacro:spring
 		robot_namespace="${namespace}"
-		link_name="bot_rud_base_joint">
-	</xacro:spring>
-	<joint name="${namespace}/bot_rud_base_link_joint" type="revolute">
+                link_name="bot_rud_base_joint"
+                parent="${namespace}/blimp_body_link"
+                >
 		<xacro:insert_block name="origin_bot_rud_base_link_joint" />
-      		<parent link="${namespace}/blimp_body_link" />
-      		<child link="${namespace}/bot_rud_base_joint_link" />
-		<xacro:insert_block name="springphysics" />
-    	</joint>	
+	</xacro:spring>
 	<xacro:box_model
 		robot_namespace="${namespace}"
 		link_name="bot_rud_part1"
@@ -363,14 +345,11 @@
     	</joint>
 	<xacro:spring
 		robot_namespace="${namespace}"
-		link_name="left_elv_base_joint">
-	</xacro:spring>
-	<joint name="${namespace}/left_elv_base_link_joint" type="revolute">
+                link_name="left_elv_base_joint"
+                parent="${namespace}/blimp_body_link"
+                >
 		<xacro:insert_block name="origin_left_elv_base_link_joint" />
-      		<parent link="${namespace}/blimp_body_link" />
-      		<child link="${namespace}/left_elv_base_joint_link" />
-		<xacro:insert_block name="springphysics" />
-    	</joint>	
+	</xacro:spring>
 	<xacro:box_model
 		robot_namespace="${namespace}"
 		link_name="left_elv_part1"
@@ -422,14 +401,11 @@
     	</joint>
 	<xacro:spring
 		robot_namespace="${namespace}"
-		link_name="right_elv_base_joint">
-	</xacro:spring>
-	<joint name="${namespace}/right_elv_base_link_joint" type="revolute">
+                link_name="right_elv_base_joint"
+                parent="${namespace}/blimp_body_link"
+                >
 		<xacro:insert_block name="origin_right_elv_base_link_joint" />
-      		<parent link="${namespace}/blimp_body_link" />
-      		<child link="${namespace}/right_elv_base_joint_link" />
-		<xacro:insert_block name="springphysics" />
-    	</joint>	
+	</xacro:spring>
 	<xacro:box_model
 		robot_namespace="${namespace}"
 		link_name="right_elv_part1"
