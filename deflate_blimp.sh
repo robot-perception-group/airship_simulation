@@ -3,7 +3,7 @@
 boost=$1
 if [ -z "$boost" ]; then
     echo "Usage: $0 <deflation factor>"
-    echo -e "\t1.0 = Normal Inlated"
+    echo -e "\t1.0 = Fully Inflated"
     echo -e "\t0.0 = Rigid"
     echo -e "\t5.0 = Floppy"
     exit
