@@ -13,12 +13,17 @@
 #include <gazebo/gazebo.hh>
 #include "gazebo/msgs/msgs.hh"
 #include <gazebo/physics/physics.hh>
-#include <sensor_msgs/FluidPressure.h>
+///#include <sensor_msgs/FluidPressure.h>
+#include <mav_msgs/default_topics.h>
 
 #include "FluidPressure.pb.h"
+#include "WindSpeed.pb.h"
 #include "common.h"
 
 namespace gazebo{
+
+  typedef const boost::shared_ptr<const gz_mav_msgs::WindSpeed>
+      GzWindSpeedMsgPtr;
 
   // Constants
   static constexpr double kGasConstantNmPerKmolKelvin = 8314.32;
@@ -38,6 +43,7 @@ namespace gazebo{
 
   // Default values
   static const std::string kDefaultDynamicVolumePubTopic = "dynamic_volume";
+  static const std::string kDefaultHeliumMassSubTopic = "helium_mass";
   static constexpr double kDefaultRefAlt = 341.0; /* m, Tuebingen: h=+341m, WGS84) */
   static constexpr double kDefaultPressureVar = 0.0; /* Pa^2, pressure variance */
 
@@ -61,6 +67,7 @@ namespace gazebo{
       /// calculate force to be applied to model
       void UpdateForcesAndMoments(double volume, double airdensity, physics::LinkPtr link_);
 
+      void HeliumMassCallback(GzWindSpeedMsgPtr& helium_mass_msg);
     private:
       /// flag that is set true when CreatePubsAndSubs() is called to prevent CreatePubsAndSubs from being called on every OnUpdate().
       bool pubs_and_subs_created_;
@@ -73,12 +80,14 @@ namespace gazebo{
 
       /// DynamicVolumePlugin messages publisher
       gazebo::transport::PublisherPtr dynamic_volume_pub_;
+      gazebo::transport::SubscriberPtr helium_mass_sub_;
 
       /// Transport namespace
       std::string namespace_;
 
       /// topic name for publisher messages
       std::string dynamic_volume_topic_;
+      std::string helium_mass_topic_;
 
       /// Frame ID for messages.
       std::string frame_id_;
@@ -97,6 +106,9 @@ namespace gazebo{
 
       /// Reference altitude (meters).
       double ref_alt_;
+
+      /// Remaining Helium Mass (Kg).
+      double heliumMassKG_;
 
       std::mt19937 random_generator_;
 

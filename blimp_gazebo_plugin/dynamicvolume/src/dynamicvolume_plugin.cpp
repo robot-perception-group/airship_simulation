@@ -1,11 +1,13 @@
 #include "dynamicvolume_plugin.hpp"
 #include "ConnectGazeboToRosTopic.pb.h"
+#include "ConnectRosToGazeboTopic.pb.h"
 
 namespace gazebo{
 
   DynamicVolumePlugin::DynamicVolumePlugin()
       : ModelPlugin(),
         node_handle_(0),
+        heliumMassKG_(kHeliumMassKG),
         pubs_and_subs_created_(false){}
 
   DynamicVolumePlugin::~DynamicVolumePlugin(){}
@@ -51,7 +53,11 @@ namespace gazebo{
 
     // Retrieve the rest of the SDF parameters.
     getSdfParam<std::string>(_sdf, "dynamicvolumetopic", dynamic_volume_topic_, kDefaultDynamicVolumePubTopic);
+    getSdfParam<std::string>(_sdf, "heliummasstopic", helium_mass_topic_, kDefaultHeliumMassSubTopic);
     getSdfParam<double>(_sdf, "referenceAltitude", ref_alt_, kDefaultRefAlt);
+
+    if (_sdf->HasElement("heliummass"))
+      this->heliumMassKG_ = _sdf->Get<double>("heliummass");
 
     // Listen to the update event. This event is broadcast every
     // simulation iteration.
@@ -101,7 +107,7 @@ namespace gazebo{
 
 
     // Compute current Hellium density.
-    double heliumdensity_ = kHeliumMassKG / volume_at_altitude_meter3;
+    double heliumdensity_ = heliumMassKG_ / volume_at_altitude_meter3;
 
     // Compute buoyancy airdensity.
     double density_ = airdensity_ - heliumdensity_;
@@ -126,7 +132,38 @@ namespace gazebo{
 
   }
 
+  void DynamicVolumePlugin::HeliumMassCallback(
+    GzWindSpeedMsgPtr& helium_mass_msg) {
+
+      heliumMassKG_ = helium_mass_msg->velocity().x();
+  }
+
   void DynamicVolumePlugin::CreatePubsAndSubs(){
+    // Create temporary "ConnectRosToGazeboTopic" publisher and message
+    gazebo::transport::PublisherPtr gz_connect_ros_to_gazebo_topic_pub =
+      node_handle_->Advertise<gz_std_msgs::ConnectRosToGazeboTopic>(
+          "~/" + kConnectRosToGazeboSubtopic, 1);
+    gz_std_msgs::ConnectRosToGazeboTopic connect_ros_to_gazebo_topic_msg;
+    // ============================================ //
+    // ==== MASS Change MSG SETUP (ROS->GAZEBO) ==== //
+    // ============================================ //
+
+    // Wind speed subscriber (Gazebo).
+    helium_mass_sub_ =
+      node_handle_->Subscribe("~/" + namespace_ + "/" + helium_mass_topic_,
+                              &DynamicVolumePlugin::HeliumMassCallback,
+                              this);
+
+    connect_ros_to_gazebo_topic_msg.set_ros_topic(namespace_ + "/" +
+                                                helium_mass_topic_);
+    connect_ros_to_gazebo_topic_msg.set_gazebo_topic("~/" + namespace_ + "/" +
+                                                   helium_mass_topic_);
+    connect_ros_to_gazebo_topic_msg.set_msgtype(
+        gz_std_msgs::ConnectRosToGazeboTopic::WIND_SPEED);
+    gz_connect_ros_to_gazebo_topic_pub->Publish(connect_ros_to_gazebo_topic_msg,
+                                              true);
+
+
     // ============================================ //
     // ========= FLUID PRESSURE MSG SETUP ========= //
     // ============================================ //

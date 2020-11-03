@@ -276,6 +276,8 @@
 			namespace="${namespace}"
 			linkname="${namespace}/blimp_body_link"
 			dynamicvolumetopic="dynamicvolumetopic"
+                        heliummasstopic="heliummasstopic"
+                        heliummass="1.723"
 			reference_altitude="341.0"/>
 	</xacro:if>
 

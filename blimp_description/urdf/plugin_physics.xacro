@@ -98,12 +98,14 @@
 
 	<!-- Macro to add buoyancy changes with volume and pressure -->
 	<xacro:macro name="dynamic_volume" 
-		     params="namespace linkname dynamicvolumetopic reference_altitude">
+		     params="namespace linkname dynamicvolumetopic heliummasstopic heliummass reference_altitude">
 		<gazebo>
 			<plugin name="dynamicvolume_plugin" filename="libdynamicvolume_plugin.so">
 				<robotNamespace>${namespace}</robotNamespace> 
 				<linkName>${linkname}</linkName> 
 				<dynamicvolumetopic>${dynamicvolumetopic}</dynamicvolumetopic> 
+				<heliummasstopic>${heliummasstopic}</heliummasstopic> 
+				<heliummass>${heliummass}</heliummass> 
 				<reference_altitude>${reference_altitude}</reference_altitude>
 			</plugin>
 		</gazebo>

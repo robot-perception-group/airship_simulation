@@ -4,21 +4,32 @@ pi="3.14159"
 boost=$1
 freeflop=$2
 collapse=$3
+helium=$4
 
-if [ -z "$boost" ]; then
-    echo "Usage: $0 <deflation factor> [freeflop_angle] [collapse_factor]"
+if [ -z "$boost" -o "$boost" = "-h" -o "$boost" = "--help" ]; then
+    echo "Usage: $0 <deflation factor> [freeflop_angle] [collapse_factor] [buoancy]"
     echo -e "\tDeflation Factor:"
-    echo -e "\t\t1.0 = Fully Inflated"
-    echo -e "\t\t0.0 = Rigid"
-    echo -e "\t\t5.0 = Floppy"
+    echo -e "\t\t1.0  = Fully Inflated"
+    echo -e "\t\t0.0  = Rigid"
+    echo -e "\t\t5.0  = Floppy"
     echo -e "\tFreeflop Angle:"
-    echo -e "\t\t0 = Properly rigged (default)"
-    echo -e "\t\t5 = Ropes loose"
-    echo -e "\t\t90 = No ropes"
+    echo -e "\t\t0    = Properly rigged (default)"
+    echo -e "\t\t5    = Ropes loose"
+    echo -e "\t\t90   = No ropes"
     echo -e "\tCollapse Factor:"
-    echo -e "\t\t0.0 = No collapse (default)"
-    echo -e "\t\t0.01 = Saggy"
-    echo -e "\t\t100 = Complete loss of integrity"
+    echo -e "\t\t0.0  = No collapse (default)"
+    echo -e "\t\t0.05 = Saggy"
+    echo -e "\t\t100  = Falling Apart"
+    echo -e "\tBuoancy:"
+    echo -e "\t\t1.0  = Full Helium volume"
+    echo -e "\t\t0.0  = No Helium left"
+    echo
+    echo "Examples:"
+    echo -e "\tIdeal Perfect Blimp:\t$0 0 0 0 1"
+    echo -e "\tIntact Blimp:\t$0 1 0 0 1"
+    echo -e "\tFloppy Blimp:\t$0 2 2 0.01 0.95"
+    echo -e "\tBlimp after 2 days:\t$0 8 10 0.08 0.8"
+    echo -e "\tDisassembly test:\t$0 100 100 100 0"
     exit
 fi
 
@@ -26,6 +37,9 @@ math() {
     echo "scale=3; $@" |bc |sed -e 's/^\./0./'
 }
 
+if [ -z "$helium" ]; then
+    helium=1
+fi
 if [ -z "$freeflop" ]; then
     freeflop=0
 else
@@ -52,8 +66,24 @@ roll_factor="1.0"
 pitch_factor="5.0"
 yaw_factor="10.0"
 
+default_helium_mass="1.723"
+no_helium_mass="10" #approximation
 
+calculated_helium_mass=$( math "${no_helium_mass} + ${helium}*( ${default_helium_mass} - ${no_helium_mass} )" )
 
+sethelium() {
+    mass=$1
+    { rostopic pub -1 /blimp/heliummasstopic rotors_comm/WindSpeed "header:
+  seq: 0
+  stamp:
+    secs: 0
+    nsecs: 0
+  frame_id: ''
+velocity:
+  x: $mass
+  y: 0.0
+  z: 0.0" & }  >/dev/null
+}
 
 setjoint() {
     name=$1
@@ -73,7 +103,6 @@ ode_joint_config:
   fmax: [-1]
   vel: [-1]" & } >/dev/null
 }
-
 
 setgroup() {
     name=$1
@@ -95,3 +124,4 @@ for joint in ${tail_joints[*]}; do
     setgroup ${joint} $tail_factor
 done
 
+sethelium ${calculated_helium_mass}
