@@ -68,7 +68,7 @@
 			<remap from="image" to="/blimp/blimp/xtion/rgb/image_raw"/>
 		</node> -->
 		<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />
-		<node name="blimp_ctrl" pkg="blimp_description" type="gcs_blimp.py" output="screen"/>
+		<node name="blimp_ctrl" pkg="blimp_description" type="gcs_blimp.py" output="screen" args="/$(arg uav_name)" />
 	</group>	
 </launch>
 
