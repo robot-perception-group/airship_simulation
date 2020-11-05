@@ -21,7 +21,7 @@
 		<!-- Mount a VI CAMERA. -->
 		<!-- TODO measure weight, xyz of camera -->
 		<xacro:property name="origin_camera">
-			<origin xyz="0.3  0  0" rpy="0  0.3  0"/>
+			<origin xyz="0.5  0  -0.1" rpy="0  0.7853  0"/>
 		</xacro:property>
 		<!--<xacro:vi_sensor_camera_macro 
 			namespace="${namespace}" 
