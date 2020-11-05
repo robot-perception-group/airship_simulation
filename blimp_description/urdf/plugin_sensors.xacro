@@ -85,7 +85,7 @@
       transform_topic="ground_truth/transform"
       odometry_topic="ground_truth/odometry"
       parent_frame_id="world"
-      child_frame_id="${namespace}/base_link"
+      child_frame_id="base_link"
       mass_odometry_sensor="0.00001"
       measurement_divisor="1"
       measurement_delay="0"
@@ -137,7 +137,7 @@
       accelerometer_bias_correlation_time accelerometer_turn_on_bias_sigma
       *inertia *origin">
     <!-- IMU link -->
-    <link name="${namespace}/imu${imu_suffix}_link">
+    <link name="imu${imu_suffix}_link">
       <inertial>
         <xacro:insert_block name="inertia" />
         <mass value="${mass_imu_sensor}" />  <!-- [kg] -->
@@ -145,10 +145,10 @@
       </inertial>
     </link>
     <!-- IMU joint -->
-    <joint name="${namespace}/imu${imu_suffix}_joint" type="revolute">
+    <joint name="imu${imu_suffix}_joint" type="revolute">
       <xacro:insert_block name="origin" />
       <parent link="${parent_link}" />
-      <child link="${namespace}/imu${imu_suffix}_link" />
+      <child link="imu${imu_suffix}_link" />
       <limit upper="0" lower="0" effort="0" velocity="0" />
     </joint>
     <gazebo>
@@ -156,7 +156,7 @@
       <!-- A good description of the IMU parameters can be found in the kalibr documentation:
            https://github.com/ethz-asl/kalibr/wiki/IMU-Noise-Model-and-Intrinsics -->
         <robotNamespace>${namespace}</robotNamespace> <!-- (string, required): ros namespace in which the messages are published -->
-        <linkName>${namespace}/imu${imu_suffix}_link</linkName> <!-- (string, required): name of the body which holds the IMU sensor -->
+        <linkName>imu${imu_suffix}_link</linkName> <!-- (string, required): name of the body which holds the IMU sensor -->
         <imuTopic>${imu_topic}</imuTopic> <!-- (string): name of the sensor output topic and prefix of service names (defaults to imu) -->
         <gyroscopeNoiseDensity>${gyroscope_noise_density}</gyroscopeNoiseDensity> <!-- Gyroscope noise density (two-sided spectrum) [rad/s/sqrt(Hz)] -->
         <gyroscopeRandomWalk>${gyroscope_random_walk}</gyroscopeRandomWalk> <!-- Gyroscope bias random walk [rad/s/s/sqrt(Hz)] -->
@@ -183,22 +183,22 @@
       noise_uniform_angular_velocity enable_odometry_map odometry_map
       image_scale *inertia *origin">
     <!-- odometry link -->
-    <link name="${namespace}/odometry_sensor${odometry_sensor_suffix}_link">
+    <link name="odometry_sensor${odometry_sensor_suffix}_link">
       <inertial>
         <xacro:insert_block name="inertia" />
         <mass value="${mass_odometry_sensor}" />  <!-- [kg] -->
       </inertial>
     </link>
     <!-- odometry joint -->
-    <joint name="${namespace}/odometry_sensor${odometry_sensor_suffix}_joint" type="revolute">
+    <joint name="odometry_sensor${odometry_sensor_suffix}_joint" type="revolute">
       <parent link="${parent_link}" />
       <xacro:insert_block name="origin" />
-      <child link="${namespace}/odometry_sensor${odometry_sensor_suffix}_link" />
+      <child link="odometry_sensor${odometry_sensor_suffix}_link" />
       <limit upper="0" lower="0" effort="0" velocity="0" />
     </joint>
     <gazebo>
       <plugin filename="librotors_gazebo_odometry_plugin.so" name="odometry_sensor${odometry_sensor_suffix}">
-        <linkName>${namespace}/odometry_sensor${odometry_sensor_suffix}_link</linkName>
+        <linkName>odometry_sensor${odometry_sensor_suffix}_link</linkName>
         <robotNamespace>${namespace}</robotNamespace>
         <poseTopic>${pose_topic}</poseTopic>
         <poseWithCovarianceTopic>${pose_with_covariance_topic}</poseWithCovarianceTopic>
@@ -251,7 +251,7 @@
       mass_gps_sensor horizontal_pos_std_dev vertical_pos_std_dev
       horizontal_vel_std_dev vertical_vel_std_dev *inertia *origin">
     <!-- GPS link -->
-    <link name="${namespace}/gps${gps_suffix}_link">
+    <link name="gps${gps_suffix}_link">
       <inertial>
         <xacro:insert_block name="inertia" />
         <mass value="${mass_gps_sensor}" />  <!-- [kg] -->
@@ -259,13 +259,13 @@
       </inertial>
     </link>
     <!-- GPS joint -->
-    <joint name="${namespace}/gps${gps_suffix}_joint" type="revolute">
+    <joint name="gps${gps_suffix}_joint" type="revolute">
       <xacro:insert_block name="origin" />
       <parent link="${parent_link}" />
-      <child link="${namespace}/gps${gps_suffix}_link" />
+      <child link="gps${gps_suffix}_link" />
       <limit upper="0" lower="0" effort="0" velocity="0" />
     </joint>
-    <gazebo reference="${namespace}/gps${gps_suffix}_link">
+    <gazebo reference="gps${gps_suffix}_link">
       <sensor type="gps" name="${namespace}_gps${gps_suffix}">
         <pose>0 0 0 0 0 0</pose>
         <visualize>0</visualize>
@@ -311,7 +311,7 @@
         </gps>
         <plugin filename="librotors_gazebo_gps_plugin.so" name="rotors_gazebo_gps${gps_suffix}_plugin">
           <robotNamespace>${namespace}</robotNamespace> <!-- (string, required): ros namespace in which the messages are published -->
-          <linkName>${namespace}/gps${gps_suffix}_link</linkName> <!-- (string, required): name of the body which holds the GPS sensor -->
+          <linkName>gps${gps_suffix}_link</linkName> <!-- (string, required): name of the body which holds the GPS sensor -->
           <gpsTopic>${gps_topic}</gpsTopic> <!-- (string): name of the sensor output topic and prefix of service names (defaults to 'gps') -->
           <groundSpeedTopic>${ground_speed_topic}</groundSpeedTopic> <!-- (string): name of the ground speed output topic (defaults to 'ground_speed') -->
           <horPosStdDev>${horizontal_pos_std_dev}</horPosStdDev> <!-- standard deviation for horizontal position noise [m] -->
@@ -353,7 +353,7 @@
     params="namespace parent_link mass camera_suffix frame_rate
       horizontal_fov image_width image_height image_format min_distance
       max_distance noise_mean noise_stddev enable_visual *geometry *origin">
-    <link name="${namespace}/camera_${camera_suffix}_link">
+    <link name="camera_${camera_suffix}_link">
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
@@ -375,18 +375,18 @@
         <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
       </inertial>
     </link>
-    <joint name="${namespace}/camera_${camera_suffix}_joint" type="fixed">
+    <joint name="camera_${camera_suffix}_joint" type="fixed">
       <xacro:insert_block name="origin" />
       <parent link="${parent_link}" />
-      <child link="${namespace}/camera_${camera_suffix}_link" />
+      <child link="camera_${camera_suffix}_link" />
     </joint>
-    <link name="${namespace}/camera_${camera_suffix}_optical_link" />
-    <joint name="${namespace}/camera_${camera_suffix}_optical_joint" type="fixed" >
+    <link name="camera_${camera_suffix}_optical_link" />
+    <joint name="camera_${camera_suffix}_optical_joint" type="fixed" >
       <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
-      <parent link="${namespace}/camera_${camera_suffix}_link" />
-      <child link="${namespace}/camera_${camera_suffix}_optical_link" />
+      <parent link="camera_${camera_suffix}_link" />
+      <child link="camera_${camera_suffix}_optical_link" />
     </joint>
-    <gazebo reference="${namespace}/camera_${camera_suffix}_link">
+    <gazebo reference="camera_${camera_suffix}_link">
       <sensor type="camera" name="${namespace}_camera_${camera_suffix}">
         <update_rate>${frame_rate}</update_rate>
         <camera name="head">

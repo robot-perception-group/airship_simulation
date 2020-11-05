@@ -44,7 +44,7 @@
 		params="namespace joint_name trans_name actuator_name ">
 		<transmission name="${trans_name}">
 			<type>transmission_interface/SimpleTransmission</type>
-			<joint name="${namespace}/${joint_name}">
+			<joint name="${joint_name}">
 				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 			</joint>
 			<actuator name="${actuator_name}">

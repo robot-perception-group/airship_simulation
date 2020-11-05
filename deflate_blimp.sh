@@ -1,13 +1,14 @@
 #!/bin/bash
 
 pi="3.14159"
-boost=$1
-freeflop=$2
-collapse=$3
-helium=$4
+namespace=$1
+boost=$2
+freeflop=$3
+collapse=$4
+helium=$5
 
-if [ -z "$boost" -o "$boost" = "-h" -o "$boost" = "--help" ]; then
-    echo "Usage: $0 <deflation factor> [freeflop_angle] [collapse_factor] [buoancy]"
+if [ -z "$namespace" -o "$namespace" = "-h" -o "$namespace" = "--help" ]; then
+    echo "Usage: $0 <namespace> [deflation factor] [freeflop_angle] [collapse_factor] [buoancy]"
     echo -e "\tDeflation Factor:"
     echo -e "\t\t1.0  = Fully Inflated"
     echo -e "\t\t0.0  = Rigid"
@@ -33,6 +34,10 @@ if [ -z "$boost" -o "$boost" = "-h" -o "$boost" = "--help" ]; then
     exit
 fi
 
+if [ -z "$boost" ]; then
+	boost=1
+fi
+
 math() {
     echo "scale=3; $@" |bc |sed -e 's/^\./0./'
 }
@@ -50,8 +55,6 @@ if [ -z "$collapse" ]; then
     collapse=0
 fi
 
-
-namespace=( "blimp" )
 gondola_joints=( gondola_body_joint_link )
 tail_joints=( top_rud_base_joint_link bot_rud_base_joint_link left_elv_base_joint_link right_elv_base_joint_link )
 
@@ -73,7 +76,7 @@ calculated_helium_mass=$( math "${no_helium_mass} + ${helium}*( ${default_helium
 
 sethelium() {
     mass=$1
-    { rostopic pub -1 /blimp/heliummasstopic rotors_comm/WindSpeed "header:
+    { rostopic pub -1 ${namespace}/heliummasstopic rotors_comm/WindSpeed "header:
   seq: 0
   stamp:
     secs: 0

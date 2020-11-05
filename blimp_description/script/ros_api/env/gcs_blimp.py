@@ -16,6 +16,11 @@ from std_srvs.srv import Empty
 from visualization_msgs.msg import *
 
 from gazeboConnection import GazeboConnection
+import sys
+
+namespace="/blimp"
+if (len(sys.argv)>1):
+    namespace=sys.argv[1]
 
 class BlimpActionSpace():
     def __init__(self):
@@ -90,27 +95,27 @@ class BlimpCtrl:
 
         """ create publishers """
         self.pub_motor_speed = rospy.Publisher(
-            "/blimp/command/motor_speed",
+            namespace+"/command/motor_speed",
             Actuators,
             queue_size=1)
         self.pub_botfin_joint_position_controller = rospy.Publisher(
-            "/blimp/botfin_joint_position_controller/command",
+            namespace+"/botfin_joint_position_controller/command",
             Float64,
             queue_size=1)
         self.pub_topfin_joint_position_controller = rospy.Publisher(
-            "/blimp/topfin_joint_position_controller/command",
+            namespace+"/topfin_joint_position_controller/command",
             Float64,
             queue_size=1)
         self.pub_leftfin_joint_position_controller = rospy.Publisher(
-            "/blimp/leftfin_joint_position_controller/command",
+            namespace+"/leftfin_joint_position_controller/command",
             Float64,
             queue_size=1)
         self.pub_rightfin_joint_position_controller = rospy.Publisher(
-            "/blimp/rightfin_joint_position_controller/command",
+            namespace+"/rightfin_joint_position_controller/command",
             Float64,
             queue_size=1)
         self.pub_stick_joint_position_controller = rospy.Publisher(
-            "/blimp/stick_joint_position_controller/command",
+            namespace+"/stick_joint_position_controller/command",
             Float64,
             queue_size=1)
 

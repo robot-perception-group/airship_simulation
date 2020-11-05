@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 	<!--***************** property description  *****************-->
-	<xacro:property name="namespace" value="blimp" />
+	<xacro:property name="namespace" value="$(arg uav_name)" />
 	<xacro:property name="air_density" value="1.2041"/> <!--[kg/m^3] Temperature 20celsius: 1.2041-->
 
 	<!-- meshes -->

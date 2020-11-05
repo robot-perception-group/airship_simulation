@@ -4,7 +4,7 @@
 	<xacro:if value="$(arg enable_wind)">
 		<xacro:wind_plugin_macro
 			namespace="${namespace}"
-			linkname="${namespace}/blimp_body_link"
+			linkname="blimp_body_link"
 			wind_direction_mean="1 0 0" 
 			wind_speed_mean="1.5"
 			wind_turbulence_level="3"
@@ -98,7 +98,7 @@
 		</xacro:property>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/forward_lift_joint_link"
+			link_name="forward_lift_joint_link"
 			air_density="${air_density}"
 			body_lift="true"
 			stall_angle="45"
@@ -115,7 +115,7 @@
 		</xacro:finliftdrag>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/aft_lift_joint_link"
+			link_name="aft_lift_joint_link"
 			air_density="${air_density}"
 			body_lift="true"
 			stall_angle="45"
@@ -132,7 +132,7 @@
 		</xacro:finliftdrag>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/bot_rud_part1_link"
+			link_name="bot_rud_part1_link"
 			air_density="${air_density}"
 			body_lift="false"
 			stall_angle="45"
@@ -149,7 +149,7 @@
 		</xacro:finliftdrag>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/top_rud_part1_link"
+			link_name="top_rud_part1_link"
 			air_density="${air_density}"
 			body_lift="false"
 			stall_angle="45"
@@ -168,7 +168,7 @@
 		</xacro:finliftdrag>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/left_elv_part1_link"
+			link_name="left_elv_part1_link"
 			air_density="${air_density}"
 			body_lift="false"
 			stall_angle="45"
@@ -185,7 +185,7 @@
 		</xacro:finliftdrag>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/right_elv_part1_link"
+			link_name="right_elv_part1_link"
 			air_density="${air_density}"
 			body_lift="false"
 			stall_angle="45"
@@ -202,7 +202,7 @@
 		</xacro:finliftdrag> 
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/bot_rud_joint_link"
+			link_name="bot_rud_joint_link"
 			air_density="${air_density}"
 			body_lift="false"
 			stall_angle="45"
@@ -219,7 +219,7 @@
 		</xacro:finliftdrag>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/top_rud_joint_link"
+			link_name="top_rud_joint_link"
 			air_density="${air_density}"
 			body_lift="false"
 			stall_angle="45"
@@ -236,7 +236,7 @@
 		</xacro:finliftdrag>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/left_elv_joint_link"
+			link_name="left_elv_joint_link"
 			air_density="${air_density}"
 			body_lift="false"
 			stall_angle="45"
@@ -253,7 +253,7 @@
 		</xacro:finliftdrag>
 		<xacro:finliftdrag
 			namespace="${namespace}"
-			link_name="${namespace}/right_elv_joint_link"
+			link_name="right_elv_joint_link"
 			air_density="${air_density}"
 			body_lift="false"
 			stall_angle="45"
@@ -274,7 +274,7 @@
 	<xacro:if value="$(arg enable_physics)">
 		<xacro:dynamic_volume
 			namespace="${namespace}"
-			linkname="${namespace}/blimp_body_link"
+			linkname="blimp_body_link"
 			dynamicvolumetopic="dynamicvolumetopic"
                         heliummasstopic="heliummasstopic"
                         heliummass="1.723"

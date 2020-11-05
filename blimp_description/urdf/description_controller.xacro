@@ -16,8 +16,8 @@
 	<!--  Instantiate rotors -->
 	<xacro:rotor_macro
 		robot_namespace="${namespace}"
-		joint_name="${namespace}/stick_left_blade_joint"
-		link_name="${namespace}/left_blade_link"
+		joint_name="stick_left_blade_joint"
+		link_name="left_blade_link"
 		direction="ccw"
 		motor_constant="${motor_constant}"
 		moment_constant="${moment_constant}"
@@ -30,8 +30,8 @@
 	</xacro:rotor_macro>
 	<xacro:rotor_macro
 		robot_namespace="${namespace}"
-		joint_name="${namespace}/stick_right_blade_joint"
-		link_name="${namespace}/right_blade_link"
+		joint_name="stick_right_blade_joint"
+		link_name="right_blade_link"
 		direction="cw"
 		motor_constant="${motor_constant}"
 		moment_constant="${moment_constant}"
@@ -44,8 +44,8 @@
 	</xacro:rotor_macro>
 	<xacro:rotor_macro
 		robot_namespace="${namespace}"
-		joint_name="${namespace}/bot_rud_part1_bot_rud_motor_joint"
-		link_name="${namespace}/bot_rud_motor_link"
+		joint_name="bot_rud_part1_bot_rud_motor_joint"
+		link_name="bot_rud_motor_link"
 		direction="cw"
 		motor_constant="${motor_constant}"
 		moment_constant="${moment_constant}"

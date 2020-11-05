@@ -5,16 +5,16 @@
 
 	<!-- ground truth imu and odo -->
 	<xacro:if value="$(arg enable_ground_truth)">
-		 <xacro:ground_truth_imu_and_odometry namespace="${namespace}" parent_link="${namespace}/base_link" /> 
+		 <xacro:ground_truth_imu_and_odometry namespace="${namespace}" parent_link="base_link" /> 
 	</xacro:if>
 
 	<xacro:if value="$(arg enable_sensors)">
 		<!-- Mount an ADIS16448 IMU. -->
-		<!--<xacro:default_imu namespace="${namespace}" parent_link="${namespace}/top_rud_part1_link" />-->
+		<!--<xacro:default_imu namespace="${namespace}" parent_link="top_rud_part1_link" />-->
 		<!-- Mount a GPS. -->
-		<xacro:default_gps namespace="${namespace}" parent_link="${namespace}/top_rud_part1_link" /> 
+		<xacro:default_gps namespace="${namespace}" parent_link="top_rud_part1_link" /> 
 		<!-- more odometry -->
-		 <xacro:tail_imu_and_odometry namespace="${namespace}" parent_link="${namespace}/top_rud_part1_link" /> 
+		 <xacro:tail_imu_and_odometry namespace="${namespace}" parent_link="top_rud_part1_link" /> 
 	</xacro:if>
 
 	<xacro:if value="$(arg enable_sensors)">
@@ -25,7 +25,7 @@
 		</xacro:property>
 		<!--<xacro:vi_sensor_camera_macro 
 			namespace="${namespace}" 
-			parent_link="${namespace}/gondola_body_link" 
+			parent_link="gondola_body_link" 
 			mass="0.425" 
 			camera_suffix="1"
 			frame_rate="60">
@@ -34,8 +34,8 @@
 
 		<xacro:include filename="$(find blimp_description)/urdf/asus_camera.urdf.xacro" />
 		<xacro:asus_camera
-		    name="${namespace}/xtion"
-		    parent="${namespace}/gondola_body_link">
+		    name="xtion"
+		    parent="gondola_body_link">
 		    <origin xyz="0.18 0.0 0.07" rpy="0 0.7853 0"/>
 		</xacro:asus_camera>
 	</xacro:if>
