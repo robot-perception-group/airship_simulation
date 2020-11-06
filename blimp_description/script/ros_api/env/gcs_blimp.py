@@ -89,7 +89,7 @@ class BlimpCtrl:
         rospy.loginfo("[Blimp Ctrl Node] Create Subscribers and Publishers...")
         """ create subscribers """
         rospy.Subscriber(
-            "/GCSACTUATORS",
+            "GCSACTUATORS",
             Float64MultiArray,
             self._controllercmd_callback)
 
