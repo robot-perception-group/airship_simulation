@@ -69,7 +69,7 @@
 			<remap from="GCSVEL" to="ground_speed" />
 			<remap from="GCSAIRSPEED" to="tail/indicatedAirspeed" />
 		</node>
-		<node name="gcs2ros" pkg="roshitl" type="ros2gcs.py" output="screen" />
+		<node name="gcs2ros" pkg="roshitl" type="gcs2ros.py" output="screen" />
 	</group>	
 </launch>
 
