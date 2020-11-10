@@ -62,14 +62,16 @@
 		</node> -->
 		<!--<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />-->
 		<node name="blimp_ctrl" pkg="blimp_description" type="gcs_blimp.py" output="screen" args="/$(arg uav_name)">
-			<remap from="GCSACTUATORS" to="actuators" />
-		</node>
+                    <remap from="GCSACTUATORS" to="actuators" />
+                </node>
+
+                <node name="fake_gps_drift_node" pkg="fake_gps_drift" type="fake_gps_drift_node" output="screen" />
 	
 		<node name="ros2roshitl" pkg="roshitl" type="ros2roshitl.py" output="screen">
-			<remap from="GCSIMU" to="tail/imu" />
-			<remap from="GCSPOS" to="tail/position" />
-			<remap from="GCSVEL" to="ground_speed" />
-			<remap from="GCSAIRSPEED" to="tail/indicatedAirspeed" />
+                    <remap from="GCSIMU" to="tail/imu" />
+                    <remap from="GCSPOS" to="tail/pose_with_drift" />
+                    <remap from="GCSVEL" to="ground_speed" />
+                    <remap from="GCSAIRSPEED" to="tail/indicatedAirspeed" />
 		</node>
 		<!--<node name="gcs2ros" pkg="roshitl" type="gcs2ros.py" output="screen" />-->
 	</group>	
