@@ -231,7 +231,7 @@
     <!-- Default GPS. -->
     <xacro:gps_plugin_macro
       namespace="${namespace}"
-      gps_suffix=""
+      gps_suffix="_${namespace}"
       parent_link="${parent_link}"
       gps_topic="gps"
       ground_speed_topic="ground_speed"
