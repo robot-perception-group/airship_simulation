@@ -26,11 +26,11 @@ if [ -z "$namespace" -o "$namespace" = "-h" -o "$namespace" = "--help" ]; then
     echo -e "\t\t0.0  = No Helium left"
     echo
     echo "Examples:"
-    echo -e "\tIdeal Perfect Blimp:\t$0 0 0 0 1"
-    echo -e "\tIntact Blimp:\t$0 1 0 0 1"
-    echo -e "\tFloppy Blimp:\t$0 2 2 0.01 0.95"
-    echo -e "\tBlimp after 2 days:\t$0 8 10 0.08 0.8"
-    echo -e "\tDisassembly test:\t$0 100 100 100 0"
+    echo -e "\tIdeal Perfect Blimp:\t$0 blimp 0 0 0 1"
+    echo -e "\tIntact Blimp:\t$0 blimp 1 0 0 1"
+    echo -e "\tFloppy Blimp:\t$0 blimp 2 2 0.01 0.95"
+    echo -e "\tBlimp after 2 days:\t$0 blimp 8 10 0.08 0.8"
+    echo -e "\tDisassembly test:\t$0 blimp 100 100 100 0"
     exit
 fi
 
