@@ -8,7 +8,8 @@ from math import pi, sin, cos, asin, acos, atan, sqrt
 import tf
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
 
-from std_msgs.msg import Float64, Float64MultiArray
+from std_msgs.msg import Float64
+from librepilot.msg import LibrepilotActuators
 from sensor_msgs.msg import JointState, Imu
 from mav_msgs.msg import Actuators
 from geometry_msgs.msg import Twist, TwistStamped, Pose, Point, PointStamped
@@ -90,7 +91,7 @@ class BlimpCtrl:
         """ create subscribers """
         rospy.Subscriber(
             "GCSACTUATORS",
-            Float64MultiArray,
+            LibrepilotActuators,
             self._controllercmd_callback)
 
         """ create publishers """
@@ -127,14 +128,14 @@ class BlimpCtrl:
 
     def _controllercmd_callback(self, msg):
 
-        self.motor3_speed = self.MOTOR3_LIMIT * -self.pwm_channel(msg.data[0])
-        self.elv1_angle = self.FIN_LIMIT * -self.pwm_channel(msg.data[1])
-        self.elv2_angle = self.FIN_LIMIT * -self.pwm_channel(msg.data[2])
-        self.rud1_angle = self.FIN_LIMIT * -self.pwm_channel(msg.data[3])
-        self.rud2_angle = self.FIN_LIMIT * -self.pwm_channel(msg.data[4])
-        self.stick_angle = self.STICK_LIMIT * -self.pwm_channel(msg.data[5])
-        self.motor1_speed = self.MOTOR_LIMIT * self.pwm_channel(msg.data[6])
-        self.motor2_speed = self.MOTOR_LIMIT * self.pwm_channel(msg.data[7])
+        self.motor3_speed = self.MOTOR3_LIMIT * -self.pwm_channel(msg.data.data[0])
+        self.elv1_angle = self.FIN_LIMIT * -self.pwm_channel(msg.data.data[1])
+        self.elv2_angle = self.FIN_LIMIT * -self.pwm_channel(msg.data.data[2])
+        self.rud1_angle = self.FIN_LIMIT * -self.pwm_channel(msg.data.data[3])
+        self.rud2_angle = self.FIN_LIMIT * -self.pwm_channel(msg.data.data[4])
+        self.stick_angle = self.STICK_LIMIT * -self.pwm_channel(msg.data.data[5])
+        self.motor1_speed = self.MOTOR_LIMIT * self.pwm_channel(msg.data.data[6])
+        self.motor2_speed = self.MOTOR_LIMIT * self.pwm_channel(msg.data.data[7])
         self._update_action()
 
 
