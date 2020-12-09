@@ -134,8 +134,8 @@ class BlimpCtrl:
         self.rud1_angle = self.FIN_LIMIT * -self.pwm_channel(msg.data.data[3])
         self.rud2_angle = self.FIN_LIMIT * -self.pwm_channel(msg.data.data[4])
         self.stick_angle = self.STICK_LIMIT * -self.pwm_channel(msg.data.data[5])
-        self.motor1_speed = self.MOTOR_LIMIT * self.pwm_channel(msg.data.data[6])
-        self.motor2_speed = self.MOTOR_LIMIT * self.pwm_channel(msg.data.data[7])
+        self.motor1_speed = self.MOTOR_LIMIT * self.pwm_channel(msg.data.data[8])
+        self.motor2_speed = self.MOTOR_LIMIT * self.pwm_channel(msg.data.data[6])
         self._update_action()
 
 
