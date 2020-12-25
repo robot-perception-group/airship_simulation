@@ -27,7 +27,6 @@ Build packages with **catkin build**
 * [ROS] (http://wiki.ros.org/melodic) 
 * [mav_msgs] (http://wiki.ros.org/mav_msgs)
 * [Gazebo] (http://gazebosim.org/) -- tested with Gazebo 9.0
-* [rotors_simulator] (https://github.com/ethz-asl/rotors_simulator)
 
 
 Installation Instructions - Ubuntu 18.04 with ROS Melodic and Gazebo 9
@@ -56,7 +55,7 @@ $ catkin_init_workspace  # initialize your catkin workspace
 $ cd ~/catkin_ws/
 $ catkin init
 $ cd ~/catkin_ws/src
-$ git clone ----recurse-submodules https://github.com/robot-perception-group/airship_simulation.git
+$ git clone --recurse-submodules https://github.com/robot-perception-group/airship_simulation.git
 ```
 
 3. Build your workspace with `python_catkin_tools` 
@@ -64,7 +63,7 @@ $ git clone ----recurse-submodules https://github.com/robot-perception-group/air
 ```console
 $ cd ~/catkin_ws
 $ rosdep install --from-paths src -i
-$ catkin build
+$ catkin_make
 $ source devel/setup.bash
 ```
 
