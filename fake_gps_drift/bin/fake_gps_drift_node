@@ -1,0 +1,147 @@
+#!/usr/bin/python
+
+import random
+import math
+import rospy
+import message_filters
+import os
+#import cv2
+import tf
+import sys
+#from cv_bridge import CvBridge, CvBridgeError
+#from sensor_msgs.msg import Image, CameraInfo
+from geometry_msgs.msg import PoseWithCovarianceStamped, Pose, PoseStamped, PointStamped
+from uav_msgs.msg import uav_pose
+from dynamic_reconfigure.server import Server
+from fake_gps_drift.cfg import FakeOffsetParamsConfig
+
+gazeboposetopic="tail/pose_with_covariance"
+driftposetopic="tail/pose_with_drift"
+fakeoffsettopic="fakegpsoffset"
+
+rospy.init_node("fake_fps_drift_node", log_level=rospy.INFO)
+#bridge=CvBridge()
+
+
+acc_sigma = [ 0.005, 0.005, 0.01 ]   #gps drift acceleration around 0.01 horizontal m/s^2
+acc_velocity_timer = 240 #legs in the gps drift will take on average 2 minutes
+acc_offset_scale = [ 0.5, 0.5, 1 ] #gps drift magnitude around 3m
+
+overrideoffset=[0.0,0.0,0.0]
+fakeoffset=[random.gauss(0.0,acc_offset_scale[0]), random.gauss(0.0,acc_offset_scale[1]), random.gauss(0.0,acc_offset_scale[2]) ]
+fakedest=[random.gauss(0.0,acc_offset_scale[0]), random.gauss(0.0,acc_offset_scale[1]), random.gauss(0.0,acc_offset_scale[2]) ]
+fakevel=[ (fakedest[0]-fakeoffset[0])/acc_velocity_timer, (fakedest[1]-fakeoffset[1])/acc_velocity_timer, (fakedest[2]-fakeoffset[2])/acc_velocity_timer ]
+lasttime=rospy.Time.now()
+legtime=0
+
+
+def posecallback(pose):
+  global fakeoffset
+  global overrideoffset
+  global fakevel
+  global acc_sigma
+  global acc_offset_scale
+  global acc_velocity_timer
+  global lasttime
+  global legtime
+
+  driftpoint = PointStamped()
+  driftpoint.header=pose.header
+  driftpoint.point=pose.pose.pose.position
+
+  # fake GPS random walk - calculated here
+  newtime = driftpoint.header.stamp
+  duration = newtime-lasttime
+  lasttime = newtime
+  if (duration.to_sec()<1.0):
+    legtime+=duration.to_sec()
+    newleg=random.gauss(legtime,acc_velocity_timer/5.0)
+    oldfakevel=fakevel
+    if (newleg>1.3*acc_velocity_timer):
+      fakedest=[random.gauss(0.0,acc_offset_scale[0]), random.gauss(0.0,acc_offset_scale[1]), random.gauss(0.0,acc_offset_scale[2]) ]
+      fakevel=[ (fakedest[0]-fakeoffset[0])/acc_velocity_timer, (fakedest[1]-fakeoffset[1])/acc_velocity_timer, (fakedest[2]-fakeoffset[2])/acc_velocity_timer ]
+      print "new destination"
+      print(fakedest)
+      legtime=0
+    fakevel[0]+= random.gauss(0.0,acc_sigma[0])*duration.to_sec()
+    fakevel[1]+= random.gauss(0.0,acc_sigma[1])*duration.to_sec()
+    fakevel[2]+= random.gauss(0.0,acc_sigma[2])*duration.to_sec()
+
+    fakeoffset[0] += duration.to_sec() * 0.5*(fakevel[0]+oldfakevel[0])
+    fakeoffset[1] += duration.to_sec() * 0.5*(fakevel[1]+oldfakevel[1])
+    fakeoffset[2] += duration.to_sec() * 0.5*(fakevel[2]+oldfakevel[2])
+    #print(fakevel)
+
+  if (overrideoffset[0]!=0.0 or overrideoffset[1]!=0.0 or overrideoffset[2]!=0.0):
+    fakeoffset[0]=overrideoffset[0]
+    fakeoffset[1]=overrideoffset[1]
+    fakeoffset[2]=overrideoffset[2]
+
+  offsetpose = PointStamped()
+  offsetpose.header=driftpoint.header
+  offsetpose.point.x=-fakeoffset[0]
+  offsetpose.point.y=-fakeoffset[1]
+  offsetpose.point.z=-fakeoffset[2]
+  fakeoffset_pub.publish(offsetpose)
+
+  driftpoint.point.x+=fakeoffset[0]
+  driftpoint.point.y+=fakeoffset[1]
+  driftpoint.point.z+=fakeoffset[2]
+ 
+  pose_pub.publish(driftpoint)
+
+rospy.loginfo("startup")
+pose_sub = rospy.Subscriber(gazeboposetopic, PoseWithCovarianceStamped, posecallback)
+
+fakeoffset_pub = rospy.Publisher(fakeoffsettopic,PointStamped, queue_size=3)
+pose_pub = rospy.Publisher(driftposetopic,PointStamped, queue_size=3)
+rospy.loginfo("registered subscribers and publishers")
+
+def fakeOffsetConfigCallback(config, level):
+   #rospy.loginfo("""Reconfigure Request: {int_param}, {double_param},  {str_param}, {bool_param}, {size}""".format(**config))
+   #rospy.loginfo("""Reconfigure Request: """.config))
+   global overrideoffset
+   overrideoffset[0]=config.offsetX
+   overrideoffset[1]=config.offsetY
+   overrideoffset[2]=config.offsetZ
+   return config
+
+
+
+srv = Server(FakeOffsetParamsConfig, fakeOffsetConfigCallback)
+rospy.loginfo("registered dynconf callback")
+
+
+rospy.loginfo("fake_gps_drift_node initialized")
+rospy.spin()
+
+
+
+#example covariance  10 dim
+#covariance: [0.0548495315015316, -0.00019765578326769173, -2.453753950248938e-06, 0.01055986899882555, -0.00015082921891007572, 3.935791426101787e-07, -1.7445318007958122e-06, 2.239604100395809e-06, -3.7793135561514646e-05, -4.547034222923685e-06,
+#            -0.00019765578326769173, 0.06000068038702011, -1.176044770545559e-05, -0.0001459985360270366, 0.014703324995934963, -2.938442412414588e-05, 2.0373488951008767e-05, 0.00011515219375723973, 3.280641612946056e-05, 0.00020261383906472474,
+#            -2.453753950248938e-06, -1.176044770545559e-05, 0.007336737122386694, 3.354846285219537e-06, -3.420135544729419e-05, 0.0013625394785776734, -4.782939413416898e-07, -8.980716756923357e-07, -3.1115430942918465e-07, -1.5752339095342904e-06,
+#             0.01055986899882555, -0.0001459985360270366, 3.354846285219537e-06, 0.006049596704542637, -0.00015048007480800152, 4.076984623679891e-06, -3.3218238968402147e-06, 9.362712262372952e-06, -9.502530156169087e-05, -1.1175266081409063e-06,
+#            -0.00015082921891007572, 0.014703324995934963, -3.420135544729419e-05, -0.00015048007480800152, 0.010441726073622704, -4.555220220936462e-05, 2.0104333088966087e-05, 0.00019250513287261128, 4.659988917410374e-05, 0.00023808427795302123,
+#             3.935791426101787e-07, -2.938442412414588e-05, 0.0013625394785776734, 4.076984623679891e-06, -4.555220220936462e-05, 0.000518435554113239, -3.3537574495312583e-07, -1.2056336800014833e-06, -4.451112829428894e-07, -2.1442763227241812e-06,
+#            -1.7445318007958122e-06, 2.0373488951008767e-05, -4.782939413416898e-07, -3.3218238968402147e-06, 2.0104333088966087e-05, -3.3537574495312583e-07, 3.1607521577825537e-07, 2.7089194531981775e-07, 3.7475456338142976e-07, 2.373247752984753e-06,
+#             2.239604100395809e-06, 0.00011515219375723973, -8.980716756923357e-07, 9.362712262372952e-06, 0.00019250513287261128, -1.2056336800014833e-06, 2.7089194531981775e-07, 8.233791959355585e-06, 8.831596005620668e-07, 6.108211437094724e-06,
+#            -3.7793135561514646e-05, 3.280641612946056e-05, -3.1115430942918465e-07, -9.502530156169087e-05, 4.659988917410374e-05, -4.451112829428894e-07, 3.7475456338142976e-07, 8.831596005620668e-07, 5.964029696770012e-06, 2.0508834950305754e-06,
+#            -4.547034222923685e-06, 0.00020261383906472474, -1.5752339095342904e-06, -1.1175266081409063e-06, 0.00023808427795302123, -2.1442763227241812e-06, 2.373247752984753e-06, 6.108211437094724e-06, 2.0508834950305754e-06, 2.01613838726189e-05]
+
+#6 dim
+#covariance: [0.05502060055732727, -0.00023331934062298387, 3.418044434511103e-05, -7.638993476264346e-05, -8.981303609019582e-06, 2.4223810916813846e-06,
+#            -0.00023331934062298387, 0.06030849367380142, 0.00015953528054524213, 3.2749646707626396e-05, 0.00042819050610568113, -3.974347592870997e-05,
+#             3.418044434511103e-05, 0.00015953528054524213, 0.007614364847540855, 5.689718647428982e-07, 6.326762880816726e-06, -3.116399526410925e-06,
+#            -7.638993476264346e-05, 3.2749646707626396e-05, 5.689718647428982e-07, 2.3344677764863064e-05, 6.071059245985057e-06, -4.7259858776111087e-07,
+#            -8.981303609019582e-06, 0.00042819050610568113, 6.326762880816726e-06, 6.071059245985056e-06, 8.477180739613367e-05, -4.76260137173283e-06,
+#             2.4223810916813846e-06, -3.974347592870997e-05, -3.116399526410925e-06, -4.7259858776111087e-07, -4.762601371732828e-06, 7.402096828097071e-07]
+
+# simulate as 0.06 0.00 0.00 0 0 0 0 0
+#             0.00 0.06 0.00 0 0 0 0 0
+#             0.00 0.00 0.01 0 0 0 0 0
+# ...
+#             0 0 0 1e-6 0 0 0
+#             0 0 0 0 1e-5 0 0
+#             0 0 0 0 0 1e-5 0
+#             0 0 0 0 0 0 1e-5
