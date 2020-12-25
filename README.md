@@ -19,9 +19,9 @@ ROS packages:
 * /blimp_gazebo_plugin -- some gazebo plugins
 
 # Compiling
-Link or copy all flight and optional packages required into the *src* folder of your catkin workspace.
+Link or copy the packaged into the *src* folder of your catkin workspace.
 
-Build packages with **catkin build**
+Build packages with **catkin_make**
 
 # Requirements
 * [ROS] (http://wiki.ros.org/melodic) 
