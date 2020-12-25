@@ -52,9 +52,6 @@ $ sudo apt install python-rosinstall python-rosinstall-generator build-essential
 $ mkdir -p ~/catkin_ws/src
 $ cd ~/catkin_ws/src
 $ catkin_init_workspace  # initialize your catkin workspace
-$ cd ~/catkin_ws/
-$ catkin init
-$ cd ~/catkin_ws/src
 $ git clone --recurse-submodules https://github.com/robot-perception-group/airship_simulation.git
 ```
 
