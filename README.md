@@ -54,6 +54,8 @@ $ cd ~/catkin_ws/src
 $ catkin_init_workspace  # initialize your catkin workspace
 $ git clone --recurse-submodules https://github.com/robot-perception-group/airship_simulation.git
 ```
+Note: Some sub-submodules inside the rotors_simulator submodule might fail to fetch. This error can be ignored, they are not needed.
+
 
 3. Build your workspace with `python_catkin_tools` 
 
@@ -91,6 +93,10 @@ $ make -j 10 fw_simposix
 $ # build HITL flightcontroller firmware
 $ make -j 10 fw_revolution
 ```
+
+Note:If make fw_revolution fails with "Command not Found" it's likely that the ARM crosscompiler, which is a 32bit binary, cannot be executed.
+In this case follow the instructions here: https://askubuntu.com/questions/454253/how-to-run-32-bit-app-in-ubuntu-64-bit
+If you are not planning to use a hardware flightcontroller you can skip this step.
 
 Basic Usage
 ----------------------------------------------------------
