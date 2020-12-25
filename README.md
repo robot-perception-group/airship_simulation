@@ -94,10 +94,12 @@ $ # build SITL flightcontroller executable
 $ make -j 10 fw_simposix
 $ # build HITL flightcontroller firmware
 $ make -j 10 fw_revolution
+```
 
 Basic Usage
 ----------------------------------------------------------
 After installing, you can test with the following commands in a terminal
+
 ```console
 $ roslaunch blimp_description blimp_gcs.launch
 $ # or
