@@ -23,8 +23,8 @@
       <ode>
         <solver>
           <type>quick</type>
-          <iters>1000</iters>
-          <sor>1.3</sor>
+          <iters>100</iters>
+          <sor>1.9</sor>
         </solver>
         <constraints>
           <cfm>0</cfm>
@@ -33,9 +33,9 @@
           <contact_surface_layer>0.001</contact_surface_layer>
         </constraints>
       </ode>
-      <max_step_size>0.005</max_step_size>
+      <max_step_size>0.00667</max_step_size>
       <!--<real_time_factor>1</real_time_factor>-->
-      <real_time_update_rate>200</real_time_update_rate>
+      <real_time_update_rate>150</real_time_update_rate>
       <gravity>0 0 -9.8</gravity>
     </physics>
   </world>
