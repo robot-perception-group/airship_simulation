@@ -121,11 +121,12 @@ $ ./build/firmware/fw_simposix/fw_simposix.elf 0
 note that the SITL firmware will load and store settings from files
 in the current working directory, in this case
 ~/catkin\_ws/src/airship\_simulation/LibrePilot
-sample configuration to fly a blimp has been provided in
-~/catkin\_ws/src/airship\_simulation/LibrePilot/blimp\_sitl\_settings.zip
+These files have the format ABCDEF123.o00 where ABCDEF123 is the CRC32
+of the settings object in question.
 
-unpack this file in ~/catkin\_ws/src/airship\_simulation/LibrePilot/ before
-running the SITL program
+The default/factory configuration is not suitable for airships, but
+a configuration has been provided in experiments/SITL.uav
+This can be loaded through the GCS after connecting to the flight controller, see below.
 
 GCS:
 ```console
@@ -149,16 +150,45 @@ Required Configuration of GCS:
 5. Familiarize yourself with the GCS. It is highly configurable. You can split the screen to add more gadgets, such as the map, UAVObject Browser or scopes and dials. You can also add more tabs.
 6. Save the GCS settings with File -> Save GCS Default Settings to make your changes permanent. You can revert all changes by deleting the folder ~/.config/LibrePilot
    
+Load a valid airship configuration into the flight controller:
+1. Start the SITL flight controller with
+   $ ./build/firmware/fw_simposix/fw_simposix.elf 0  
+2. Select Connections (bottom right) -> UDP: localhost
+3. Click Connect
+4. Select File->Import UAV Settings
+5. Select experiments/SITL.uav in the root folder of this repository
+6. Make sure all objects are selected, then click "Save to Board Flash"
+7. Click Disconnect (bottom right)
+8. Stop the flight controller with CTRL+C - Some settings will only be applied after the next restart!
 
-Connecting to the flight controller:
-1. Select Connections (bottom right) -> UDP: localhost
-2. Click Connect
-3. Start Gazebo if you haven't yet with
+Starting a simulation:
+1. Start the SITL flight controller with
+   $ ./build/firmware/fw_simposix/fw_simposix.elf 0  
+2. Select Connections (bottom right) -> UDP: localhost
+3. Click Connect
+4. Start Gazebo if you haven't yet with
    roslaunch blimp\_description blimp\_gcs\_wind.launch
-4. Click "Start" in the HITL gadget
+5. Click "Start" in the HITL gadget
    the attitude from simulator should now show up in the artificial horizon
    both  Autopilot ON and ROS connected should be green
-5. In the "Controller" widget
+6. In the "Controller" widget
    click "GCS control", as well as "Arm switch (Accessory 0)"
-6. You should now be able to control the blimp. Engage autonomous modes with the "Flight Mode" switch
+7. You should now be able to control the blimp. Engage autonomous modes with the "Flight Mode" switch:
+   1. Mode 1 is Manual control through the GCS control gadget. Thruttle and rudder is on the left, thrust vector and pitch on the right.
+   2. Mode 2 is Stabilized control, with setpoints given through GCS control gadget.
+   3. Mode 3 is PositionHold - the guidance algorithm will loiter around the current position and altitude as close as it can.
+   4. Mode 4 engages the PathPlanner and will follow a previously uploaded waypoint sequence.
+
+Loading Waypoints:
+1. Make a Telemetry connection to a flight controller in the GCS
+2. In the "Flight data" tab , right click on the map, select "waypoint editor"
+3. In the dialog, click the "Read from file" icon. (Cardboard box with an arrow)
+4. Select experiments/waypoints.xml in the root folder of this repository
+5. Click the Green up arrow to send the path plan to the flight controller
+
+Note: The path plan is not kept between reboots/restarts of the flight controller and needs to be re-uploaded for every new flight.
+The pathplan can be executed in the "PathPlanner" flight mode - position 4 on the flight mode switch in GCS Control gadget
+
+
+
 
