@@ -178,6 +178,9 @@ Starting a simulation:
    2. Mode 2 is Stabilized control, with setpoints given through GCS control gadget.
    3. Mode 3 is PositionHold - the guidance algorithm will loiter around the current position and altitude as close as it can.
    4. Mode 4 engages the PathPlanner and will follow a previously uploaded waypoint sequence.
+   
+Example Video:
+https://www.youtube.com/watch?v=LNybtK3HNp8
 
 Loading Waypoints:
 1. Make a Telemetry connection to a flight controller in the GCS
