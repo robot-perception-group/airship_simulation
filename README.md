@@ -1,5 +1,5 @@
 ![Blimp Description file launch in Gazebo](image/blimp.png)
-Blimp Robot Description File 
+Deformable Airship Simulation in ROS/Gazebo
 =================================================================
 
 # Copyright and License
@@ -193,6 +193,64 @@ Loading Waypoints:
 Note: The path plan is not kept between reboots/restarts of the flight controller and needs to be re-uploaded for every new flight.
 The pathplan can be executed in the "PathPlanner" flight mode - position 4 on the flight mode switch in GCS Control gadget
 
+# Reproduction of results:
+--------------------------
 
+* Experiment 3
+--------------
 
+  1. Load simulation with:
+```console
+$ roslaunch blimp_description blimp_gcs.launch
+```
+  2. Engage position hold
+     * Start GCS and SITL Flight Controller, Connect to Flight Controller
+     * Engage HITL Gadget in GCS
+     * Put Flight Mode Switch to "3" (Position Hold)
+  3. Start Flight Controller ROS integration to expose additional data topics
+```console
+$ rosrun librepilot librepilot_node /blimp UDP 127.0.0.1 9002
+```
+  4. Record data with "rosbag record" if desired.
 
+* Experiment 4
+--------------
+
+  1. Load simulation with:
+```console
+$ roslaunch blimp_description blimp_gcs.launch
+```
+  2. Engage position hold
+     * Start GCS and SITL Flight Controller, Connect to Flight Controller
+     * Start waypoint editor in maps gadget and load waypoints.xml file from experiments subfolder
+     * Upload waypoints to Flight Controller
+     * Engage HITL Gadget in GCS
+     * Put Flight Mode Switch to "4" (Path Plan)
+  3. Start Flight Controller ROS integration to expose additional data topics
+```console
+$ rosrun librepilot librepilot_node /blimp UDP 127.0.0.1 9002
+```
+  4. Record data with "rosbag record" if desired.
+
+* Experiment 5
+--------------
+
+  1. Load simulation with:
+```console
+$ roslaunch blimp_description blimp_gcs_wind.launch
+```
+  2. Proceed as with Experiment 3 and 4
+  
+* Experiment 6
+--------------
+
+  1. Load simulation with:
+```console
+$ roslaunch blimp_description blimp_gcs.launch
+```
+  2. Proceed as with Experiment 3 or 4
+  3. During experiment, execute:
+```console
+$ ./deflate_blimp.sh 8 0 0.2 .95
+```
+  
