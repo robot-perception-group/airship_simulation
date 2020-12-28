@@ -180,6 +180,7 @@ Starting a simulation:
    4. Mode 4 engages the PathPlanner and will follow a previously uploaded waypoint sequence.
    
 Example Video:
+
 [![Example Video](https://img.youtube.com/vi/LNybtK3HNp8/0.jpg)](http://www.youtube.com/watch?v=LNybtK3HNp8)
 
 Loading Waypoints:
