@@ -193,10 +193,11 @@ Loading Waypoints:
 Note: The path plan is not kept between reboots/restarts of the flight controller and needs to be re-uploaded for every new flight.
 The pathplan can be executed in the "PathPlanner" flight mode - position 4 on the flight mode switch in GCS Control gadget
 
-# Reproduction of results:
+## Reproduction of results:
 --------------------------
 
-* Experiment 3
+--------------
+# Experiment 3
 --------------
 
   1. Load simulation with:
@@ -213,7 +214,8 @@ $ rosrun librepilot librepilot_node /blimp UDP 127.0.0.1 9002
 ```
   4. Record data with "rosbag record" if desired.
 
-* Experiment 4
+--------------
+# Experiment 4
 --------------
 
   1. Load simulation with:
@@ -232,7 +234,8 @@ $ rosrun librepilot librepilot_node /blimp UDP 127.0.0.1 9002
 ```
   4. Record data with "rosbag record" if desired.
 
-* Experiment 5
+--------------
+# Experiment 5
 --------------
 
   1. Load simulation with:
@@ -240,8 +243,9 @@ $ rosrun librepilot librepilot_node /blimp UDP 127.0.0.1 9002
 $ roslaunch blimp_description blimp_gcs_wind.launch
 ```
   2. Proceed as with Experiment 3 and 4
-  
-* Experiment 6
+ 
+--------------
+# Experiment 6
 --------------
 
   1. Load simulation with:
@@ -254,3 +258,4 @@ $ roslaunch blimp_description blimp_gcs.launch
 $ ./deflate_blimp.sh 8 0 0.2 .95
 ```
   
+--------------
