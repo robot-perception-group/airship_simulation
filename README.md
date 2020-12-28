@@ -197,6 +197,21 @@ The pathplan can be executed in the "PathPlanner" flight mode - position 4 on th
 --------------------------
 
 --------------
+# Experiment 2
+--------------
+
+  1. Load simulation with:
+```console
+$ roslaunch blimp_description blimp_gcs_wind.launch
+```
+  2. Fly the blimp manually
+     * Start GCS and SITL Flight Controller, Connect to Flight Controller
+     * Engage HITL Gadget in GCS
+     * Leave Flight Mode Switch in "1" (Manual Flight) or "2" (Stabilized Flight)
+  3. If desired, change URDF condiguration
+     * Edit blimp_desciption/urdf/\*.xacro , then re-run simulation with modified/different airship model
+
+--------------
 # Experiment 3
 --------------
 
