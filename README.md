@@ -197,7 +197,7 @@ The pathplan can be executed in the "PathPlanner" flight mode - position 4 on th
 --------------------------
 
 --------------
-# Experiment 2
+# Experiment 1
 --------------
 
   1. Load simulation with:
@@ -212,7 +212,7 @@ $ roslaunch blimp_description blimp_gcs_wind.launch
      * Edit blimp_desciption/urdf/\*.xacro , then re-run simulation with modified/different airship model
 
 --------------
-# Experiment 3
+# Experiment 2
 --------------
 
   1. Load simulation with:
@@ -230,7 +230,7 @@ $ rosrun librepilot librepilot_node /blimp UDP 127.0.0.1 9002
   4. Record data with "rosbag record" if desired.
 
 --------------
-# Experiment 4
+# Experiment 3
 --------------
 
   1. Load simulation with:
@@ -250,24 +250,24 @@ $ rosrun librepilot librepilot_node /blimp UDP 127.0.0.1 9002
   4. Record data with "rosbag record" if desired.
 
 --------------
-# Experiment 5
+# Experiment 4
 --------------
 
   1. Load simulation with:
 ```console
 $ roslaunch blimp_description blimp_gcs_wind.launch
 ```
-  2. Proceed as with Experiment 3 and 4
+  2. Proceed as with Experiment 2 and 3
  
 --------------
-# Experiment 6
+# Experiment 5
 --------------
 
   1. Load simulation with:
 ```console
 $ roslaunch blimp_description blimp_gcs.launch
 ```
-  2. Proceed as with Experiment 3 or 4
+  2. Proceed as with Experiment 2 or 3
   3. During experiment, execute:
 ```console
 $ ./deflate_blimp.sh 8 0 0.2 .95
