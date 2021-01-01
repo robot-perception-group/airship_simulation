@@ -2,6 +2,9 @@
 Deformable Airship Simulation in ROS/Gazebo
 =================================================================
 
+## For more information, read our preprint on Arxiv: https://arxiv.org/abs/2012.15684
+--------------------------------------------------------------
+
 # Copyright and License
 
 All Code in this repository - unless otherwise stated in local license or code headers is
