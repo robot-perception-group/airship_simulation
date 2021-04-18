@@ -148,10 +148,12 @@ endif()
 
 find_package(OpenCV)
 find_package(Glog)
+find_package(rotors_gazebo_plugins REQUIRED )
 link_directories(${GAZEBO_LIBRARY_DIRS})
 include_directories(${GAZEBO_INCLUDE_DIRS})
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${rotors_gazebo_plugins_INCLUDE_DIRS})
 
 
 if (BUILD_MAVLINK_INTERFACE_PLUGIN)
