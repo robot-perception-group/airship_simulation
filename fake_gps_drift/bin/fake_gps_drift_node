@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import random
 import math
@@ -60,7 +60,7 @@ def posecallback(pose):
     if (newleg>1.3*acc_velocity_timer):
       fakedest=[random.gauss(0.0,acc_offset_scale[0]), random.gauss(0.0,acc_offset_scale[1]), random.gauss(0.0,acc_offset_scale[2]) ]
       fakevel=[ (fakedest[0]-fakeoffset[0])/acc_velocity_timer, (fakedest[1]-fakeoffset[1])/acc_velocity_timer, (fakedest[2]-fakeoffset[2])/acc_velocity_timer ]
-      print "new destination"
+      print("new destination")
       print(fakedest)
       legtime=0
     fakevel[0]+= random.gauss(0.0,acc_sigma[0])*duration.to_sec()

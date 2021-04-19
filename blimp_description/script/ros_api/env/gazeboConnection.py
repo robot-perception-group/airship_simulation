@@ -12,8 +12,8 @@ class GazeboConnection():
 
     def __init__(self, start_init_physics_parameters, reset_world_or_sim):
 
-    	self.delete = rospy.ServiceProxy("gazebo/delete_model", DeleteModel)
-    	self.spawn = rospy.ServiceProxy("gazebo/spawn_urdf_model", SpawnModel)
+        self.delete = rospy.ServiceProxy("gazebo/delete_model", DeleteModel)
+        self.spawn = rospy.ServiceProxy("gazebo/spawn_urdf_model", SpawnModel)
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_simulation_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
