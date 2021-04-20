@@ -32,22 +32,22 @@ Build packages with **catkin_make**
 * [Gazebo] (http://gazebosim.org/) -- tested with Gazebo 9.0
 
 
-Installation Instructions - Ubuntu 18.04 with ROS Melodic and Gazebo 9
+Installation Instructions - Ubuntu 20.04 with ROS Noetic and Gazebo 11
 ---------------------------------------------------------------------------
 
-1. Install and initialize ROS Melodic desktop full, additional ROS packages, catkin-tools, and wstool:
+1. Install and initialize ROS Noetic desktop full, additional ROS packages, catkin-tools, and wstool:
 
 ```console
 $ sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 $ sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
 $ sudo apt update
-$ sudo apt install ros-melodic-desktop-full ros-melodic-joy ros-melodic-octomap-ros ros-melodic-mavlink
-$ sudo apt install python-wstool python-catkin-tools protobuf-compiler libgoogle-glog-dev ros-melodic-control-toolbox
+$ sudo apt install ros-noetic-desktop-full ros-noetic-joy ros-noetic-octomap-ros ros-noetic-mavlink
+$ sudo apt install python-wstool python-catkin-tools protobuf-compiler libgoogle-glog-dev ros-noetic-control-toolbox
 $ sudo rosdep init
 $ rosdep update
-$ echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
+$ echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 $ source ~/.bashrc
-$ sudo apt install python-rosinstall python-rosinstall-generator build-essential
+$ sudo apt install build-essential
 ```
 2. If you don't have ROS workspace yet you can do so by
 
@@ -55,10 +55,8 @@ $ sudo apt install python-rosinstall python-rosinstall-generator build-essential
 $ mkdir -p ~/catkin_ws/src
 $ cd ~/catkin_ws/src
 $ catkin_init_workspace  # initialize your catkin workspace
-$ git clone --recurse-submodules https://github.com/robot-perception-group/airship_simulation.git
+$ git clone --recurse-submodules https://github.com/robot-perception-group/airship_simulation.git -b noetic
 ```
-Note: Some sub-submodules inside the rotors_simulator submodule might fail to fetch. This error can be ignored, they are not needed.
-
 
 3. Build your workspace with `python_catkin_tools` 
 
@@ -87,7 +85,16 @@ $ make arm_sdk_install
 $ # install uncrustify
 $ make uncrustify_install
 $ # install build dependencies
-$ sudo apt install libusb-dev libsdl-dev libudev-dev libosgearth-dev libopenscenegraph-3.4-dev
+$ sudo apt install libusb-dev libsdl-dev libudev-dev libosgearth-dev libopenscenegraph-3.4-dev gcc-7 g++-7
+$ # switch to gcc-7 - gcc-9 does not compile due to some new warnings treated as errors
+$ # see https://www.fosslinux.com/39386/how-to-install-multiple-versions-of-gcc-and-g-on-ubuntu-20-04.htm
+$ # please remember to switch back to 9 as needed.
+$ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 7
+$ sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 7
+$ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9
+$ sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
+$ sudo update-alternatives --set gcc /usr/bin/gcc-7
+$ sudo update-alternatives --set g++ /usr/bin/g++-7
 $ # build gcs
 $ make -j 10 gcs
 $ # if this fails, check error message for possible additional dependencies
