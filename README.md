@@ -86,17 +86,9 @@ $ # install uncrustify
 $ make uncrustify_install
 $ # install build dependencies
 $ sudo apt install libusb-dev libsdl-dev libudev-dev libosgearth-dev libopenscenegraph-3.4-dev gcc-7 g++-7
-$ # switch to gcc-7 - gcc-9 does not compile due to some new warnings treated as errors
-$ # see https://www.fosslinux.com/39386/how-to-install-multiple-versions-of-gcc-and-g-on-ubuntu-20-04.htm
-$ # please remember to switch back to 9 as needed.
-$ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 7
-$ sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 7
-$ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 9
-$ sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 9
-$ sudo update-alternatives --set gcc /usr/bin/gcc-7
-$ sudo update-alternatives --set g++ /usr/bin/g++-7
-$ # build gcs
-$ make -j 10 gcs
+$ # IMPORTANT # Ubuntu20 uses gcc-9 by default, but gcs does not compile with gcc9 due to some new warnings treated as errors
+$ # build gcs - ENFORCE gcc-7
+$ GCS_QMAKE_OPTS="QMAKE_CXX=g++-7 QMAKE_CC=gcc-7" make -j 10 gcs
 $ # if this fails, check error message for possible additional dependencies
 $ # build SITL flightcontroller executable
 $ make -j 10 fw_simposix
