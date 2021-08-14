@@ -20,9 +20,9 @@
 	<xacro:if value="$(arg enable_sensors)">
 		<!-- Mount a VI CAMERA. -->
 		<!-- TODO measure weight, xyz of camera -->
-		<xacro:property name="origin_camera">
+            <!--<xacro:property name="origin_camera">
 			<origin xyz="0.5  0  -0.1" rpy="0  0.7853  0"/>
-		</xacro:property>
+            </xacro:property>-->
 		<!--<xacro:vi_sensor_camera_macro 
 			namespace="${namespace}" 
 			parent_link="gondola_body_link" 
@@ -36,7 +36,8 @@
 		<xacro:asus_camera
 		    name="xtion"
 		    parent="gondola_body_link">
-		    <origin xyz="0.18 0.0 0.07" rpy="0 0.7853 0"/>
+                    <!--<origin xyz="0.18 0.0 0.07" rpy="0 0.7853 0"/>-->
+		    <origin xyz="0.18 0.0 0.07" rpy="0 0.7853 -1.570"/>
 		</xacro:asus_camera>
 	</xacro:if>
 	
