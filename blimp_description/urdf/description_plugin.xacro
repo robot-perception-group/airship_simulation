@@ -6,7 +6,7 @@
 			namespace="${namespace}"
 			linkname="blimp_body_link"
 			wind_direction_mean="1 1 0" 
-			wind_speed_mean="1.5"
+			wind_speed_mean="0.5"
 			wind_turbulence_level="3"
 			use_custom_static_wind_field="false"
 			custom_wind_field_path="~/blimp_simulator/blimp_description/worlds/wind_field.txt"> 
