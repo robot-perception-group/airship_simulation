@@ -5,3 +5,4 @@
 [submodule "rotors_simulator"]
 	path = rotors_simulator
 	url = https://github.com/robot-perception-group/rotors_simulator.git
+	branch = aircap_noetic_fixes
