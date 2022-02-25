@@ -37,7 +37,8 @@
 		    name="xtion"
 		    parent="gondola_body_link">
                     <!--<origin xyz="0.18 0.0 0.07" rpy="0 0.7853 0"/>-->
-		    <origin xyz="0.18 0.0 0.07" rpy="0 0.7853 -1.570"/>
+		    <!--<origin xyz="0.18 0.0 0.07" rpy="0 0.7853 -1.570"/>-->
+		    <origin xyz="0.18 0.0 0.07" rpy="0 0.524 -1.570"/>
 		</xacro:asus_camera>
 	</xacro:if>
 	

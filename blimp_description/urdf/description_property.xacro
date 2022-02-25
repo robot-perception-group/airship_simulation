@@ -32,7 +32,7 @@
 	<xacro:property name="mass_rud_part2" value="0.113" /> 
 	<xacro:property name="mass_bot_rud_part1" value="0.410" /> <!--part1: 0.120kg + wire: 0.290kg = 0.410 -->
 	<xacro:property name="mass_bot_rud_motor" value="0.127" />
-	<xacro:property name="mass_ballast" value="0.6" />
+	<xacro:property name="mass_ballast" value="0.4" />
 
 	<!-- geometry [m] -->
 	<xacro:property name="radius_blimp_body" value="1.00"/>
