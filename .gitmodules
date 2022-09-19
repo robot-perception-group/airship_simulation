@@ -1,6 +1,6 @@
 [submodule "LibrePilot"]
 	path = LibrePilot
-	url = https://github.tik.uni-stuttgart.de/gs106913/librepilot-mpg.git
+	url = https://github.com/robot-perception-group/LibrePilot.git
 	branch = airship_control_noetic
 [submodule "rotors_simulator"]
 	path = rotors_simulator
