@@ -84,9 +84,9 @@ def posecallback(pose):
   offsetpose.point.z=-fakeoffset[2]
   fakeoffset_pub.publish(offsetpose)
 
-  driftpoint.point.x+=fakeoffset[0]
-  driftpoint.point.y+=fakeoffset[1]
-  driftpoint.point.z+=fakeoffset[2]
+  #driftpoint.point.x+=fakeoffset[0]
+  #driftpoint.point.y+=fakeoffset[1]
+  #driftpoint.point.z+=fakeoffset[2]
  
   pose_pub.publish(driftpoint)
 
