@@ -87,8 +87,8 @@ else()
   message(STATUS "NO_ROS = FALSE, building rotors_gazebo_plugins WITH ROS dependancies.")
 endif()
 
-# Specify C++11 standard
-add_definitions(-std=c++11)
+# Specify C++17 standard
+add_definitions(-std=c++17)
 
 # Provides a compiler flag notifying the preprocessor about
 # the MAVLink Interface plugin build status
