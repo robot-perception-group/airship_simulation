@@ -33,6 +33,10 @@
 #include <mav_msgs/default_topics.h>  // This comes from the mav_comm repo
 
 #include "common.h"
+#include <ros/ros.h>
+#include "blimp_description/WindGust.h"
+
+
 
 #include "WindSpeed.pb.h"             // Wind speed message
 #include "WrenchStamped.pb.h"         // Wind force message
@@ -66,6 +70,7 @@ static constexpr bool kDefaultUseCustomStaticWindField = false;
 
 
 
+
 /// \brief    This gazebo plugin simulates wind acting on a model.
 /// \details  This plugin publishes on a Gazebo topic and instructs the ROS interface plugin to
 ///           forward the message onto ROS.
@@ -90,6 +95,10 @@ class GazeboWindPlugin : public ModelPlugin {
         time_until_next_gust_(0.0),
         time_gust_start_(0.0),
         randomGenGust(randomGenGust),
+
+      // Add variables for communication with ROS
+
+
         // Other variables
         wind_force_pub_topic_(mav_msgs::default_topics::EXTERNAL_FORCE),
         wind_speed_pub_topic_(mav_msgs::default_topics::WIND_SPEED),
@@ -167,6 +176,9 @@ class GazeboWindPlugin : public ModelPlugin {
   double time_until_next_gust_;
   double time_gust_start_;
   std::default_random_engine randomGenGust;
+  ros::Publisher pub;
+  blimp_description::WindGust msg;
+
   
 
   //ignition::math::Vector3d xyz_offset_;

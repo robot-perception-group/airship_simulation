@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   roscpp
   rviz
+  message_generation
 geometry_msgs
 rosbag
 roscpp
@@ -20,10 +21,23 @@ tf
 )
 find_package(gazebo REQUIRED)
 
+## Generate messages in the 'msg' folder
+ add_message_files(
+   DIRECTORY
+   msgs
+   FILES
+   WindGust.msg
+    )
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+  geometry_msgs
+)
+
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES blimp_description
-  CATKIN_DEPENDS controller_manager gazebo_ros joint_state_publisher robot_state_publisher rospy rviz 
+  CATKIN_DEPENDS controller_manager gazebo_ros joint_state_publisher robot_state_publisher rospy rviz message_runtime std_msgs geometry_msgs
 #  DEPENDS system_lib
 )
 

@@ -1,0 +1,9 @@
+Header header
+geometry_msgs/Point direction
+float64 duration
+float64 max_gust_velocity
+float64 gust_velocity
+float64 gust_time
+bool gust_active
+bool waiting_for_next_gust
+float64 time_until_next_gust

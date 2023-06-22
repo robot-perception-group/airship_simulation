@@ -20,6 +20,9 @@
  */
 
 #include "normwind_plugin.hpp"
+#include "std_msgs/String.h"
+#include "blimp_description/WindGust.h"
+#include <ros/ros.h>
 
 #include <fstream>
 #include <math.h>
@@ -34,6 +37,8 @@ GazeboWindPlugin::~GazeboWindPlugin() {
 
 // PG: This gets executed when the plugin is loaded
 void GazeboWindPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
+
+
   if (kPrintOnPluginLoad) {
     gzdbg << __FUNCTION__ << "() called." << std::endl;
   }
@@ -156,6 +161,15 @@ void GazeboWindPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
   // simulation iteration.
   update_connection_ = event::Events::ConnectWorldUpdateBegin(
       boost::bind(&GazeboWindPlugin::OnUpdate, this, _1));
+
+
+// Initialize ROS
+    int argc = 0;
+    char **argv = NULL;
+    ros::init(argc, argv, "gazebo_plugin_wind_gust_publisher_node");
+    ros::NodeHandle nh;
+  // Create the publisher for wind gust information
+   pub = nh.advertise<blimp_description::WindGust>("/gazebo/WindGust", 1);
 }
 
 double GazeboWindPlugin::POEValue(int s, double h) {
@@ -444,12 +458,21 @@ void GazeboWindPlugin::CreatePubsAndSubs() {
       gz_std_msgs::ConnectGazeboToRosTopic::WIND_SPEED);
   connect_gazebo_to_ros_topic_pub->Publish(connect_gazebo_to_ros_topic_msg,
                                            true);
+
+
+
+
+
 }
 
 
 ignition::math::Vector3d GazeboWindPlugin::ComputeWindGust(double* max_gust_velocity,double* gust_duration,ignition::math::Vector3d* gust_direction,ignition::math::Vector3d* gust_direction_mean,ignition::math::Vector3d* gust_direction_std, double* gust_occurence_interval_mean,double* gust_occurence_interval_std,double* gust_time,double*time_until_next_gust,double* elapsed_time_between_gusts,bool* gust_active, bool* waiting_for_next_gust,double* delta_t,std::default_random_engine* randomGenGust){
   
   double v(0.0);
+
+
+
+
 
   if (*gust_time > *gust_duration && *gust_active == true){
     //Reset case
@@ -469,20 +492,26 @@ ignition::math::Vector3d GazeboWindPlugin::ComputeWindGust(double* max_gust_velo
           (*gust_direction)[0]= dist_gust_direction_x(*randomGenGust);
           (*gust_direction)[1]= dist_gust_direction_y(*randomGenGust);
           (*gust_direction)[2]= dist_gust_direction_z(*randomGenGust);
+
     }
   }else if(*gust_active==false && *waiting_for_next_gust==true){
       // if in between gusts
       *elapsed_time_between_gusts += *delta_t;
+      msg.time_until_next_gust = *time_until_next_gust-*elapsed_time_between_gusts;
+
+
       if (*elapsed_time_between_gusts > *time_until_next_gust){
         *waiting_for_next_gust = false;
         *gust_active = true;
         *gust_time = 0;
+        // publish gust information for logging elsewhere
       }
   }else if(*gust_active==true){
       // if a gust is currently happening 
       // compute the velocity
       v = (*max_gust_velocity/2)*(1-cos(2*3.14159265*(*gust_time)/(*gust_duration)));
-
+      msg.gust_active = *gust_active;
+      msg.gust_velocity = v;
       //update the gust duration.
       *gust_time += *delta_t;
     }else{
@@ -501,7 +530,17 @@ ignition::math::Vector3d GazeboWindPlugin::ComputeWindGust(double* max_gust_velo
   // gzdbg << "gust_occurenc_interval_std="<<*gust_occurence_interval_std<<"\n";
   // gzdbg << "====================\n";
   // gzdbg << "gust_direction="<<gust_direction->Normalize()<<"\n";
-
+    // Create ROS message for Wind Gust
+  msg.header.stamp = ros::Time::now();
+  msg.duration = *gust_duration;
+  msg.max_gust_velocity = *max_gust_velocity;
+  msg.waiting_for_next_gust = *waiting_for_next_gust;
+  msg.direction.x = (*gust_direction)[0];
+  msg.direction.y = (*gust_direction)[1];
+  msg.direction.z = (*gust_direction)[2];
+  msg.gust_active = *gust_active;
+  msg.gust_time = *gust_time;
+  pub.publish(msg);
   return (v*(gust_direction->Normalize()));
   }
 

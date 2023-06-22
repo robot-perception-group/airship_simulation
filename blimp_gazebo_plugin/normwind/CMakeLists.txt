@@ -107,6 +107,7 @@ if (NOT NO_ROS)
     rotors_control
     std_srvs
     tf
+    blimp_description
   )
 endif()
 
@@ -142,6 +143,7 @@ include_directories(${GAZEBO_INCLUDE_DIRS})
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${rotors_gazebo_plugins_INCLUDE_DIRS})
+include_directories(catkin_INCLUDE_DIRS})
 
 
 if (BUILD_MAVLINK_INTERFACE_PLUGIN)
