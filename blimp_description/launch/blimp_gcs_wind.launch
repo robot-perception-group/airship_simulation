@@ -52,6 +52,11 @@
 		<arg name="Y" value="$( arg Y )"/>
 		<arg name="Z" value="$( arg Z )"/>
 	</include>
+
+
+	<include file="$(find docking)/launch/copter.launch">
+
+	</include>
 </launch>
 
 

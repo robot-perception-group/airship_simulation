@@ -1,15 +1,43 @@
 <?xml version="1.0" ?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 	<!-- wind -->
+	<!-- <xacro:if value="$(arg enable_wind)">
+		<xacro:wind_gust_plugin_macro
+			namespace="${namespace}"
+			linkname="blimp_body_link"
+			wind_direction="-1 0 0" 
+			wind_speed_mean="0.9"
+			wind_gust_duration="5"
+			wind_gust_force_mean="100"
+			use_custom_static_wind_field="false"
+			custom_wind_field_path="~/blimp_simulator/blimp_description/worlds/wind_field.txt"> 
+		</xacro:wind_gust_plugin_macro>
+	</xacro:if> -->
+
+
+ 
+			<!-- <max_gust_velocity="7" >
+			<gust_direction="-1 0 0"  >
+			<gust_duration="10" >
+			<gust_occurence_interval_mean="1" >
+			<gust_occurence_interval_std="1" > -->
+
+
 	<xacro:if value="$(arg enable_wind)">
 		<xacro:wind_plugin_macro
 			namespace="${namespace}"
 			linkname="blimp_body_link"
 			wind_direction_mean="-1 0 0" 
-			wind_speed_mean="0.6"
+			wind_speed_mean="0"
 			wind_turbulence_level="0"
 			use_custom_static_wind_field="false"
-			custom_wind_field_path="~/blimp_simulator/blimp_description/worlds/wind_field.txt"> 
+			custom_wind_field_path="~/blimp_simulator/blimp_description/worlds/wind_field.txt"
+			max_gust_velocity="3" 
+			gust_direction_mean="1 0 1"
+			gust_direction_std="3 3 0.5"
+			gust_duration="4" 
+			gust_occurence_interval_mean="8" 
+			gust_occurence_interval_std="1" >
 		</xacro:wind_plugin_macro>
 	</xacro:if>
 

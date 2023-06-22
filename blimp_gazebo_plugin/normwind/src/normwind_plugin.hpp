@@ -46,8 +46,19 @@ static const std::string kDefaultWindSpeedPubTopic = "wind_speed";
 static constexpr double kDefaultWindSpeedMean = 0.0;
 static constexpr int kDefaultTurbulenceLevel = 0;
 
+// Default values for wind gusts
+static constexpr double kDefaultGustVelocity = 0.0;
+static constexpr double kDefaultWindGustDuration = 0.0;
+static const ignition::math::Vector3d kDefaultWindGustDirection = ignition::math::Vector3d(0, 0, 0);
+static const ignition::math::Vector3d kDefaultWindGustDirectionMean = ignition::math::Vector3d(1, 0, 0);
+static const ignition::math::Vector3d kDefaultWindGustDirectionStd = ignition::math::Vector3d(0, 0, 0);
+static constexpr double kDefaultGustOccurenceIntervalMean = 20.0;
+static constexpr double kDefaultGustOccurenceIntervalStd = 5.0;
+
+
+
 static const ignition::math::Vector3d kDefaultWindDirectionMean = ignition::math::Vector3d(1, 0, 0);
-static const ignition::math::Vector3d kDefaultWindGustDirectionMean = ignition::math::Vector3d(0, 1, 0);
+// static const ignition::math::Vector3d kDefaultWindGustDirectionMean = ignition::math::Vector3d(0, 1, 0);
 static constexpr double kDefaultWindDirectionVariance = 0.0;
 static constexpr double kDefaultWindGustDirectionVariance = 0.0;
 
@@ -63,6 +74,23 @@ class GazeboWindPlugin : public ModelPlugin {
   GazeboWindPlugin()
       : ModelPlugin(),
         namespace_(kDefaultNamespace),
+        //Add variables for wind gusts
+        max_gust_velocity_(kDefaultGustVelocity),
+        gust_duration_(kDefaultWindGustDuration),
+        gust_direction_(kDefaultWindGustDirection),
+        gust_direction_mean_(kDefaultWindGustDirectionMean),
+        gust_direction_std_(kDefaultWindGustDirectionStd),
+        gust_occurence_interval_mean_(kDefaultGustOccurenceIntervalMean),
+        gust_occurence_interval_std_(kDefaultGustOccurenceIntervalStd),
+        waiting_for_next_gust(false),
+        gust_active_(false),
+        elapsed_time_between_gusts_(0.0),
+        gust_time_(0.0),
+        waiting_for_next_gust_(true),
+        time_until_next_gust_(0.0),
+        time_gust_start_(0.0),
+        randomGenGust(randomGenGust),
+        // Other variables
         wind_force_pub_topic_(mav_msgs::default_topics::EXTERNAL_FORCE),
         wind_speed_pub_topic_(mav_msgs::default_topics::WIND_SPEED),
         wind_speed_mean_(kDefaultWindSpeedMean),
@@ -73,6 +101,7 @@ class GazeboWindPlugin : public ModelPlugin {
         link_name_(kDefaultLinkName),
         node_handle_(nullptr),
         pubs_and_subs_created_(false) {}
+
 
   virtual ~GazeboWindPlugin();
 
@@ -122,6 +151,24 @@ class GazeboWindPlugin : public ModelPlugin {
   double wind_speed_mean_;
   int wind_turbulence_level;
 
+ // Declaration of gust variables
+  double max_gust_velocity_;
+  double gust_duration_;
+  ignition::math::Vector3d gust_direction_;
+  ignition::math::Vector3d gust_direction_mean_;
+  ignition::math::Vector3d gust_direction_std_;
+  double gust_occurence_interval_mean_;
+  double gust_occurence_interval_std_;
+  bool waiting_for_next_gust;
+  bool gust_active_;
+  double elapsed_time_between_gusts_;
+  double gust_time_;
+  bool waiting_for_next_gust_;
+  double time_until_next_gust_;
+  double time_gust_start_;
+  std::default_random_engine randomGenGust;
+  
+
   //ignition::math::Vector3d xyz_offset_;
   ignition::math::Vector3d wind_direction_mean_;
   //ignition::math::Vector3d wind_gust_direction_mean_;
@@ -141,6 +188,14 @@ class GazeboWindPlugin : public ModelPlugin {
 
   //common::Time wind_gust_end_;
   //common::Time wind_gust_start_;
+
+
+ //   /// \brief Variables for wind gust
+
+ //   std::normal_distribution<double> dist(0.0,1.0)
+ 
+ 
+  ignition::math::Vector3d ComputeWindGust(double* max_gust_velocity,double* gust_duration, ignition::math::Vector3d* gust_direction_,ignition::math::Vector3d* gust_direction_mean, ignition::math::Vector3d* gust_direction_std,double* gust_occurence_interval_mean,double* gust_occurence_interval_std,double* gust_time,double*time_until_next_gust,double* elapsed_time_between_gusts,bool* gust_active, bool* waiting_for_next_gust,double* delta_t,  std::default_random_engine* randomGen);
 
   /// \brief    Variables for custom wind field generation.
   bool use_custom_static_wind_field_;

@@ -551,15 +551,15 @@
   </xacro:macro>
 
   <!-- Macro to add the wind plugin. -->
-  <xacro:macro name="wind_plugin_macro"
-    params="namespace xyz_offset wind_direction wind_force_mean
+  <xacro:macro name="wind_gust_plugin_macro"
+    params="linkname namespace xyz_offset wind_direction wind_force_mean
       wind_gust_direction wind_gust_duration wind_gust_start
       wind_gust_force_mean wind_speed_mean use_custom_static_wind_field 
       custom_wind_field_path">
     <gazebo>
       <plugin filename="librotors_gazebo_wind_plugin.so" name="wind_plugin">
         <frameId>world</frameId>
-        <linkName>base_link</linkName>
+        <linkName>${linkname}</linkName>
         <robotNamespace>${namespace}</robotNamespace>
         <xyzOffset>${xyz_offset}</xyzOffset> <!-- [m] [m] [m] -->
         <windDirection>${wind_direction}</windDirection>

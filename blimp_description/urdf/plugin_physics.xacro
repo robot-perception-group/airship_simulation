@@ -3,7 +3,7 @@
 	
 	<!-- Macro to add the wind plugin. -->
 	<xacro:macro name="wind_plugin_macro"
-		params="namespace linkname wind_direction_mean wind_speed_mean wind_turbulence_level use_custom_static_wind_field custom_wind_field_path">
+		params="namespace linkname wind_direction_mean wind_speed_mean wind_turbulence_level use_custom_static_wind_field custom_wind_field_path max_gust_velocity gust_direction_mean gust_direction_std gust_duration gust_occurence_interval_mean gust_occurence_interval_std">
 		<gazebo>
 			<plugin filename="libnormwind_plugin.so" name="wind_plugin">
 				<frameId>world</frameId>
@@ -14,6 +14,12 @@
 				<windTurbulenceLevel>${wind_turbulence_level}</windTurbulenceLevel>
 				<useCustomStaticWindField>${use_custom_static_wind_field}</useCustomStaticWindField>
 				<customWindFieldPath>${custom_wind_field_path}</customWindFieldPath> <!-- from ~/.ros -->
+				<maxGustVelocity>${max_gust_velocity} </maxGustVelocity>
+				<gustDirectionMean>${gust_direction_mean}</gustDirectionMean>
+				<gustDirectionStd>${gust_direction_std}</gustDirectionStd>
+				<gustDuration>${gust_duration}</gustDuration>
+				<gustOccurenceIntervalMean>${gust_occurence_interval_mean} </gustOccurenceIntervalMean>
+				<gustOccurenceIntervalStd>${gust_occurence_interval_std} </gustOccurenceIntervalStd>
 			</plugin>
 		</gazebo>
 	</xacro:macro>

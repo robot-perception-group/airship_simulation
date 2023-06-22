@@ -32,6 +32,7 @@ GazeboWindPlugin::~GazeboWindPlugin() {
   
 }
 
+// PG: This gets executed when the plugin is loaded
 void GazeboWindPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
   if (kPrintOnPluginLoad) {
     gzdbg << __FUNCTION__ << "() called." << std::endl;
@@ -76,13 +77,35 @@ void GazeboWindPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
   getSdfParam<int>(_sdf, "windTurbulenceLevel", wind_turbulence_level,
                       wind_turbulence_level);
   getSdfParam<ignition::math::Vector3d>(_sdf, "windDirectionMean", wind_direction_mean_, wind_direction_mean_);
+
+  // Get the wind gust params from sdf
+  getSdfParam<double>(_sdf, "maxGustVelocity", max_gust_velocity_,
+                      max_gust_velocity_);
+  getSdfParam<double>(_sdf, "gustDuration", gust_duration_,
+                      gust_duration_);        
+  getSdfParam<ignition::math::Vector3d>(_sdf, "gustDirectionMean", gust_direction_mean_,
+                      gust_direction_mean_);  
+  getSdfParam<ignition::math::Vector3d>(_sdf, "gustDirectionStd", gust_direction_std_,
+                      gust_direction_std_);                             
+  getSdfParam<double>(_sdf,"gustOccurenceIntervalMean",gust_occurence_interval_mean_,
+                      gust_occurence_interval_mean_);
+  getSdfParam<double>(_sdf,"gustOccurenceIntervalStd",gust_occurence_interval_std_,
+                      gust_occurence_interval_std_);                                                     
+
+
+
+
+
   //getSdfParam<double>(_sdf, "windDirectionVariance", wind_direction_variance_, wind_direction_variance_);
+
+  // Wind gust parameters for 1-cos wind gust
 
   // Check if a custom static wind field should be used.
   getSdfParam<bool>(_sdf, "useCustomStaticWindField", use_custom_static_wind_field_,
                       use_custom_static_wind_field_);
   if (!use_custom_static_wind_field_) {
     gzdbg << "[gazebo_wind_plugin] Using user-defined random wind field and gusts.\n";
+
     // Get the wind params from SDF.
     //getSdfParam<double>(_sdf, "windForceMean", wind_force_mean_,
     //                    wind_force_mean_);
@@ -159,8 +182,12 @@ void GazeboWindPlugin::OnUpdate(const common::UpdateInfo& _info) {
   common::Time now = world_->SimTime();
   double deltaT = now.Double() - previousRun.Double();
   previousRun = now;
+
+
+
   
   ignition::math::Vector3d wind_velocity(0.0, 0.0, 0.0);
+  
 
   // Get the current position of the aircraft in world coordinates.
   ignition::math::Vector3d link_position = link_->WorldPose().Pos();
@@ -277,7 +304,6 @@ void GazeboWindPlugin::OnUpdate(const common::UpdateInfo& _info) {
          the F18-HARV" (<a href="http://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/19980028448_1998081596.pdf">pdf</a>), NASA CR-1998-206937, 1998
         @see MIL-F-8785C: Military Specification: Flying Qualities of Piloted Aircraft
     */
-
     ignition::math::Vector3d turbulence(0.0, 0.0, 0.0);
     double psiw = atan2(wind_direction_mean_.Y(),wind_direction_mean_.X());
     double b_w = 30., L_u, L_w, sig_u, sig_w;
@@ -358,13 +384,15 @@ void GazeboWindPlugin::OnUpdate(const common::UpdateInfo& _info) {
     xi_p_km1 = xi_p; nu_p_km1 = nu_p;
     xi_q_km1 = xi_q;
     xi_r_km1 = xi_r;
-    
-    
+    ignition::math::Vector3d wind_gust_velocity(0.0, 0.0,0.0);
+//double GazeboWindPlugin::ComputeWindGustVelocity(double* max_gust_velocity,double* gust_duration,double* gust_occurence_interval_mean,double* gust_occurence_interval_std,double* gust_time,double*time_until_next_gust,double* elapsed_time_between_gusts,bool* gust_active, double* waiting_for_next_gust,double* delta_t){
 
-    
-    wind_velocity = (wind_speed_mean_ * wind_direction_mean_) + turbulence;
+    wind_gust_velocity = ComputeWindGust(&max_gust_velocity_,&gust_duration_,&gust_direction_,&gust_direction_mean_,&gust_direction_std_,&gust_occurence_interval_mean_,&gust_occurence_interval_std_, &gust_time_,&time_until_next_gust_,&elapsed_time_between_gusts_,&gust_active_, &waiting_for_next_gust_, &deltaT,&randomGenGust);
+    wind_velocity = (wind_speed_mean_ * wind_direction_mean_) + turbulence + wind_gust_velocity;
   } else {
-    wind_velocity = (wind_speed_mean_ * wind_direction_mean_);
+    ignition::math::Vector3d wind_gust_velocity(0.0,0.0,0.0);
+    wind_gust_velocity = ComputeWindGust(&max_gust_velocity_,&gust_duration_,&gust_direction_,&gust_direction_mean_,&gust_direction_std_,&gust_occurence_interval_mean_,&gust_occurence_interval_std_, &gust_time_,&time_until_next_gust_,&elapsed_time_between_gusts_,&gust_active_, &waiting_for_next_gust_, &deltaT,&randomGenGust);
+    wind_velocity = (wind_speed_mean_ * wind_direction_mean_) + wind_gust_velocity;
   }
 
   wind_speed_msg_.mutable_header()->set_frame_id(frame_id_);
@@ -417,6 +445,67 @@ void GazeboWindPlugin::CreatePubsAndSubs() {
   connect_gazebo_to_ros_topic_pub->Publish(connect_gazebo_to_ros_topic_msg,
                                            true);
 }
+
+
+ignition::math::Vector3d GazeboWindPlugin::ComputeWindGust(double* max_gust_velocity,double* gust_duration,ignition::math::Vector3d* gust_direction,ignition::math::Vector3d* gust_direction_mean,ignition::math::Vector3d* gust_direction_std, double* gust_occurence_interval_mean,double* gust_occurence_interval_std,double* gust_time,double*time_until_next_gust,double* elapsed_time_between_gusts,bool* gust_active, bool* waiting_for_next_gust,double* delta_t,std::default_random_engine* randomGenGust){
+  
+  double v(0.0);
+
+  if (*gust_time > *gust_duration && *gust_active == true){
+    //Reset case
+    // reset elapsed time counter
+    *elapsed_time_between_gusts = 0;
+    // set gust_active to false
+    *gust_active = false;
+    // determine time until next episode - define distribution first
+    std::normal_distribution<double> dist_t(*gust_occurence_interval_mean, *gust_occurence_interval_std);
+    std::normal_distribution<double> dist_gust_direction_x(gust_direction_mean->X(), gust_direction_std->X());
+    std::normal_distribution<double> dist_gust_direction_y(gust_direction_mean->Y(), gust_direction_std->Y());
+    std::normal_distribution<double> dist_gust_direction_z(gust_direction_mean->Z(), gust_direction_std->Z());
+    // draw random number and clip to avoid values lower than zero.
+    if (*waiting_for_next_gust == false){
+          *time_until_next_gust = std::fmax(dist_t(*randomGenGust),0);
+          *waiting_for_next_gust = true;
+          (*gust_direction)[0]= dist_gust_direction_x(*randomGenGust);
+          (*gust_direction)[1]= dist_gust_direction_y(*randomGenGust);
+          (*gust_direction)[2]= dist_gust_direction_z(*randomGenGust);
+    }
+  }else if(*gust_active==false && *waiting_for_next_gust==true){
+      // if in between gusts
+      *elapsed_time_between_gusts += *delta_t;
+      if (*elapsed_time_between_gusts > *time_until_next_gust){
+        *waiting_for_next_gust = false;
+        *gust_active = true;
+        *gust_time = 0;
+      }
+  }else if(*gust_active==true){
+      // if a gust is currently happening 
+      // compute the velocity
+      v = (*max_gust_velocity/2)*(1-cos(2*3.14159265*(*gust_time)/(*gust_duration)));
+
+      //update the gust duration.
+      *gust_time += *delta_t;
+    }else{
+      v=0;
+    };
+  // gzdbg << "v="<< v;
+  // gzdbg << "gust_time="<< *gust_time<<"\n";
+  // gzdbg << "elapsed_time_between_gusts="<< *elapsed_time_between_gusts<<"\n";
+  // gzdbg << "time_until_next_gust="<< *time_until_next_gust<<"\n";
+  // gzdbg << "waiting for next gust="<<*waiting_for_next_gust<<"\n";
+  // gzdbg << "gust_active="<<*gust_active<<"\n";
+  // gzdbg << "====================\n";
+  // gzdbg << "max_gust_velocity="<<*max_gust_velocity<<"\n";
+  // gzdbg << "gust_duration="<<*gust_duration<<"\n";
+  // gzdbg << "gust_occurenc_interval_mean="<<*gust_occurence_interval_mean<<"\n";
+  // gzdbg << "gust_occurenc_interval_std="<<*gust_occurence_interval_std<<"\n";
+  // gzdbg << "====================\n";
+  // gzdbg << "gust_direction="<<gust_direction->Normalize()<<"\n";
+
+  return (v*(gust_direction->Normalize()));
+  }
+
+
 
 void GazeboWindPlugin::ReadCustomWindField(std::string& custom_wind_field_path) {
   std::ifstream fin;
