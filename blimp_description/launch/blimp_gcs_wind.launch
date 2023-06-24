@@ -54,8 +54,10 @@
 	</include>
 
 
-	<!-- <include file="$(find docking)/launch/copter.launch"> -->
-	<!-- </include> -->
+	<include file="$(find docking)/launch/copter.launch"></include>
+	<include file="$(find docking)/launch/compute_relative_information.launch"></include>
+
+
 </launch>
 
 

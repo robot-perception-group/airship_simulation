@@ -492,6 +492,7 @@ ignition::math::Vector3d GazeboWindPlugin::ComputeWindGust(double* max_gust_velo
           (*gust_direction)[0]= dist_gust_direction_x(*randomGenGust);
           (*gust_direction)[1]= dist_gust_direction_y(*randomGenGust);
           (*gust_direction)[2]= dist_gust_direction_z(*randomGenGust);
+          gust_direction->Normalize();
 
     }
   }else if(*gust_active==false && *waiting_for_next_gust==true){
@@ -504,7 +505,7 @@ ignition::math::Vector3d GazeboWindPlugin::ComputeWindGust(double* max_gust_velo
         *waiting_for_next_gust = false;
         *gust_active = true;
         *gust_time = 0;
-        // publish gust information for logging elsewhere
+  
       }
   }else if(*gust_active==true){
       // if a gust is currently happening 

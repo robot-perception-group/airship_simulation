@@ -33,11 +33,11 @@
 			use_custom_static_wind_field="false"
 			custom_wind_field_path="~/blimp_simulator/blimp_description/worlds/wind_field.txt"
 			max_gust_velocity="3" 
-			gust_direction_mean="1 0 1"
-			gust_direction_std="3 3 0.5"
+			gust_direction_mean="0 0 0"
+			gust_direction_std="3 3 3"
 			gust_duration="4" 
-			gust_occurence_interval_mean="8" 
-			gust_occurence_interval_std="1" >
+			gust_occurence_interval_mean="50" 
+			gust_occurence_interval_std="0" >
 		</xacro:wind_plugin_macro>
 	</xacro:if>
 
