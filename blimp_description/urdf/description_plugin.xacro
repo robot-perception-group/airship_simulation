@@ -24,6 +24,8 @@
 
 
 	<xacro:if value="$(arg enable_wind)">
+		<!-- ATTENTION -->
+		<!-- UNIFORM DISTRIBUTION FOR GUST DIRECTION: Current implementation of gust direction uses mean as a value and std as delta value added in positive and negative direction to define limit bounds. -->
 		<xacro:wind_plugin_macro
 			namespace="${namespace}"
 			linkname="blimp_body_link"

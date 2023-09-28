@@ -482,9 +482,9 @@ ignition::math::Vector3d GazeboWindPlugin::ComputeWindGust(double* max_gust_velo
     *gust_active = false;
     // determine time until next episode - define distribution first
     std::normal_distribution<double> dist_t(*gust_occurence_interval_mean, *gust_occurence_interval_std);
-    std::normal_distribution<double> dist_gust_direction_x(gust_direction_mean->X(), gust_direction_std->X());
-    std::normal_distribution<double> dist_gust_direction_y(gust_direction_mean->Y(), gust_direction_std->Y());
-    std::normal_distribution<double> dist_gust_direction_z(gust_direction_mean->Z(), gust_direction_std->Z());
+    std::uniform_real_distribution<double> dist_gust_direction_x(gust_direction_mean->X()-gust_direction_std->X(), gust_direction_mean->X()+gust_direction_std->X());
+    std::uniform_real_distribution<double> dist_gust_direction_y(gust_direction_mean->Y()-gust_direction_std->Y(), gust_direction_mean->Y()+gust_direction_std->Y());
+    std::uniform_real_distribution<double> dist_gust_direction_z(gust_direction_mean->Z()-gust_direction_std->Z(), gust_direction_mean->Z()+gust_direction_std->Z());
     // draw random number and clip to avoid values lower than zero.
     if (*waiting_for_next_gust == false){
           *time_until_next_gust = std::fmax(dist_t(*randomGenGust),0);
