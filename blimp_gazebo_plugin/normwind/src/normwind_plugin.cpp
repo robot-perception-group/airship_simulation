@@ -84,6 +84,7 @@ void GazeboWindPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
   getSdfParam<ignition::math::Vector3d>(_sdf, "windDirectionMean", wind_direction_mean_, wind_direction_mean_);
 
   // Get the wind gust params from sdf
+  getSdfParam<std::string>(_sdf,"gustGenerationMode",gust_generation_mode_,gust_generation_mode_);
   getSdfParam<double>(_sdf, "maxGustVelocity", max_gust_velocity_,
                       max_gust_velocity_);
   getSdfParam<double>(_sdf, "gustDuration", gust_duration_,
@@ -170,6 +171,8 @@ void GazeboWindPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
     ros::NodeHandle nh;
   // Create the publisher for wind gust information
    pub = nh.advertise<blimp_description::WindGust>("/gazebo/WindGust", 1);
+   // Create the subscriber to set wind velocity
+   set_wind_gust_speed_subscriber = nh.subscribe("/gazebo/SetWindGustSpeed",3,&GazeboWindPlugin::read_set_wind_gust_speed,this);
 }
 
 double GazeboWindPlugin::POEValue(int s, double h) {
@@ -399,14 +402,21 @@ void GazeboWindPlugin::OnUpdate(const common::UpdateInfo& _info) {
     xi_q_km1 = xi_q;
     xi_r_km1 = xi_r;
     ignition::math::Vector3d wind_gust_velocity(0.0, 0.0,0.0);
-//double GazeboWindPlugin::ComputeWindGustVelocity(double* max_gust_velocity,double* gust_duration,double* gust_occurence_interval_mean,double* gust_occurence_interval_std,double* gust_time,double*time_until_next_gust,double* elapsed_time_between_gusts,bool* gust_active, double* waiting_for_next_gust,double* delta_t){
-
     wind_gust_velocity = ComputeWindGust(&max_gust_velocity_,&gust_duration_,&gust_direction_,&gust_direction_mean_,&gust_direction_std_,&gust_occurence_interval_mean_,&gust_occurence_interval_std_, &gust_time_,&time_until_next_gust_,&elapsed_time_between_gusts_,&gust_active_, &waiting_for_next_gust_, &deltaT,&randomGenGust);
     wind_velocity = (wind_speed_mean_ * wind_direction_mean_) + turbulence + wind_gust_velocity;
   } else {
-    ignition::math::Vector3d wind_gust_velocity(0.0,0.0,0.0);
-    wind_gust_velocity = ComputeWindGust(&max_gust_velocity_,&gust_duration_,&gust_direction_,&gust_direction_mean_,&gust_direction_std_,&gust_occurence_interval_mean_,&gust_occurence_interval_std_, &gust_time_,&time_until_next_gust_,&elapsed_time_between_gusts_,&gust_active_, &waiting_for_next_gust_, &deltaT,&randomGenGust);
-    wind_velocity = (wind_speed_mean_ * wind_direction_mean_) + wind_gust_velocity;
+    // if wind speed is received through ros
+
+    // if gazebo_plugin is supposed to be used
+    if (gust_generation_mode_== "gazebo_plugin"){
+      ignition::math::Vector3d wind_gust_velocity(0.0,0.0,0.0);
+      wind_gust_velocity = ComputeWindGust(&max_gust_velocity_,&gust_duration_,&gust_direction_,&gust_direction_mean_,&gust_direction_std_,&gust_occurence_interval_mean_,&gust_occurence_interval_std_, &gust_time_,&time_until_next_gust_,&elapsed_time_between_gusts_,&gust_active_, &waiting_for_next_gust_, &deltaT,&randomGenGust);
+      wind_velocity = (wind_speed_mean_ * wind_direction_mean_) + wind_gust_velocity;
+    }else{
+      wind_velocity.X() = set_wind_gust_speed_value_.point.x;
+      wind_velocity.Y() = set_wind_gust_speed_value_.point.y;
+      wind_velocity.Z() = set_wind_gust_speed_value_.point.z;
+    }
   }
 
   wind_speed_msg_.mutable_header()->set_frame_id(frame_id_);
@@ -465,14 +475,25 @@ void GazeboWindPlugin::CreatePubsAndSubs() {
 
 }
 
+void GazeboWindPlugin::read_set_wind_gust_speed(const geometry_msgs::PointStamped::ConstPtr& msg) {
+  set_wind_gust_speed_value_ = *msg;
+  // // Process the received message
+  // ROS_INFO("Received PointStamped message:");
+  // ROS_INFO("Header:");
+  // ROS_INFO("  Seq: %d", msg->header.seq);
+  // ROS_INFO("  Stamp: %d.%09d", msg->header.stamp.sec, msg->header.stamp.nsec);
+  // ROS_INFO("  Frame ID: %s", msg->header.frame_id.c_str());
+  // ROS_INFO("Point:");
+  // ROS_INFO("  X: %f", msg->point.x);
+  // ROS_INFO("  Y: %f", msg->point.y);
+  // ROS_INFO("  Z: %f", msg->point.z);
+}
+
+
 
 ignition::math::Vector3d GazeboWindPlugin::ComputeWindGust(double* max_gust_velocity,double* gust_duration,ignition::math::Vector3d* gust_direction,ignition::math::Vector3d* gust_direction_mean,ignition::math::Vector3d* gust_direction_std, double* gust_occurence_interval_mean,double* gust_occurence_interval_std,double* gust_time,double*time_until_next_gust,double* elapsed_time_between_gusts,bool* gust_active, bool* waiting_for_next_gust,double* delta_t,std::default_random_engine* randomGenGust){
   
   double v(0.0);
-
-
-
-
 
   if (*gust_time > *gust_duration && *gust_active == true){
     //Reset case

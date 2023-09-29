@@ -35,7 +35,7 @@
 #include "common.h"
 #include <ros/ros.h>
 #include "blimp_description/WindGust.h"
-
+#include <geometry_msgs/PointStamped.h>
 
 
 #include "WindSpeed.pb.h"             // Wind speed message
@@ -95,6 +95,7 @@ class GazeboWindPlugin : public ModelPlugin {
         time_until_next_gust_(0.0),
         time_gust_start_(0.0),
         randomGenGust(randomGenGust),
+        gust_generation_mode_("ROS"),
 
       // Add variables for communication with ROS
 
@@ -155,6 +156,10 @@ class GazeboWindPlugin : public ModelPlugin {
   std::string wind_force_pub_topic_;
   std::string wind_speed_pub_topic_;
 
+  std::string gust_generation_mode_;
+  geometry_msgs::PointStamped set_wind_gust_speed_value_;
+
+
   common::Time previousRun;
 
   double wind_speed_mean_;
@@ -177,6 +182,7 @@ class GazeboWindPlugin : public ModelPlugin {
   double time_gust_start_;
   std::default_random_engine randomGenGust;
   ros::Publisher pub;
+  ros::Subscriber set_wind_gust_speed_subscriber;
   blimp_description::WindGust msg;
 
   
@@ -202,12 +208,14 @@ class GazeboWindPlugin : public ModelPlugin {
   //common::Time wind_gust_start_;
 
 
- //   /// \brief Variables for wind gust
-
- //   std::normal_distribution<double> dist(0.0,1.0)
- 
- 
+  /// \brief Variables for wind gust 
+  // Gazebo wind plugin that specifies a 1-sin windgust using different paraemeters
   ignition::math::Vector3d ComputeWindGust(double* max_gust_velocity,double* gust_duration, ignition::math::Vector3d* gust_direction_,ignition::math::Vector3d* gust_direction_mean, ignition::math::Vector3d* gust_direction_std,double* gust_occurence_interval_mean,double* gust_occurence_interval_std,double* gust_time,double*time_until_next_gust,double* elapsed_time_between_gusts,bool* gust_active, bool* waiting_for_next_gust,double* delta_t,  std::default_random_engine* randomGen);
+  
+  // Callback function for a subscriber that reads wind speed from a ros topic
+  void read_set_wind_gust_speed(const geometry_msgs::PointStamped::ConstPtr& msg);
+
+
 
   /// \brief    Variables for custom wind field generation.
   bool use_custom_static_wind_field_;
