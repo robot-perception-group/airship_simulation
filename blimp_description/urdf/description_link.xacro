@@ -11,7 +11,8 @@
 		body_width= "${width_gondola_body}"
 		body_height="${height_gondola_body}"
 		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_blimp_gondola}">
+    		mesh_file="${mesh_file_blimp_gondola}"
+		activate_collision="${activate_collision}">
 		<xacro:insert_block name="origin_gondola_body" />
 		<xacro:insert_block name="inertia_gondola_body" />
 	</xacro:box_model>
@@ -28,7 +29,8 @@
 		body_width= "${width_gondola_support}"
 		body_height="${height_gondola_support}"
     		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_blimp_support}">
+    		mesh_file="${mesh_file_blimp_support}"
+		activate_collision="${activate_collision}">
 		<xacro:insert_block name="origin_gondola_support" />
 		<xacro:insert_block name="inertia_gondola_support" />
 	</xacro:box_model>
@@ -45,7 +47,8 @@
 		body_width= "${width_gondola_support}"
 		body_height="${height_gondola_support}"
     		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_blimp_support}">
+    		mesh_file="${mesh_file_blimp_support}"
+		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_gondola_support" />
 		<xacro:insert_block name="inertia_gondola_support" />
 	</xacro:box_model>
@@ -69,7 +72,8 @@
 		body_radius="${radius_blimp_body}"
 		body_length="${length_blimp_body}"
     		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_blimp_body}">
+    		mesh_file="${mesh_file_blimp_body}"
+		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_blimp_body" />
 		<xacro:insert_block name="inertia_blimp_body" />
 	</xacro:cylinder_model>
@@ -86,7 +90,8 @@
 		body_radius="${radius_stick}"
 		body_length="${length_stick}"
 		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_blimp_stick}">
+    		mesh_file="${mesh_file_blimp_stick}"
+		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_stick" />
 		<xacro:insert_block name="inertia_stick" />
 	</xacro:cylinder_model>
@@ -104,7 +109,8 @@
 		body_radius="${radius_wing}"
 		body_length="${length_wing}"
     		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_blimp_wing}">
+    		mesh_file="${mesh_file_blimp_wing}"
+		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_wing" />
 		<xacro:insert_block name="inertia_wing" />
 	</xacro:cylinder_model>
@@ -120,7 +126,8 @@
 		body_radius="${radius_wing}"
 		body_length="${length_wing}"
     		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_blimp_wing}">
+    		mesh_file="${mesh_file_blimp_wing}"
+		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_wing" />
 		<xacro:insert_block name="inertia_wing" />
 	</xacro:cylinder_model>
@@ -136,7 +143,8 @@
 		body_radius="${radius_blade}"
 		body_length="${length_blade}"
     		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_propeller_ccw}">
+    		mesh_file="${mesh_file_propeller_ccw}"
+		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_blade" />
 		<xacro:insert_block name="inertia_blade" />
 	</xacro:cylinder_model>
@@ -153,7 +161,8 @@
 		body_radius="${radius_blade}"
 		body_length="${length_blade}"
     		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_propeller_cw}">
+    		mesh_file="${mesh_file_propeller_cw}"
+		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_blade" />
 		<xacro:insert_block name="inertia_blade" />
 	</xacro:cylinder_model>
@@ -170,7 +179,8 @@
 		body_radius="${radius_ballast}"
 		body_length="${length_ballast}"
     		use_mesh_file="false"
-    		mesh_file="">
+    		mesh_file=""
+		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_ballast" />
 		<xacro:insert_block name="inertia_ballast" />
 	</xacro:cylinder_model>
@@ -229,7 +239,8 @@
 		body_width= "${width_rud_part1}"
 		body_height="${height_rud_part1}"
     		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_blimp_rud_part1}">
+    		mesh_file="${mesh_file_blimp_rud_part1}"
+		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_rud_part1" />
 		<xacro:insert_block name="inertia_rud_part1" />
 	</xacro:box_model>
@@ -261,7 +272,8 @@
 		body_width= "${width_rud_part2}"
 		body_height="${height_rud_part2}"
     		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_blimp_rud_part2}">
+    		mesh_file="${mesh_file_blimp_rud_part2}"
+		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_rud_part2" />
 		<xacro:insert_block name="inertia_rud_part2" />
 	</xacro:box_model>
@@ -285,7 +297,8 @@
 		body_width= "${width_rud_part1}"
 		body_height="${height_rud_part1}"
     		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_blimp_bot_rud_part1}">
+    		mesh_file="${mesh_file_blimp_bot_rud_part1}"
+		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_rud_part1" />
 		<xacro:insert_block name="inertia_rud_part1" />
 	</xacro:box_model>
@@ -317,7 +330,8 @@
 		body_width= "${width_rud_part2}"
 		body_height="${height_rud_part2}"
     		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_blimp_rud_part2}">
+    		mesh_file="${mesh_file_blimp_rud_part2}"
+		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_rud_part2" />
 		<xacro:insert_block name="inertia_rud_part2" />
 	</xacro:box_model>
@@ -333,7 +347,8 @@
 		body_radius="${radius_bot_rud_motor}"
 		body_length= "${length_bot_rud_motor}"
 		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_bot_propeller_cw}">
+    		mesh_file="${mesh_file_bot_propeller_cw}"
+		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_bot_rud_motor" />
 		<xacro:insert_block name="inertia_bot_rud_motor" />
 	</xacro:cylinder_model>
@@ -358,7 +373,8 @@
 		body_width= "${width_rud_part1}"
 		body_height="${height_rud_part1}"
     		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_blimp_rud_part1}">
+    		mesh_file="${mesh_file_blimp_rud_part1}"
+		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_rud_part1" />
 		<xacro:insert_block name="inertia_rud_part1" />
 	</xacro:box_model>
@@ -390,7 +406,8 @@
 		body_width= "${width_rud_part2}"
 		body_height="${height_rud_part2}"
     		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_blimp_rud_part2}">
+    		mesh_file="${mesh_file_blimp_rud_part2}"
+		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_rud_part2" />
 		<xacro:insert_block name="inertia_rud_part2" />
 	</xacro:box_model>
@@ -414,7 +431,8 @@
 		body_width= "${width_rud_part1}"
 		body_height="${height_rud_part1}"
     		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_blimp_rud_part1}">
+    		mesh_file="${mesh_file_blimp_rud_part1}"
+		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_rud_part1" />
 		<xacro:insert_block name="inertia_rud_part1" />
 	</xacro:box_model>
@@ -446,7 +464,8 @@
 		body_width= "${width_rud_part2}"
 		body_height="${height_rud_part2}"
     		use_mesh_file="${use_mesh_file}"
-    		mesh_file="${mesh_file_blimp_rud_part2}">
+    		mesh_file="${mesh_file_blimp_rud_part2}"
+		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_rud_part2" />
 		<xacro:insert_block name="inertia_rud_part2" />
 	</xacro:box_model>

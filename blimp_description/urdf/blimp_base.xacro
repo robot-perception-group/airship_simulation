@@ -49,7 +49,7 @@
 	   <parent link="base_link"/>
 	   <child link="docking_link"/>
        <origin xyz="0 0 -0.5" rpy="0 0 0"/>
-       <limit effort="100" velocity="1.0" lower="0" upper="0"/>
+       <limit effort="0" velocity="0" lower="0" upper="0"/>
 
 	</joint>
 

@@ -64,24 +64,28 @@
             </gazebo>
 	</xacro:macro>
 	<xacro:macro name="box_model"
-	params="robot_namespace link_name mass body_length body_width body_height use_mesh_file mesh_file *origin *inertia">
+	params="robot_namespace link_name mass body_length body_width body_height use_mesh_file mesh_file activate_collision *origin *inertia">
 		<link name="${link_name}_link">
 			<inertial>
 				<mass value="${mass}"/>
 				<xacro:insert_block name="origin" />
 				<xacro:insert_block name="inertia" />
 			</inertial>
-			<collision>
-				<xacro:insert_block name="origin" />
-				<geometry>
-					<xacro:if value="${use_mesh_file}">
-						<mesh filename="${mesh_file}" scale="1 1 1" />
-					</xacro:if>
-					<xacro:unless value="${use_mesh_file}">
-						<box size="${body_length} ${body_width} ${body_height}"/>
-					</xacro:unless>
-				</geometry>
-			</collision>
+
+			<xacro:if value="${activate_collision}">
+				<collision>
+					<xacro:insert_block name="origin" />
+					<geometry>
+						<xacro:if value="${use_mesh_file}">
+							<mesh filename="${mesh_file}" scale="1 1 1" />
+						</xacro:if>
+						<xacro:unless value="${use_mesh_file}">
+							<box size="${body_length} ${body_width} ${body_height}"/>
+						</xacro:unless>
+					</geometry>
+				</collision>
+			</xacro:if>
+			
 			<visual>
 				<xacro:insert_block name="origin" />
 				<geometry>
@@ -103,24 +107,28 @@
 	</xacro:macro>
 
 	<xacro:macro name="cylinder_model"
-	params="robot_namespace link_name mass body_radius body_length use_mesh_file mesh_file *origin *inertia">
+	params="robot_namespace link_name mass body_radius body_length use_mesh_file mesh_file activate_collision *origin *inertia">
 		<link name="${link_name}_link">
 			<inertial>
 				<mass value="${mass}"/>
 				<xacro:insert_block name="origin" />
 				<xacro:insert_block name="inertia" />
 			</inertial>
-			<collision>
-				<xacro:insert_block name="origin" />
-				<geometry>
-					<xacro:if value="${use_mesh_file}">
-						<mesh filename="${mesh_file}" scale="1 1 1" />
-					</xacro:if>
-					<xacro:unless value="${use_mesh_file}">
-						<cylinder length="${body_length}" radius="${body_radius}"/> <!-- [m] [m] [m] -->
-					</xacro:unless>
-				</geometry>
-			</collision>
+			<xacro:if value="${activate_collision}">
+
+				<collision>
+					<xacro:insert_block name="origin" />
+					<geometry>
+						<xacro:if value="${use_mesh_file}">
+							<mesh filename="${mesh_file}" scale="1 1 1" />
+						</xacro:if>
+						<xacro:unless value="${use_mesh_file}">
+							<cylinder length="${body_length}" radius="${body_radius}"/> <!-- [m] [m] [m] -->
+						</xacro:unless>
+					</geometry>
+				</collision>
+			</xacro:if>
+
 			<visual>
 				<xacro:insert_block name="origin" />
 				<geometry>
