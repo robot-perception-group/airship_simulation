@@ -18,12 +18,8 @@
 	</xacro:if>
 
 	<xacro:if value="$(arg enable_sensors)">
-		<!-- Mount an ADIS16448 IMU. -->
-		<!-- Mount a GPS. -->
-		<!-- <xacro:default_gps namespace="${namespace}" parent_link="docking_link" />  -->
-		<!-- more odometry -->
 		 <xacro:docking_port_imu_and_odometry namespace="${namespace}" parent_link="docking_link" /> 
-	</xacro:if>
+	</xacro:if> 
 
 	<xacro:if value="$(arg enable_sensors)">
 		<!-- Mount a VI CAMERA. -->

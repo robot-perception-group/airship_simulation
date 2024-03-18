@@ -63,6 +63,9 @@
                 <stopErp>0.2</stopErp>
             </gazebo>
 	</xacro:macro>
+
+
+
 	<xacro:macro name="box_model"
 	params="robot_namespace link_name mass body_length body_width body_height use_mesh_file mesh_file activate_collision *origin *inertia">
 		<link name="${link_name}_link">

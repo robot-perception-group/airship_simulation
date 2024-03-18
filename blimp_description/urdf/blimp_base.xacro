@@ -31,12 +31,38 @@
     </material>
 
 	<link name="docking_link">
-
 		<visual>
 			<geometry>
 				<box size="0.50 0.50 0.50"/>
 			</geometry>
+		</visual>
+	    <inertial>
+			<mass value = "0.01"/>
+	      <inertia ixx="0.0004" ixy="0" ixz="0" iyy="0.0004" iyz="0" izz="0.0004"/>
+	    </inertial>
+	</link>
 
+
+
+
+	<!-- <joint name="box_joint" type="revolute"> -->
+	<joint name="box_joint_docking_port" type="revolute">
+	   <parent link="base_link"/>
+	   <child link="docking_link"/>
+       <origin xyz="0 0 -0.5" rpy="0 0 0"/>
+       <limit effort="0" velocity="0" lower="0" upper="0"/> 
+
+	</joint>
+
+	<gazebo reference="docking_link">
+	   <material>Gazebo/GreenTransparent</material>
+	</gazebo>
+
+	<link name="docking_goal_link">
+		<visual>
+			<geometry>
+				<box size="0.50 0.50 0.50"/>
+			</geometry>
 		</visual>
 	    <inertial>
 			<mass value = "0.01"/>
@@ -45,16 +71,16 @@
 
 	</link>
 
-	<joint name="box_joint" type="revolute">
-	   <parent link="base_link"/>
-	   <child link="docking_link"/>
-       <origin xyz="0 0 -0.5" rpy="0 0 0"/>
-       <limit effort="0" velocity="0" lower="0" upper="0"/>
-
+	<!-- <joint name="box_goal_joint" type="revolute"> -->
+	<joint name="box_goal_joint" type="revolute">
+		<parent link="base_link"/>
+		<child link="docking_goal_link"/>
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<limit effort="0" velocity="0" lower="0" upper="0"/> 
 	</joint>
 
-			<gazebo reference="docking_link">
-			   <material>Gazebo/GreenTransparent</material>
-			</gazebo>
+	<gazebo reference="docking_goal_link">
+	   <material>Gazebo/RedTransparent</material>
+	</gazebo>
 	
 </robot>
