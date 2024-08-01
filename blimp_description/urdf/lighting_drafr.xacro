@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<robot name="flashlight" xmlns:xacro="http://ros.org/wiki/xacro">
+  
+  <!-- Xacro macro for flashlight -->
+  <xacro:macro name="flashlight" params="namespace parent_frame">
+
+
+    
+    <!-- Define the flashlight body -->
+    <link name="${namespace}/flashlight_body">
+      <visual>
+        <geometry>
+          <cylinder radius="0.02" length="0.02"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <joint name="${namespace}/flashlight_body_joint" type="revolute">
+      <parent link="${namespace}/${parent_frame}"/>
+      <child link="${namespace}/flashlight_body"/>
+      <origin xyz="0 0 0.01"/>
+      <limit upper="0" lower="0" effort="0" velocity="0" />
+    </joint>
+
+    <!-- Define the light source as a separate link -->
+    <link name="${namespace}/flashlight_light">
+      <visual>
+        <geometry>
+          <sphere radius="0.01"/>
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- Fixed joint connecting the light to the flashlight body -->
+    <joint name="${namespace}/flashlight_light_joint" type="fixed">
+      <parent link="${namespace}/flashlight_body"/>
+      <child link="${namespace}/flashlight_light"/>
+      <origin xyz="0 0 0.01"/>
+    </joint>
+
+    <!-- Gazebo configurations -->
+    <gazebo reference="${namespace}/flashlight_body">
+      <pose>0.05 0 0.15 0 -1.5705 0</pose>
+    </gazebo>
+
+    <!-- Gazebo light definition -->
+    <gazebo reference="${namespace}/flashlight_light">
+      <light type="spot" name="light_source1">
+        <pose>0 0 0 0 0 0</pose>
+        <attenuation>
+          <range>5</range>
+          <linear>0.05</linear>
+        </attenuation>
+        <diffuse>1 1 1 1</diffuse>
+        <specular>1 0.1 0.1 0.1</specular>
+        <direction>0 0 -1</direction>
+        <spot>
+          <inner_angle>0.57</inner_angle>
+          <outer_angle>0.65</outer_angle>
+          <falloff>1</falloff>
+        </spot>
+      </light>
+    </gazebo>
+
+    <!-- Gazebo plugin for light control -->
+    <gazebo>
+      <plugin name="light_control" filename="libFlashLightPlugin.so">
+        <enable>true</enable>
+        <light>
+          <id>${namespace}_flashlight_light::light_source1</id>
+          <duration>0.1</duration>
+          <interval>0.4</interval>
+        </light>
+      </plugin>
+    </gazebo>
+
+  </xacro:macro>
+
+  <!-- Example instantiation of the macro -->
+  <xacro:flashlight namespace="hummingbird" parent_frame="base_link"/>
+
+</robot>

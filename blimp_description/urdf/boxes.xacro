@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+    <!--Boxes defining docking zones -->
+
+	<link name="docking_link">
+		<!-- <visual>
+			<geometry>
+				<box size="0.50 0.50 0.20"/>
+			</geometry>
+		</visual> -->
+	    <inertial>
+			<mass value = "0.01"/>
+	      <inertia ixx="0.0004" ixy="0" ixz="0" iyy="0.0004" iyz="0" izz="0.0004"/>
+	    </inertial>
+	</link>
+
+	<joint name="box_joint_docking_port" type="revolute">
+	   <parent link="base_link"/>
+	   <child link="docking_link"/>
+       <origin xyz="0 0 -0.5" rpy="0 0 0"/>
+       <limit effort="0" velocity="0" lower="0" upper="0"/> 
+	</joint>
+
+
+
+	<!--Boxes defining safety zone around hull -->
+
+	<link name="hull_protection_link">
+		<visual>
+			<geometry>
+				<mesh filename="package://blimp_description/meshes/docking/blimp_obstacle_mesh.dae"/>
+			</geometry>
+		</visual>
+	    <inertial>
+			<mass value = "0.01"/>
+	      <inertia ixx="0.0004" ixy="0" ixz="0" iyy="0.0004" iyz="0" izz="0.0004"/>
+	    </inertial>
+	</link>
+
+
+	<joint name="hull_protection_joint" type="fixed">
+		<parent link="docking_link"/>
+		<child link="hull_protection_link"/>
+		<origin xyz="0 0 0.20" rpy="0 0 0"/>
+		<!-- <limit effort="0" velocity="0" lower="0" upper="0"/>  -->
+	</joint>
+
+
+	<gazebo reference="hull_protection_link">
+	   <material>Gazebo/RedTransparent</material>
+	</gazebo>
+</robot>
