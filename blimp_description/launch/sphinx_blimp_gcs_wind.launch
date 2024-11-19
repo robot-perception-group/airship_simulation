@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<launch>
+	<!--********** arg **********-->
+	<arg name="uav_name" default="blimp"/>
+	<arg name="roboID" default="0"/>
+
+	<arg name="is_input_joystick" default="false"/>
+	<arg name="enable_meshes" default="true"/>
+	<arg name="enable_wind" default="true"/>
+	<arg name="enable_physics" default="true"/>
+	<arg name="enable_sensors" default="true"/>
+	<arg name="enable_logging" default="false" />
+	<arg name="enable_ground_truth" default="true" />
+	<arg name="enable_mavlink_interface" default="false"/>
+
+	<arg name="world_name" default="basic_sphinx"/>
+	<arg name="debug" default="false"/>
+	<arg name="gui" default="true"/>
+	<arg name="paused" default="false"/>
+	<arg name="log_file" default="$(arg uav_name)"/>
+	<arg name="wait_to_record_bag" default="false"/>
+	<arg name="verbose" default="true"/>
+	<arg name="rvizconfig" default="$(find blimp_description)/rviz/blimp.rviz" />
+
+	<arg name="X" default="0.0"/>
+	<arg name="Y" default="0.0"/>
+	<arg name="Z" default="1.0"/>
+
+	<include file="$(find blimp_description)/launch/blimp_gcs.launch">
+		<arg name="uav_name" value="$( arg uav_name )"/>
+		<arg name="roboID" value="$( arg roboID )"/>
+
+		<arg name="is_input_joystick" value="$( arg is_input_joystick )"/>
+		<arg name="enable_meshes" value="$( arg enable_meshes )"/>
+		<arg name="enable_wind" value="$( arg enable_wind )"/>
+		<arg name="enable_physics" value="$( arg enable_physics )"/>
+		<arg name="enable_sensors" value="$( arg enable_sensors )"/>
+		<arg name="enable_logging" value="$( arg enable_logging )" />
+		<arg name="enable_ground_truth" value="$( arg enable_ground_truth )" />
+		<arg name="enable_mavlink_interface" value="$( arg enable_mavlink_interface )"/>
+
+		<arg name="world_name" value="$( arg world_name )"/>
+		<arg name="debug" value="$( arg debug )"/>
+		<arg name="gui" value="$( arg gui )"/>
+		<arg name="paused" value="$( arg paused )"/>
+		<arg name="log_file" value="$( arg log_file )"/>
+		<arg name="wait_to_record_bag" value="$( arg wait_to_record_bag )"/>
+		<arg name="verbose" value="$( arg verbose )"/>
+		<arg name="rvizconfig" value="$( arg rvizconfig )" />
+
+		<arg name="X" value="$( arg X )"/>
+		<arg name="Y" value="$( arg Y )"/>
+		<arg name="Z" value="$( arg Z )"/>
+	</include>
+
+
+	<include file="$(find docking)/launch/copter_sphinx.launch"></include>
+	<!-- <include file="$(find docking)/launch/compute_relative_information.launch"></include> -->
+
+
+</launch>
+
+
