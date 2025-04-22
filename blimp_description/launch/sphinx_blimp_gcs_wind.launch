@@ -53,8 +53,7 @@
 		<arg name="Z" value="$( arg Z )"/>
 	</include>
 
-
-	<include file="$(find docking)/launch/copter_sphinx.launch"></include>
+	<include file="$(find anafi_description)/launch/spawn_anafi.launch"></include>
 	<!-- <include file="$(find docking)/launch/compute_relative_information.launch"></include> -->
 
 

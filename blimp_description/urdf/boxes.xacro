@@ -25,7 +25,7 @@
 
 	<!--Boxes defining safety zone around hull -->
 
-	<link name="hull_protection_link">
+	<!-- <link name="hull_protection_link">
 		<visual>
 			<geometry>
 				<mesh filename="package://blimp_description/meshes/docking/blimp_obstacle_mesh.dae"/>
@@ -42,11 +42,10 @@
 		<parent link="docking_link"/>
 		<child link="hull_protection_link"/>
 		<origin xyz="0 0 0.20" rpy="0 0 0"/>
-		<!-- <limit effort="0" velocity="0" lower="0" upper="0"/>  -->
 	</joint>
 
 
 	<gazebo reference="hull_protection_link">
 	   <material>Gazebo/RedTransparent</material>
-	</gazebo>
+	</gazebo> -->
 </robot>

@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
     
-    <link name="april_tag_box_link">
+    <link name="docking_port_link">
 		<visual>
 			<geometry>
-				<mesh filename="package://blimp_description/meshes/docking/cube_with_apriltags.dae" scale="0.2 0.2 0.2"/>
+				<mesh filename="$(find blimp_description)/meshes/docking/new_dp_dae_new/new_dp.dae" scale="1 1 1"/>
 			</geometry>
 		</visual>
 	    <inertial>
@@ -14,10 +14,50 @@
 	</link>
 
 
-	<joint name="apriltag_cube_joint" type="revolute">
+	<joint name="docking_port_joint" type="revolute">
 	   <parent link="base_link"/>
-	   <child link="april_tag_box_link"/>
-       <origin xyz="1 0 -0.3" rpy="0 0 0"/>
+	   <child link="docking_port_link"/>
+       <origin xyz="0 0 -0.2" rpy="0 0 0"/>
+       <limit effort="0" velocity="0" lower="0" upper="0"/> 
+	</joint>
+
+  <link name="docking_port_fc_link">
+    <visual>
+			<geometry>
+				<box size="0.15 0.1 0.08"/>
+			</geometry>
+		</visual>
+	    <inertial>
+			<mass value = "0.01"/>
+	      <inertia ixx="0.0004" ixy="0" ixz="0" iyy="0.0004" iyz="0" izz="0.0004"/>
+	    </inertial>
+	</link>
+
+
+	<joint name="docking_port_fc_joint" type="revolute">
+	   <parent link="docking_port_link"/>
+	   <child link="docking_port_fc_link"/>
+       <origin xyz="0.2 0 0.12" rpy="0 0 0"/>
+       <limit effort="0" velocity="0" lower="0" upper="0"/> 
+	</joint>
+
+
+  <link name="approach_target_link">
+		<!-- <visual>
+			<geometry>
+				<box size="0.50 0.50 0.20"/>
+			</geometry>
+		</visual> -->
+	    <inertial>
+			<mass value = "0.01"/>
+	      <inertia ixx="0.0004" ixy="0" ixz="0" iyy="0.0004" iyz="0" izz="0.0004"/>
+	    </inertial>
+	</link>
+
+	<joint name="approach_target_joint" type="revolute">
+	   <parent link="docking_port_link"/>
+	   <child link="approach_target_link"/>
+       <origin xyz="0 0 -0.3" rpy="0 0 0"/>
        <limit effort="0" velocity="0" lower="0" upper="0"/> 
 	</joint>
 
@@ -28,11 +68,11 @@
 <link name="led_link_3"></link><!--it is useless to define light tag here, it helps to define light tag in gazebo tag below-->
 <link name="led_link_4"></link><!--it is useless to define light tag here, it helps to define light tag in gazebo tag below-->
 
-<joint name="led_joint_0" type="fixed"> <origin xyz="0 0 0" rpy="0 0 0"/> <parent link="april_tag_box_link"/> <child link="led_link_0"/> </joint>
-<joint name="led_joint_1" type="fixed"> <origin xyz="0 0 0" rpy="0 0 0"/> <parent link="april_tag_box_link"/> <child link="led_link_1"/> </joint>
-<joint name="led_joint_2" type="fixed"> <origin xyz="0 0 0" rpy="0 0 0"/> <parent link="april_tag_box_link"/> <child link="led_link_2"/> </joint>
-<joint name="led_joint_3" type="fixed"> <origin xyz="0 0 0" rpy="0 0 0"/> <parent link="april_tag_box_link"/> <child link="led_link_3"/> </joint>
-<joint name="led_joint_4" type="fixed"> <origin xyz="0 0 0" rpy="0 0 0"/> <parent link="april_tag_box_link"/> <child link="led_link_4"/> </joint>
+<joint name="led_joint_0" type="fixed"> <origin xyz="0 0 0" rpy="0 0 0"/> <parent link="docking_port_link"/> <child link="led_link_0"/> </joint>
+<joint name="led_joint_1" type="fixed"> <origin xyz="0 0 0" rpy="0 0 0"/> <parent link="docking_port_link"/> <child link="led_link_1"/> </joint>
+<joint name="led_joint_2" type="fixed"> <origin xyz="0 0 0" rpy="0 0 0"/> <parent link="docking_port_link"/> <child link="led_link_2"/> </joint>
+<joint name="led_joint_3" type="fixed"> <origin xyz="0 0 0" rpy="0 0 0"/> <parent link="docking_port_link"/> <child link="led_link_3"/> </joint>
+<joint name="led_joint_4" type="fixed"> <origin xyz="0 0 0" rpy="0 0 0"/> <parent link="docking_port_link"/> <child link="led_link_4"/> </joint>
 
 <gazebo reference="led_link_0">
   <visual>
@@ -153,5 +193,9 @@
   </light>
   </plugin>
 </gazebo>
+
+
+
+
 
 </robot>

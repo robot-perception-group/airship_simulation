@@ -22,11 +22,8 @@
 	<!-- <xacro:include filename="$(find blimp_description)/urdf/plugin_component_snippets.xacro"/> -->
 	<xacro:include filename="$(find blimp_description)/urdf/description_plugin.xacro"/>
 
-	<!-- **********************Additional boxes for reference in docking**************************** -->
-	<xacro:include filename="$(find blimp_description)/urdf/boxes.xacro"/>
-
 	<!-- **********************AprilTag boxes**************************** -->
-	<xacro:include filename="$(find blimp_description)/urdf/apriltag_box.xacro"/>
+	<xacro:include filename="$(find blimp_description)/urdf/docking_port.xacro"/>
 
 	
 </robot>
