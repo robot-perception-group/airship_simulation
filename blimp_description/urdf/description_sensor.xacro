@@ -17,9 +17,9 @@
 		 <xacro:tail_imu_and_odometry namespace="${namespace}" parent_link="top_rud_part1_link" /> 
 	</xacro:if>
 
-	<!-- <xacro:if value="$(arg enable_sensors)">
-		 <xacro:docking_port_imu_and_odometry namespace="${namespace}" parent_link="docking_link" /> 
-	</xacro:if>  -->
+	<xacro:if value="$(arg enable_sensors)">
+		 <xacro:docking_port_imu_and_odometry namespace="${namespace}" parent_link="approach_target_link" /> 
+	</xacro:if> 
 
 	<xacro:if value="$(arg enable_sensors)">
 		<!-- Mount a VI CAMERA. -->

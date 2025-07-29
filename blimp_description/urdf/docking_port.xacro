@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
     
+
+
+
+
     <link name="docking_port_link">
 		<visual>
 			<geometry>
@@ -41,6 +45,23 @@
        <limit effort="0" velocity="0" lower="0" upper="0"/> 
 	</joint>
 
+  <xacro:imu_plugin_macro
+      namespace="docking_port"
+      imu_suffix="docking_port_fc"
+      parent_link="docking_port_fc_link"
+      imu_topic="imu"
+      mass_imu_sensor="0.00001"
+      gyroscope_noise_density="0.0"
+      gyroscope_random_walk="0.0"
+      gyroscope_bias_correlation_time="1000.0"
+      gyroscope_turn_on_bias_sigma="0.0"
+      accelerometer_noise_density="0.0"
+      accelerometer_random_walk="0.0"
+      accelerometer_bias_correlation_time="300.0"
+      accelerometer_turn_on_bias_sigma="0.0">
+      <inertia ixx="0.00001" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.00001" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </xacro:imu_plugin_macro>
 
   <link name="approach_target_link">
 		<!-- <visual>
@@ -58,6 +79,27 @@
 	   <parent link="docking_port_link"/>
 	   <child link="approach_target_link"/>
        <origin xyz="0 0 -0.3" rpy="0 0 0"/>
+       <limit effort="0" velocity="0" lower="0" upper="0"/> 
+	</joint>
+
+
+
+  <link name="protection_hull_link">
+		<visual>
+			<geometry>
+				<mesh filename="$(find blimp_description)/meshes/docking/blimp_obsctacle_mesh.dae" scale="1 1 1" alpha="0.2" />
+			</geometry>
+		</visual>
+	    <inertial>
+			<mass value = "0.01"/>
+	      <inertia ixx="0.0004" ixy="0" ixz="0" iyy="0.0004" iyz="0" izz="0.0004"/>
+	    </inertial>
+	</link>
+
+  <joint name="protection_hull_joint" type="revolute">
+	   <parent link="approach_target_link"/>
+	   <child link="protection_hull_link"/>
+       <origin xyz="0 0 0" rpy="0 0 0"/>
        <limit effort="0" velocity="0" lower="0" upper="0"/> 
 	</joint>
 
@@ -84,7 +126,7 @@
     </material>
   </visual>
   <light name ='led_link_0/led' type = 'point'>
-    <pose>0 0.5 0 0 0 0</pose><!--you can place light position here ,and it is useless to give position in link-->
+    <pose>0 0.5 0 0 0 0</pose>
   </light>
   <plugin name='light_control' filename='libFlashLightPlugin.so'>
   <enable>true</enable>
@@ -108,7 +150,7 @@
     </material>
   </visual>
   <light name ='led_link_1/led' type = 'point'>
-    <pose>0 -0.5 0 0 0 0</pose><!--you can place light position here ,and it is useless to give position in link-->
+    <pose>0 -0.5 0 0 0 0</pose>
   </light>
   <plugin name='light_control' filename='libFlashLightPlugin.so'>
   <enable>true</enable>
@@ -132,7 +174,7 @@
     </material>
   </visual>
   <light name ='led_link_2/led' type = 'point'>
-    <pose>0.5 0 0 0 0 0</pose><!--you can place light position here ,and it is useless to give position in link-->
+    <pose>0.5 0 0 0 0 0</pose>
   </light>
   <plugin name='light_control' filename='libFlashLightPlugin.so'>
   <enable>true</enable>
@@ -156,7 +198,7 @@
     </material>
   </visual>
   <light name ='led_link_3/led' type = 'point'>
-    <pose>-0.5 0 0 0 0 0</pose><!--you can place light position here ,and it is useless to give position in link-->
+    <pose>-0.5 0 0 0 0 0</pose>
   </light>
   <plugin name='light_control' filename='libFlashLightPlugin.so'>
   <enable>true</enable>
@@ -180,7 +222,7 @@
     </material>
   </visual>
   <light name ='led_link_4/led' type = 'point'>
-    <pose>0 0 -0.5 0 0 0</pose><!--you can place light position here ,and it is useless to give position in link-->
+    <pose>0 0 -0.5 0 0 0</pose>
   </light>
   <plugin name='light_control' filename='libFlashLightPlugin.so'>
   <enable>true</enable>
