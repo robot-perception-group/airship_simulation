@@ -43,6 +43,13 @@
       <!-- <real_time_update_rate>150</real_time_update_rate> -->
       <gravity>0 0 -9.8</gravity>
     </physics>
+
+    <scene>
+      <shadows>0</shadows>
+      <grid>true</grid>
+      <origin_visual>false</origin_visual>
+  </scene>
+
   </world>
 </sdf>
 

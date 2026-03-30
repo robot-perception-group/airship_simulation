@@ -116,7 +116,7 @@
 <joint name="led_joint_3" type="fixed"> <origin xyz="0 0 0" rpy="0 0 0"/> <parent link="docking_port_link"/> <child link="led_link_3"/> </joint>
 <joint name="led_joint_4" type="fixed"> <origin xyz="0 0 0" rpy="0 0 0"/> <parent link="docking_port_link"/> <child link="led_link_4"/> </joint>
 
-<gazebo reference="led_link_0">
+<!-- <gazebo reference="led_link_0">
   <visual>
     <material>
       <ambient>0 0 0 1</ambient>
@@ -236,7 +236,7 @@
   </plugin>
 </gazebo>
 
-
+ -->
 
 
 
