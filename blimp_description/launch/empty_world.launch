@@ -56,7 +56,8 @@
     <!-- Optional: if you also want to separate static TFs produced by any Gazebo plugins -->
     <remap from="/tf_static" to="/rsp_tf_static"/>
     <!-- Remap clock topic -->
-    <remap from="/clock" to="/clock_gazebo"/>
+    
+    <!-- <remap from="/clock" to="/clock_gazebo"/> -->
 
   </node>
 

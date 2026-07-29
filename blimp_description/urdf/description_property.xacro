@@ -10,17 +10,18 @@
 
 	<!-- meshes -->
 	<xacro:property name="use_mesh_file" value="$(arg enable_meshes)" />
-  	<xacro:property name="mesh_file_blimp_body" value="package://blimp_description/meshes/blimp_body/blimp_body_v4.dae" />
+  	<xacro:property name="mesh_file_blimp_body" value="package://blimp_description/meshes/blimp_body/blimp_body_v4_white.dae" />
 	<xacro:property name="mesh_file_blimp_support" value="package://blimp_description/meshes/blimp_support/blimp_support_v5.dae" />
-	<xacro:property name="mesh_file_blimp_gondola" value="package://blimp_description/meshes/blimp_gondola/blimp_gondola_v4.dae" />
+	<!-- <xacro:property name="mesh_file_blimp_support" value="package://blimp_description/meshes/simple_dp_with_tags_mesh/simple_dp_with_tags.dae" /> -->
+	<xacro:property name="mesh_file_blimp_gondola" value="package://blimp_description/meshes/blimp_gondola/blimp_gondola_v4_white.dae" />
 	<xacro:property name="mesh_file_blimp_wing" value="package://blimp_description/meshes/blimp_wing/blimp_wing_v2.dae" />
 	<xacro:property name="mesh_file_blimp_stick" value="package://blimp_description/meshes/blimp_wing/blimp_stick_v2.dae" />
 	<xacro:property name="mesh_file_propeller_cw" value="package://blimp_description/meshes/blimp_propeller/blimp_right_propeller_cw_v3.dae" />
 	<xacro:property name="mesh_file_propeller_ccw" value="package://blimp_description/meshes/blimp_propeller/blimp_left_propeller_ccw_v3.dae" />
 	<xacro:property name="mesh_file_bot_propeller_cw" value="package://blimp_description/meshes/blimp_propeller/blimp_bot_propeller_cw_v3.dae" />
-	<xacro:property name="mesh_file_blimp_rud_part1" value="package://blimp_description/meshes/blimp_fin/blimp_top_rud_part1_v3.dae" />
-	<xacro:property name="mesh_file_blimp_rud_part2" value="package://blimp_description/meshes/blimp_fin/blimp_top_rud_part2_v5.dae" />
-	<xacro:property name="mesh_file_blimp_bot_rud_part1" value="package://blimp_description/meshes/blimp_fin/blimp_bot_rud_part1_v3.dae" />
+	<xacro:property name="mesh_file_blimp_rud_part1" value="package://blimp_description/meshes/blimp_fin/blimp_top_rud_part1_v3_white.dae" />
+	<xacro:property name="mesh_file_blimp_rud_part2" value="package://blimp_description/meshes/blimp_fin/blimp_top_rud_part2_v5_white.dae" />
+	<xacro:property name="mesh_file_blimp_bot_rud_part1" value="package://blimp_description/meshes/blimp_fin/blimp_bot_rud_part1_v3_white.dae" />
 
 	<!-- mass [kg] -->
 	<!-- Modified mass for convenience -->

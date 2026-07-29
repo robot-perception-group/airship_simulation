@@ -21,7 +21,7 @@
       		<parent link="base_link" />
       		<child link="gondola_body_link" />
     	</joint>
-	<xacro:box_model
+	<!-- <xacro:box_model
 		robot_namespace="${namespace}"
 		link_name="gondola_left_support"
 		mass="${mass_gondola_support}"
@@ -33,13 +33,13 @@
 		activate_collision="${activate_collision}">
 		<xacro:insert_block name="origin_gondola_support" />
 		<xacro:insert_block name="inertia_gondola_support" />
-	</xacro:box_model>
-	<joint name="base_gondola_left_support_joint" type="fixed">
+	</xacro:box_model> -->
+	<!-- <joint name="base_gondola_left_support_joint" type="fixed">
 		<xacro:insert_block name="origin_base_gondola_left_support_joint" />
       		<parent link="base_link" />
       		<child link="gondola_left_support_link" />
-    	</joint>
-	<xacro:box_model
+    	</joint> -->
+	<!-- <xacro:box_model
 		robot_namespace="${namespace}"
 		link_name="gondola_right_support"
 		mass="${mass_gondola_support}"
@@ -51,12 +51,12 @@
 		activate_collision="${activate_collision}">			
 		<xacro:insert_block name="origin_gondola_support" />
 		<xacro:insert_block name="inertia_gondola_support" />
-	</xacro:box_model>
-	<joint name="base_gondola_right_support_joint" type="fixed">
+	</xacro:box_model> -->
+	<!-- <joint name="base_gondola_right_support_joint" type="fixed">
 		<xacro:insert_block name="origin_base_gondola_right_support_joint" />
       		<parent link="base_link" />
       		<child link="gondola_right_support_link" />
-    	</joint>
+    	</joint> -->
 	<xacro:spring
 		robot_namespace="${namespace}"
                 link_name="gondola_body_joint"
