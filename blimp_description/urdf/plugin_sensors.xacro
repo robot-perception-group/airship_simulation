@@ -1,8 +1,7 @@
 <?xml version="1.0" ?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <xacro:macro name="docking_port_imu_and_odometry" params="namespace parent_link">
-    <!-- Mount an IMU providing ground truth. -->
+  <!-- <xacro:macro name="docking_port_imu_and_odometry" params="namespace parent_link">
     <xacro:imu_plugin_macro
       namespace="${namespace}"
       imu_suffix="docking_port"
@@ -18,11 +17,9 @@
       accelerometer_bias_correlation_time="300.0"
       accelerometer_turn_on_bias_sigma="0.0">
       <inertia ixx="0.00001" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.00001" />
-      <!-- <origin xyz="0 0 0" rpy="${pi} 0 0" /> -->
       <origin xyz="0 0 0" rpy="${pi} 0 0" />
     </xacro:imu_plugin_macro>
 
-    <!-- Mount a generic odometry sensor providing ground truth. -->
     <xacro:odometry_plugin_macro
       namespace="${namespace}"
       odometry_sensor_suffix="docking_port"
@@ -49,11 +46,10 @@
       enable_odometry_map="false"
       odometry_map=""
       image_scale="">
-      <inertia ixx="0.00001" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.00001" /> <!-- [kg m^2] [kg m^2] [kg m^2] [kg m^2] [kg m^2] [kg m^2] -->
+      <inertia ixx="0.00001" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.00001" /> 
       <origin xyz="0.0 0.0 0.0" rpy="${pi} 0.0 0.0" />
-      <!-- <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" /> -->
     </xacro:odometry_plugin_macro>
-  </xacro:macro>
+  </xacro:macro> -->
 
   <xacro:macro name="tail_imu_and_odometry" params="namespace parent_link">
     <!-- Mount an IMU providing ground truth. -->
