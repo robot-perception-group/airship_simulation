@@ -41,7 +41,7 @@
 	<joint name="docking_port_fc_joint" type="revolute">
 	   <parent link="docking_port_link"/>
 	   <child link="docking_port_fc_link"/>
-       <origin xyz="0.02 0 0.272" rpy="0 0 0"/>
+       <origin xyz="0.0 0 0.272" rpy="0 0 0"/>
        <limit effort="0" velocity="0" lower="0" upper="0"/> 
 	</joint>
 
