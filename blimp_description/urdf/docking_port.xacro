@@ -96,14 +96,14 @@
 
 
         <xacro:odometry_plugin_macro
-        namespace="dockingport_fc"
+        namespace="dockingport_fc_gt"
         odometry_sensor_suffix="_gt"
         parent_link="docking_port_fc_link"
         pose_topic="odom_pose_gt"
-        pose_with_covariance_topic="pose_with_covariance"
-        position_topic="odom_position"
-        transform_topic="odom_transform"
-        odometry_topic="odometry"
+        pose_with_covariance_topic="pose_with_covariance_gt"
+        position_topic="odom_position_gt"
+        transform_topic="odom_transform_gt"
+        odometry_topic="odometry_gt"
         parent_frame_id="world"
         child_frame_id="dockingport_fc_gt"
         mass_odometry_sensor="0.01"
